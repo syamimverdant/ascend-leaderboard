@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project ASCEND FY27 — Live Leaderboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 30px 20px;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    header h1 {
+      font-size: 2.8em;
+      background: linear-gradient(90deg, #ffd700, #ff8c00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0;
+      text-shadow: 0 0 30px rgba(255,215,0,0.3);
+    }
+    header .subtitle-main {
+      font-size: 1.4em;
+      color: #e2e8f0;
+      font-weight: 700;
+      letter-spacing: 4px;
+      margin-bottom: 8px;
+    }
+    header .subtitle {
+      color: #e2e8f0;
+      font-size: 1.1em;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .refresh-info {
+      text-align: center;
+      color: #718096;
+      font-size: 0.85em;
+      margin-bottom: 20px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🏔 PROJECT ASCEND 27</h1>
+    <p class="subtitle-main">LIVE LEADERBOARD</p>
+    <p class="subtitle">Titans — Live Leaderboard</p>
+  </header>
+  <p class="refresh-info">Auto-refreshes every 5 minutes | <span id="lastUpdate">Loading...</span></p>
+
+  <!-- Period Selector -->
+  <div id="periodSelector" style="text-align:center; margin-bottom:20px;">
+    <button class="period-btn active" data-period="month">Current Month</button>
+    <button class="period-btn" data-period="h1">H1 (Jul–Dec)</button>
+    <button class="period-btn" data-period="h2">H2 (Jan–Jun)</button>
+  </div>
+
+  <!-- Daily Trivia & Motivation -->
+  <div id="triviaSection" class="trivia-section"></div>
+
+  <!-- Summary Cards -->
+  <div id="summaryCards" class="summary-grid"></div>
+
+  <!-- Main Leaderboard -->
+  <div id="leaderboard" class="leaderboard-section"></div>
+
+  <!-- Individual Cards -->
+  <div id="individualCards" class="cards-grid"></div>
+
+  <!-- Badges Section -->
+  <div id="badgesSection" class="badges-section"></div>
+
+  <!-- Loading Overlay -->
+  <div id="loading" class="loading-overlay">
+    <div class="spinner"></div>
+    <p>Fetching data from Monday.com...</p>
+  </div>
+</div>
+
+<style>
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+  .summary-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .summary-card .value {
+    font-size: 2em;
+    font-weight: 700;
+    color: #ffd700;
+  }
+  .summary-card .label {
+    font-size: 0.85em;
+    color: #a0aec0;
+    margin-top: 5px;
+  }
+  .period-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #e2e8f0;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin: 0 5px;
+    transition: all 0.3s;
+  }
+  .period-btn:hover, .period-btn.active {
+    background: linear-gradient(90deg, #ffd700, #ff8c00);
+    color: #1a202c;
+    border-color: transparent;
+    font-weight: 600;
+  }
+  .leaderboard-section {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 30px;
+  }
+  .leaderboard-section h2 {
+    color: #ffd700;
+    margin-bottom: 20px;
+    font-size: 1.3em;
+  }
+</style>
+
+<style>
+  .lb-table { width: 100%; border-collapse: collapse; }
+  .lb-table th {
+    text-align: left;
+    padding: 12px 15px;
+    border-bottom: 2px solid rgba(255,215,0,0.3);
+    color: #a0aec0;
+    font-size: 0.85em;
+    text-transform: uppercase;
+  }
+  .lb-table td {
+    padding: 14px 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    vertical-align: middle;
+  }
+  .lb-table tr:hover { background: rgba(255,255,255,0.03); }
+  .rank-1 { color: #ffd700; font-size: 1.4em; }
+  .rank-2 { color: #c0c0c0; font-size: 1.2em; }
+  .rank-3 { color: #cd7f32; font-size: 1.1em; }
+  .sc-name { font-weight: 600; font-size: 1.05em; }
+  .level-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.75em;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .level-explorer { background: #4a5568; color: #e2e8f0; }
+  .level-climber { background: #2b6cb0; color: #fff; }
+  .level-achiever { background: #38a169; color: #fff; }
+  .level-elite { background: #9f7aea; color: #fff; }
+  .level-legend { background: linear-gradient(90deg,#ffd700,#ff8c00); color: #1a202c; }
+  .xp-bar {
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 4px;
+    width: 120px;
+  }
+  .xp-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ffd700, #ff8c00);
+    border-radius: 3px;
+    transition: width 0.5s;
+  }
+</style>
+
+<style>
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  .sc-card {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 20px;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .sc-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,215,0,0.4);
+  }
+  .sc-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  .sc-card-header h3 { font-size: 1.1em; }
+  .sc-card-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    text-align: center;
+  }
+  .sc-card-stats .stat-value {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #ffd700;
+  }
+  .sc-card-stats .stat-label {
+    font-size: 0.75em;
+    color: #a0aec0;
+  }
+  .badges-section {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 30px;
+  }
+  .badges-section h2 {
+    color: #ffd700;
+    margin-bottom: 15px;
+  }
+  .badge-item {
+    display: inline-block;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 8px 14px;
+    margin: 5px;
+    font-size: 0.85em;
+  }
+  .badge-item .badge-icon { margin-right: 5px; }
+</style>
+
+<style>
+  .trivia-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+  .trivia-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 18px 22px;
+  }
+  .trivia-card.fact {
+    border-left: 4px solid #4ecdc4;
+  }
+  .trivia-card.quote {
+    border-left: 4px solid #ffd700;
+  }
+  .trivia-card .trivia-label {
+    font-size: 0.75em;
+    text-transform: uppercase;
+    color: #718096;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+  .trivia-card .trivia-text {
+    font-size: 0.95em;
+    line-height: 1.5;
+    color: #e2e8f0;
+  }
+  .trivia-card.quote .trivia-text {
+    font-style: italic;
+  }
+  .trivia-card .trivia-author {
+    font-size: 0.8em;
+    color: #a0aec0;
+    margin-top: 8px;
+    text-align: right;
+  }
+  @media (max-width: 700px) {
+    .trivia-section { grid-template-columns: 1fr; }
+  }
+  .loading-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(15,12,41,0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  .loading-overlay.hidden { display: none; }
+  .spinner {
+    width: 50px; height: 50px;
+    border: 4px solid rgba(255,215,0,0.2);
+    border-top-color: #ffd700;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-overlay p { margin-top: 15px; color: #a0aec0; }
+  .tier-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7em;
+    font-weight: 700;
+  }
+  .tier-1 { background: #4a5568; color: #e2e8f0; }
+  .tier-2 { background: #2b6cb0; color: #fff; }
+  .tier-3 { background: #9f7aea; color: #fff; }
+  .tier-4 { background: linear-gradient(90deg,#ffd700,#ff8c00); color: #1a202c; }
+</style>
+
+<script>
+// ===== CONFIGURATION =====
+const API_KEY = 'eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjY2OTEwOTgwMSwiYWFpIjoxMSwidWlkIjo0NTIzMjEyMiwiaWFkIjoiMjAyNi0wNi0xMFQwMzozODowOS4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6NjEwMDgxMywicmduIjoidXNlMSJ9.BbiMHjDBGEgrccYncahbVuKsE8wfoqzo7_CnIbu1Zfw';
+const BOARD_ID = 530233143;
+const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+
+// Northern Team SC Names (as they appear in Monday.com) — for leaderboard
+const TEAM_MEMBERS = {
+  'NORNAIM KAMARUDIN': 'Naim',
+  'Adi Arifin': 'Adi',
+  'MUHAMMAD NUR SYAHEED BIN KUNCHALAVI': 'Syaheed',
+  'Mabel Lim': 'Mabel',
+  'Sidik': 'Sidik',
+  'Ashlynn Pang': 'Ashlynn',
+  'Shirley': 'Shirley'
+};
+
+// Full team including AM (for team totals only)
+const FULL_TEAM = {
+  ...TEAM_MEMBERS,
+  'Syamim': 'Syamim'
+};
+
+// Referral source labels (any source containing these = referral)
+const REFERRAL_KEYWORDS = ['referral'];
+
+// XP Constants
+const XP_PER_NOC = 100;
+const XP_REFERRAL_BONUS = 50;
+const XP_MQL_BONUS = 40;
+const TIER_BONUSES = { 2: 150, 3: 250, 4: 500 };
+const OVERACHIEVER_XP = 100; // per NOC above 12
+const TEAM_TARGET_XP = 200;
+const CHAMPION_XP = { noc: 500, referral: 300, mql: 300 };
+
+// Level thresholds
+const LEVELS = [
+  { name: 'Explorer', xp: 0 },
+  { name: 'Climber', xp: 1000 },
+  { name: 'Achiever', xp: 2500 },
+  { name: 'Elite', xp: 5000 },
+  { name: 'Legend', xp: 10000 },
+  { name: 'Legend II', xp: 15000 },
+  { name: 'Legend III', xp: 20000 },
+  { name: 'Grand Legend', xp: 30000 }
+];
+
+// FY27 Dates (use noon to avoid timezone issues with date-only strings)
+const FY27_START = new Date('2026-07-01T00:00:00+08:00');
+const H1_START = new Date('2026-07-01T00:00:00+08:00');
+const H1_END = new Date('2026-12-31T23:59:59+08:00');
+const H2_START = new Date('2027-01-01T00:00:00+08:00');
+const H2_END = new Date('2027-06-30T23:59:59+08:00');
+
+// State
+let allItems = [];
+let currentPeriod = 'month';
+
+// ===== MONDAY.COM API =====
+async function fetchMondayData() {
+  let allFetched = [];
+  let cursor = null;
+  let hasMore = true;
+
+  // Fetch from FY27 start (July 2026) to now
+  const startDate = '2026-07-01';
+  const endDate = new Date().toISOString().split('T')[0];
+
+  while (hasMore) {
+    let query;
+    if (!cursor) {
+      query = `{ boards(ids: ${BOARD_ID}) { items_page(limit: 100, query_params: {rules: [{column_id: "date4", compare_value: ["${startDate}", "${endDate}"], operator: between}]}) { cursor items { id name column_values(ids: ["person", "numbers8", "date4", "date19", "status5", "dropdown5"]) { id text } } } } }`;
+    } else {
+      query = `{ next_items_page(limit: 100, cursor: "${cursor}") { cursor items { id name column_values(ids: ["person", "numbers8", "date4", "date19", "status5", "dropdown5"]) { id text } } } }`;
+    }
+
+    const response = await fetch('https://api.monday.com/v2', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': API_KEY
+      },
+      body: JSON.stringify({ query })
+    });
+
+    const data = await response.json();
+    let page;
+    if (!cursor) {
+      page = data.data.boards[0].items_page;
+    } else {
+      page = data.data.next_items_page;
+    }
+
+    allFetched = allFetched.concat(page.items);
+    cursor = page.cursor;
+    hasMore = !!cursor && page.items.length > 0;
+  }
+
+  return allFetched;
+}
+
+// ===== DATA PROCESSING =====
+function parseItems(items) {
+  return items.map(item => {
+    const cols = {};
+    item.column_values.forEach(cv => { cols[cv.id] = cv.text; });
+    const scFull = cols['person'] || '';
+    const shortName = FULL_TEAM[scFull];
+    if (!shortName) return null; // Not a Northern team member
+
+    // Only count ATAP category
+    const category = (cols['dropdown5'] || '').toLowerCase();
+    if (!category.includes('atap')) return null;
+
+    const source = (cols['status5'] || '').toLowerCase();
+    const isReferral = REFERRAL_KEYWORDS.some(kw => source.includes(kw));
+
+    return {
+      id: item.id,
+      customer: item.name,
+      sc: shortName,
+      scFull: scFull,
+      systemPrice: parseFloat(cols['numbers8']) || 0,
+      closedDate: cols['date4'] || null,
+      depositDate: cols['date19'] || null,
+      source: cols['status5'] || 'Unknown',
+      isReferral: isReferral,
+      isAM: shortName === 'Syamim'
+    };
+  }).filter(x => x !== null && x.closedDate);
+}
+
+function getMonthKey(dateStr) {
+  const d = new Date(dateStr);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+
+function getWeekNumber(dateStr) {
+  const d = new Date(dateStr);
+  const startOfYear = new Date(d.getFullYear(), 0, 1);
+  const days = Math.floor((d - startOfYear) / 86400000);
+  return Math.ceil((days + startOfYear.getDay() + 1) / 7);
+}
+
+function getWeekKey(dateStr) {
+  const d = new Date(dateStr);
+  return `${d.getFullYear()}-W${String(getWeekNumber(dateStr)).padStart(2,'0')}`;
+}
+
+function isInPeriod(dateStr, period) {
+  // Parse date string as Malaysia timezone to avoid UTC offset issues
+  const parts = dateStr.split('-');
+  const d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+  if (period === 'h1') {
+    return d.getFullYear() === 2026 && d.getMonth() >= 6; // Jul-Dec 2026
+  }
+  if (period === 'h2') {
+    return d.getFullYear() === 2027 && d.getMonth() <= 5; // Jan-Jun 2027
+  }
+  if (period === 'month') {
+    const now = new Date();
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+  }
+  return true;
+}
+
+function calculateXP(items) {
+  // Group by SC
+  const scData = {};
+  Object.values(TEAM_MEMBERS).forEach(name => {
+    scData[name] = { noc: 0, referrals: 0, mqls: 0, nob: 0, items: [], monthlyNOC: {} };
+  });
+
+  items.forEach(item => {
+    const sc = scData[item.sc];
+    if (!sc) return;
+    sc.noc++;
+    sc.nob += item.systemPrice;
+    sc.items.push(item);
+    if (item.isReferral) sc.referrals++;
+    else sc.mqls++;
+
+    const mk = getMonthKey(item.closedDate);
+    sc.monthlyNOC[mk] = (sc.monthlyNOC[mk] || 0) + 1;
+  });
+
+  // If no items at all in this period, return all zeros
+  if (items.length === 0) {
+    return Object.values(TEAM_MEMBERS).map(name => ({
+      name, xp: 0, noc: 0, referrals: 0, mqls: 0, nob: 0,
+      level: 'Explorer', nextLevel: 'Climber', xpProgress: 0,
+      currentTier: 0, currentMonthNOC: 0, monthlyNOC: {}, items: []
+    }));
+  }
+
+  // Calculate XP per SC
+  const results = Object.entries(scData).map(([name, data]) => {
+    let xp = 0;
+
+    // Performance XP
+    xp += data.noc * XP_PER_NOC;
+    // Contribution XP
+    xp += data.referrals * XP_REFERRAL_BONUS;
+    xp += data.mqls * XP_MQL_BONUS;
+
+    // Tier bonuses (per month)
+    let totalTierBonus = 0;
+    Object.values(data.monthlyNOC).forEach(monthNOC => {
+      if (monthNOC >= 12) {
+        totalTierBonus += TIER_BONUSES[4];
+        // Overachiever
+        xp += (monthNOC - 12) * OVERACHIEVER_XP;
+      } else if (monthNOC >= 9) totalTierBonus += TIER_BONUSES[3];
+      else if (monthNOC >= 6) totalTierBonus += TIER_BONUSES[2];
+    });
+    xp += totalTierBonus;
+
+    // Determine current month tier
+    const now = new Date();
+    const currentMK = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+    const currentMonthNOC = data.monthlyNOC[currentMK] || 0;
+    let currentTier = 0;
+    if (currentMonthNOC >= 12) currentTier = 4;
+    else if (currentMonthNOC >= 9) currentTier = 3;
+    else if (currentMonthNOC >= 6) currentTier = 2;
+    else if (currentMonthNOC >= 3) currentTier = 1;
+
+    // Determine level
+    let level = LEVELS[0];
+    for (let i = LEVELS.length - 1; i >= 0; i--) {
+      if (xp >= LEVELS[i].xp) { level = LEVELS[i]; break; }
+    }
+    // Next level
+    const levelIdx = LEVELS.indexOf(level);
+    const nextLevel = LEVELS[levelIdx + 1] || null;
+    const xpProgress = nextLevel ? ((xp - level.xp) / (nextLevel.xp - level.xp)) * 100 : 100;
+
+    return {
+      name, xp, noc: data.noc, referrals: data.referrals, mqls: data.mqls,
+      nob: data.nob, level: level.name, nextLevel: nextLevel?.name,
+      xpProgress, currentTier, currentMonthNOC, monthlyNOC: data.monthlyNOC,
+      items: data.items
+    };
+  });
+
+  // Champions (highest in period) — display only, no XP bonus during live tracking
+  // Champion XP is awarded at month-end by management, not in real-time
+  results.sort((a, b) => b.xp - a.xp);
+
+  if (results.length > 0 && items.length > 0) {
+    const nocChamp = [...results].sort((a,b) => b.noc - a.noc)[0];
+    if (nocChamp.noc > 0) { nocChamp.isNOCChampion = true; }
+    const refChamp = [...results].sort((a,b) => b.referrals - a.referrals)[0];
+    if (refChamp.referrals > 0) { refChamp.isRefChampion = true; }
+    const mqlChamp = [...results].sort((a,b) => b.mqls - a.mqls)[0];
+    if (mqlChamp.mqls > 0) { mqlChamp.isMQLChampion = true; }
+  }
+
+  // Re-sort and re-calculate levels after champion bonuses
+  results.forEach(r => {
+    for (let i = LEVELS.length - 1; i >= 0; i--) {
+      if (r.xp >= LEVELS[i].xp) { r.level = LEVELS[i].name; break; }
+    }
+  });
+  results.sort((a, b) => b.xp - a.xp);
+
+  return results;
+}
+
+// ===== BADGE CALCULATION =====
+function calculateBadges(items) {
+  const badges = {};
+  Object.values(TEAM_MEMBERS).forEach(name => { badges[name] = []; });
+
+  // Group by month
+  const byMonth = {};
+  items.forEach(item => {
+    const mk = getMonthKey(item.closedDate);
+    if (!byMonth[mk]) byMonth[mk] = [];
+    byMonth[mk].push(item);
+  });
+
+  // First Strike — first NOC of each month
+  Object.entries(byMonth).forEach(([month, monthItems]) => {
+    monthItems.sort((a,b) => new Date(a.closedDate) - new Date(b.closedDate));
+    if (monthItems.length > 0) {
+      const first = monthItems[0];
+      badges[first.sc].push({ icon: '🥇', name: 'First Strike', month });
+    }
+  });
+
+  // Lightning Closer — 3 NOC in one week
+  const byScWeek = {};
+  items.forEach(item => {
+    const wk = getWeekKey(item.closedDate);
+    const key = `${item.sc}-${wk}`;
+    byScWeek[key] = (byScWeek[key] || 0) + 1;
+  });
+  Object.entries(byScWeek).forEach(([key, count]) => {
+    if (count >= 3) {
+      const sc = key.split('-')[0];
+      if (badges[sc] && !badges[sc].some(b => b.name === 'Lightning Closer')) {
+        badges[sc].push({ icon: '⚡', name: 'Lightning Closer' });
+      }
+    }
+  });
+
+  // Hot Streak — NOC in 3 consecutive weeks
+  Object.values(TEAM_MEMBERS).forEach(name => {
+    const scItems = items.filter(i => i.sc === name);
+    const weeks = [...new Set(scItems.map(i => getWeekKey(i.closedDate)))].sort();
+    for (let i = 0; i < weeks.length - 2; i++) {
+      const w1 = parseInt(weeks[i].split('W')[1]);
+      const w2 = parseInt(weeks[i+1].split('W')[1]);
+      const w3 = parseInt(weeks[i+2].split('W')[1]);
+      if (w2 === w1 + 1 && w3 === w2 + 1) {
+        if (!badges[name].some(b => b.name === 'Hot Streak')) {
+          badges[name].push({ icon: '🔥', name: 'Hot Streak' });
+        }
+        break;
+      }
+    }
+  });
+
+  // Referral Master — 5 referral NOC in a month
+  Object.entries(byMonth).forEach(([month, monthItems]) => {
+    const refBySC = {};
+    monthItems.filter(i => i.isReferral).forEach(i => {
+      refBySC[i.sc] = (refBySC[i.sc] || 0) + 1;
+    });
+    Object.entries(refBySC).forEach(([sc, count]) => {
+      if (count >= 5 && !badges[sc].some(b => b.name === 'Referral Master' && b.month === month)) {
+        badges[sc].push({ icon: '🤝', name: 'Referral Master', month });
+      }
+    });
+  });
+
+  // MQL Specialist — 5 MQL NOC in a month
+  Object.entries(byMonth).forEach(([month, monthItems]) => {
+    const mqlBySC = {};
+    monthItems.filter(i => !i.isReferral).forEach(i => {
+      mqlBySC[i.sc] = (mqlBySC[i.sc] || 0) + 1;
+    });
+    Object.entries(mqlBySC).forEach(([sc, count]) => {
+      if (count >= 5 && !badges[sc].some(b => b.name === 'MQL Specialist' && b.month === month)) {
+        badges[sc].push({ icon: '💡', name: 'MQL Specialist', month });
+      }
+    });
+  });
+
+  // Momentum Builder — improve NOC vs previous month
+  const months = Object.keys(byMonth).sort();
+  for (let i = 1; i < months.length; i++) {
+    Object.values(TEAM_MEMBERS).forEach(name => {
+      const prev = byMonth[months[i-1]]?.filter(x => x.sc === name).length || 0;
+      const curr = byMonth[months[i]]?.filter(x => x.sc === name).length || 0;
+      if (curr > prev && prev > 0) {
+        badges[name].push({ icon: '📈', name: 'Momentum Builder', month: months[i] });
+      }
+    });
+  }
+
+  // Elite Performer — reach Tier 4 in any month
+  Object.entries(byMonth).forEach(([month, monthItems]) => {
+    const nocBySC = {};
+    monthItems.forEach(i => { nocBySC[i.sc] = (nocBySC[i.sc] || 0) + 1; });
+    Object.entries(nocBySC).forEach(([sc, count]) => {
+      if (count >= 12 && !badges[sc].some(b => b.name === 'Elite Performer')) {
+        badges[sc].push({ icon: '🏆', name: 'Elite Performer', month });
+      }
+    });
+  });
+
+  return badges;
+}
+
+// ===== RENDERING =====
+function renderLeaderboard(results, badges, teamTotalNOC, teamTotalNOB) {
+  // Summary cards — full team totals (including AM)
+  document.getElementById('summaryCards').innerHTML = `
+    <div class="summary-card"><div class="value">${teamTotalNOC}</div><div class="label">Team NOC</div></div>
+    <div class="summary-card"><div class="value">RM ${teamTotalNOB.toLocaleString()}</div><div class="label">Team NOB</div></div>
+  `;
+
+  // Leaderboard table
+  let tableHTML = `<h2>🏆 Leaderboard Rankings</h2><table class="lb-table">
+    <thead><tr><th>#</th><th>Consultant</th><th>Level</th><th>XP</th><th>NOC</th><th>Referral</th><th>MQL</th><th>Tier</th><th>Badges</th></tr></thead><tbody>`;
+
+  results.forEach((r, i) => {
+    const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
+    const rankIcon = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i+1}`;
+    const levelClass = `level-${r.level.toLowerCase().replace(' ', '-')}`;
+    const tierClass = r.currentTier > 0 ? `tier-${r.currentTier}` : '';
+    const tierLabel = r.currentTier > 0 ? `T${r.currentTier}` : '—';
+    const badgeCount = (badges[r.name] || []).length;
+
+    tableHTML += `<tr>
+      <td class="${rankClass}">${rankIcon}</td>
+      <td class="sc-name">${r.name}</td>
+      <td><span class="level-badge ${levelClass}">${r.level}</span></td>
+      <td><strong>${r.xp.toLocaleString()}</strong>
+        <div class="xp-bar"><div class="xp-bar-fill" style="width:${r.xpProgress}%"></div></div>
+      </td>
+      <td>${r.noc}</td>
+      <td>${r.referrals}</td>
+      <td>${r.mqls}</td>
+      <td><span class="tier-badge ${tierClass}">${tierLabel}</span></td>
+      <td>${badgeCount} ⭐</td>
+    </tr>`;
+  });
+
+  tableHTML += '</tbody></table>';
+  document.getElementById('leaderboard').innerHTML = tableHTML;
+
+  // Individual Cards
+  let cardsHTML = '';
+  results.forEach(r => {
+    const scBadges = badges[r.name] || [];
+    const badgeIcons = scBadges.map(b => b.icon).join(' ') || '—';
+    const champLabels = [];
+    if (r.isNOCChampion) champLabels.push('🏆 NOC Champ');
+    if (r.isRefChampion) champLabels.push('🎯 Ref Champ');
+    if (r.isMQLChampion) champLabels.push('💡 MQL Champ');
+
+    cardsHTML += `
+      <div class="sc-card">
+        <div class="sc-card-header">
+          <h3>${r.name}</h3>
+          <span class="level-badge level-${r.level.toLowerCase().replace(' ','-')}">${r.level}</span>
+        </div>
+        ${champLabels.length ? `<p style="color:#ffd700;font-size:0.8em;margin-bottom:10px;">${champLabels.join(' | ')}</p>` : ''}
+        <div class="sc-card-stats">
+          <div><div class="stat-value">${r.xp.toLocaleString()}</div><div class="stat-label">XP</div></div>
+          <div><div class="stat-value">${r.noc}</div><div class="stat-label">NOC</div></div>
+          <div><div class="stat-value">${r.currentMonthNOC}</div><div class="stat-label">This Month</div></div>
+        </div>
+        <div style="margin-top:12px; font-size:0.85em; color:#a0aec0;">
+          Referral: ${r.referrals} | MQL: ${r.mqls} | NOB: RM ${r.nob.toLocaleString()}
+        </div>
+        <div style="margin-top:8px; font-size:0.9em;">${badgeIcons}</div>
+      </div>`;
+  });
+  document.getElementById('individualCards').innerHTML = cardsHTML;
+
+  // Badges Overview
+  let badgesHTML = '<h2>🎖 Badge Tracker</h2><div>';
+  Object.entries(badges).forEach(([sc, scBadges]) => {
+    if (scBadges.length > 0) {
+      badgesHTML += `<p style="margin:10px 0 5px; font-weight:600;">${sc}:</p>`;
+      scBadges.forEach(b => {
+        badgesHTML += `<span class="badge-item"><span class="badge-icon">${b.icon}</span>${b.name}${b.month ? ` (${b.month})` : ''}</span>`;
+      });
+    }
+  });
+  badgesHTML += '</div>';
+  document.getElementById('badgesSection').innerHTML = badgesHTML;
+}
+
+// ===== MONTHLY THEMES =====
+const MONTHLY_THEMES = {
+  7:  { name: 'FAST START', emoji: '🌱', accent: '#00e676', gradient: 'linear-gradient(135deg, #0a192f, #0d3320, #1a4731)', headerGrad: 'linear-gradient(90deg, #00e676, #76ff03)', cardBg: 'rgba(0,230,118,0.08)', glowColor: '#00e676' },
+  8:  { name: 'BUILD MOMENTUM', emoji: '🏗️', accent: '#448aff', gradient: 'linear-gradient(135deg, #0a0e2a, #0d1f4d, #142b6b)', headerGrad: 'linear-gradient(90deg, #448aff, #82b1ff)', cardBg: 'rgba(68,138,255,0.08)', glowColor: '#448aff' },
+  9:  { name: 'RAISE THE BAR', emoji: '📈', accent: '#ff9100', gradient: 'linear-gradient(135deg, #1a0f00, #2d1800, #4a2800)', headerGrad: 'linear-gradient(90deg, #ff9100, #ffab40)', cardBg: 'rgba(255,145,0,0.08)', glowColor: '#ff9100' },
+  10: { name: 'PEAK PERFORMANCE', emoji: '⚡', accent: '#ff1744', gradient: 'linear-gradient(135deg, #1a0005, #2d000d, #4a0014)', headerGrad: 'linear-gradient(90deg, #ff1744, #ff5252)', cardBg: 'rgba(255,23,68,0.08)', glowColor: '#ff1744' },
+  11: { name: 'POWER UP', emoji: '🔋', accent: '#00e5ff', gradient: 'linear-gradient(135deg, #001519, #002630, #003d4d)', headerGrad: 'linear-gradient(90deg, #00e5ff, #18ffff)', cardBg: 'rgba(0,229,255,0.08)', glowColor: '#00e5ff' },
+  12: { name: 'FINISH STRONG', emoji: '🏆', accent: '#ffd600', gradient: 'linear-gradient(135deg, #1a1500, #2d2400, #4a3b00)', headerGrad: 'linear-gradient(90deg, #ffd600, #ffff00)', cardBg: 'rgba(255,214,0,0.08)', glowColor: '#ffd600' },
+  1:  { name: 'NEW HEIGHTS', emoji: '🏔', accent: '#1de9b6', gradient: 'linear-gradient(135deg, #001a14, #00332b, #004d40)', headerGrad: 'linear-gradient(90deg, #1de9b6, #64ffda)', cardBg: 'rgba(29,233,182,0.08)', glowColor: '#1de9b6' },
+  2:  { name: 'STAY RELENTLESS', emoji: '🔥', accent: '#d500f9', gradient: 'linear-gradient(135deg, #12001a, #240033, #3b0052)', headerGrad: 'linear-gradient(90deg, #d500f9, #e040fb)', cardBg: 'rgba(213,0,249,0.08)', glowColor: '#d500f9' },
+  3:  { name: 'BREAK LIMITS', emoji: '💥', accent: '#ff3d00', gradient: 'linear-gradient(135deg, #1a0500, #330a00, #4d1000)', headerGrad: 'linear-gradient(90deg, #ff3d00, #ff6e40)', cardBg: 'rgba(255,61,0,0.08)', glowColor: '#ff3d00' },
+  4:  { name: 'OWN THE GAME', emoji: '⚡', accent: '#ff1744', gradient: 'linear-gradient(135deg, #0f0000, #2d0505, #4a0a0a)', headerGrad: 'linear-gradient(90deg, #ff1744, #f50057)', cardBg: 'rgba(255,23,68,0.08)', glowColor: '#ff1744' },
+  5:  { name: 'FINAL PUSH', emoji: '🚀', accent: '#ff6d00', gradient: 'linear-gradient(135deg, #1a0c00, #331800, #4d2500)', headerGrad: 'linear-gradient(90deg, #ff6d00, #ff9e40)', cardBg: 'rgba(255,109,0,0.08)', glowColor: '#ff6d00' },
+  6:  { name: 'LEGACY FINISH', emoji: '👑', accent: '#ffd700', gradient: 'linear-gradient(135deg, #1a1400, #332900, #4d3e00)', headerGrad: 'linear-gradient(90deg, #ffd700, #ffe57f)', cardBg: 'rgba(255,215,0,0.08)', glowColor: '#ffd700' }
+};
+
+function applyMonthlyTheme() {
+  const month = new Date().getMonth() + 1; // 1-12
+  const theme = MONTHLY_THEMES[month] || MONTHLY_THEMES[7];
+
+  // Apply background
+  document.body.style.background = theme.gradient;
+
+  // Apply header gradient
+  const h1 = document.querySelector('header h1');
+  h1.style.background = theme.headerGrad;
+  h1.style.webkitBackgroundClip = 'text';
+  h1.style.webkitTextFillColor = 'transparent';
+
+  // Add chapter subtitle
+  const subtitle = document.querySelector('.subtitle');
+  subtitle.innerHTML = `Titans — Chapter ${String(month >= 7 ? month - 6 : month + 6).padStart(2,'0')}: ${theme.name} ${theme.emoji}`;
+
+  // Apply accent to various elements
+  document.documentElement.style.setProperty('--accent', theme.accent);
+
+  // Update summary card value colors
+  document.querySelectorAll('.summary-card .value').forEach(el => {
+    el.style.color = theme.accent;
+  });
+
+  // Update period button active style
+  const style = document.createElement('style');
+  style.textContent = `
+    .period-btn:hover, .period-btn.active {
+      background: ${theme.headerGrad} !important;
+      color: #1a202c !important;
+    }
+    .leaderboard-section h2, .badges-section h2 {
+      color: ${theme.accent} !important;
+    }
+    .leaderboard-section, .badges-section {
+      border-color: ${theme.accent}20 !important;
+      box-shadow: 0 0 20px ${theme.accent}10;
+    }
+    .sc-card {
+      background: transparent !important;
+      border-color: ${theme.accent}50 !important;
+    }
+    .sc-card:hover {
+      border-color: ${theme.accent}90 !important;
+      box-shadow: 0 0 15px ${theme.accent}30;
+    }
+    .sc-card-stats .stat-value {
+      color: #ffd700 !important;
+    }
+    .xp-bar-fill {
+      background: linear-gradient(90deg, #ffd700, #ffab00) !important;
+    }
+    .trivia-card.fact {
+      border-left-color: ${theme.accent} !important;
+    }
+    .summary-card {
+      border-color: ${theme.accent}30 !important;
+      box-shadow: 0 0 12px ${theme.accent}15;
+    }
+    .summary-card .value {
+      color: ${theme.accent} !important;
+      text-shadow: 0 0 10px ${theme.accent}40;
+    }
+    .rank-1 { color: ${theme.accent} !important; text-shadow: 0 0 8px ${theme.accent}60; }
+    .lb-table th {
+      background: ${theme.accent}20 !important;
+      color: ${theme.accent} !important;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+// Apply theme immediately
+applyMonthlyTheme();
+
+const SOLAR_FACTS = [
+  "A single solar panel can save over 1 tonne of CO₂ emissions per year — that's like planting 50 trees.",
+  "Solar panels can last 25-30 years, but many keep producing energy well beyond that with only slight efficiency loss.",
+  "Malaysia receives an average of 4-5 hours of peak sunlight daily — one of the best solar resources in Southeast Asia.",
+  "The first solar cell was invented in 1954 at Bell Labs. It was only 6% efficient. Today's panels hit 20-22%.",
+  "A typical 10kW residential system in Malaysia can generate enough electricity to power 3-4 average homes.",
+  "Solar inverters convert DC electricity from panels into AC electricity your home uses. They're the brain of the system.",
+  "Monocrystalline panels are more efficient but costlier. Polycrystalline panels offer better value per watt for larger roofs.",
+  "Battery storage systems (like BESS) let homeowners use solar energy at night — true energy independence.",
+  "The NEM (Net Energy Metering) scheme lets you sell excess solar energy back to TNB and offset your bill.",
+  "A solar panel's efficiency drops only about 0.5% per year. After 25 years, it still produces ~87% of its original output.",
+  "Hybrid inverters can manage both solar panels and battery systems, switching between grid and battery seamlessly.",
+  "The sun produces enough energy in one hour to power the entire world for a full year.",
+  "Solar panels work on cloudy days too — they just produce about 10-25% of their rated output.",
+  "Microinverters optimize each panel individually, while string inverters connect panels in series — each has its use case.",
+  "Lithium iron phosphate (LFP) batteries are the safest chemistry for home storage — no thermal runaway risk.",
+  "The payback period for solar in Malaysia is typically 5-7 years, after which it's essentially free electricity.",
+  "Bifacial solar panels capture sunlight from both sides, boosting output by 10-30% depending on the mounting surface.",
+  "A clean solar panel produces up to 25% more energy than a dirty one. Regular maintenance matters.",
+  "Peak sun hours in Peninsular Malaysia average 4.2 hours — meaning a 10kW system generates about 42 kWh daily.",
+  "Solar optimizers help when panels face different directions or have partial shading — maximizing each panel's contribution.",
+  "Three-phase inverters distribute power evenly across all phases, which is essential for larger residential systems.",
+  "The ATAP program (Aturan Tenaga Awam untuk Pengguna) allows rooftop solar up to 72kW for residential consumers.",
+  "Solar panels are 90% recyclable. The glass, aluminium frame, and silicon can all be recovered and reused.",
+  "Half-cut cell technology reduces resistive losses and improves shade tolerance compared to traditional full-cell panels.",
+  "Tier 1 solar panels come from manufacturers with >5 years experience and bankable financial stability.",
+  "An EPS (Emergency Power Supply) box ensures critical loads stay powered during blackouts when paired with batteries.",
+  "Malaysia's equatorial location means solar irradiance is consistent year-round — no dramatic seasonal drops like temperate countries.",
+  "String sizing matters: too many panels on one string can exceed the inverter's voltage limit, especially on cold mornings.",
+  "Ground-mounted systems can be angled optimally, but rooftop systems save land and are closer to consumption points.",
+  "A 5kW system typically costs RM 20,000-30,000 in Malaysia and saves RM 300-500 monthly on electricity bills."
+];
+
+const MOTIVATIONAL_QUOTES = [
+  { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+  { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+  { text: "Don't count the days, make the days count.", author: "Muhammad Ali" },
+  { text: "Small progress is still progress. Every step up matters.", author: "Project ASCEND" },
+  { text: "Consistency is what transforms average into excellence.", author: "Unknown" },
+  { text: "Your limitation—it's only your imagination.", author: "Unknown" },
+  { text: "The harder you work for something, the greater you'll feel when you achieve it.", author: "Unknown" },
+  { text: "Success doesn't come from what you do occasionally. It comes from what you do consistently.", author: "Marie Forleo" },
+  { text: "Wake up with determination. Go to bed with satisfaction.", author: "Unknown" },
+  { text: "It's not about being the best. It's about being better than you were yesterday.", author: "Project ASCEND" },
+  { text: "Champions keep playing until they get it right.", author: "Billie Jean King" },
+  { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
+  { text: "Opportunities don't happen. You create them.", author: "Chris Grosser" },
+  { text: "What seems impossible today will one day become your warm-up.", author: "Unknown" },
+  { text: "A river cuts through rock not because of its power, but because of its persistence.", author: "Jim Watkins" },
+  { text: "You don't have to be great to start, but you have to start to be great.", author: "Zig Ziglar" },
+  { text: "The best time to plant a tree was 20 years ago. The second best time is now.", author: "Chinese Proverb" },
+  { text: "Push yourself because no one else is going to do it for you.", author: "Unknown" },
+  { text: "Great things never come from comfort zones.", author: "Unknown" },
+  { text: "Don't wish it were easier. Wish you were better.", author: "Jim Rohn" },
+  { text: "Results happen over time, not overnight. Work hard, stay consistent, and be patient.", author: "Unknown" },
+  { text: "The energy you bring to your work is the energy your customers feel.", author: "Project ASCEND" },
+  { text: "The difference between ordinary and extraordinary is that little extra.", author: "Jimmy Johnson" },
+  { text: "Discipline is doing what needs to be done, even when you don't feel like doing it.", author: "Unknown" },
+  { text: "One closing at a time. One step at a time. That's how legends are built.", author: "Project ASCEND" },
+  { text: "Your future is created by what you do today, not tomorrow.", author: "Robert Kiyosaki" },
+  { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+  { text: "Success is the sum of small efforts repeated day in and day out.", author: "Robert Collier" },
+  { text: "Fall seven times, stand up eight.", author: "Japanese Proverb" },
+  { text: "Every champion was once a contender that refused to give up.", author: "Rocky Balboa" }
+];
+
+function getDailyTrivia() {
+  // Use day of year to rotate daily
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const dayOfYear = Math.floor((now - start) / 86400000);
+
+  const fact = SOLAR_FACTS[dayOfYear % SOLAR_FACTS.length];
+  const quote = MOTIVATIONAL_QUOTES[dayOfYear % MOTIVATIONAL_QUOTES.length];
+
+  document.getElementById('triviaSection').innerHTML = `
+    <div class="trivia-card fact">
+      <div class="trivia-label">☀️ Solar Fun Facts</div>
+      <div class="trivia-text">${fact}</div>
+    </div>
+    <div class="trivia-card quote">
+      <div class="trivia-label">💡 Daily Motivation</div>
+      <div class="trivia-text">"${quote.text}"</div>
+      <div class="trivia-author">— ${quote.author}</div>
+    </div>
+  `;
+}
+
+// Render trivia immediately
+getDailyTrivia();
+
+
+async function loadData() {
+  try {
+    document.getElementById('loading').classList.remove('hidden');
+    const rawItems = await fetchMondayData();
+    allItems = parseItems(rawItems);
+
+    // Filter by period
+    const filtered = allItems.filter(item => isInPeriod(item.closedDate, currentPeriod));
+    
+    // SC-only items for leaderboard XP
+    const scFiltered = filtered.filter(item => !item.isAM);
+    const results = calculateXP(scFiltered);
+    const badges = calculateBadges(scFiltered);
+
+    // Full team items for team totals (including Syamim)
+    const teamTotalNOC = filtered.length;
+    const teamTotalNOB = filtered.reduce((s, item) => s + item.systemPrice, 0);
+
+    renderLeaderboard(results, badges, teamTotalNOC, teamTotalNOB);
+
+    document.getElementById('lastUpdate').textContent =
+      'Last updated: ' + new Date().toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
+  } catch (err) {
+    console.error('Error fetching data:', err);
+    document.getElementById('leaderboard').innerHTML =
+      `<p style="color:#e53e3e;">Error loading data: ${err.message}</p>`;
+  } finally {
+    document.getElementById('loading').classList.add('hidden');
+  }
+}
+
+// Period selector
+document.querySelectorAll('.period-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentPeriod = btn.dataset.period;
+    // Re-render with existing data
+    const filtered = allItems.filter(item => isInPeriod(item.closedDate, currentPeriod));
+    const scFiltered = filtered.filter(item => !item.isAM);
+    const results = calculateXP(scFiltered);
+    const badges = calculateBadges(scFiltered);
+    const teamTotalNOC = filtered.length;
+    const teamTotalNOB = filtered.reduce((s, item) => s + item.systemPrice, 0);
+    renderLeaderboard(results, badges, teamTotalNOC, teamTotalNOB);
+  });
+});
+
+// Initial load
+loadData();
+
+// Auto-refresh
+setInterval(loadData, REFRESH_INTERVAL);
+</script>
+</body>
+</html>
