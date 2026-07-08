@@ -110,6 +110,24 @@
     color: #a0aec0;
     margin-top: 5px;
   }
+  .progress-bar {
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ffd700, #ff8c00);
+    border-radius: 4px;
+    transition: width 0.8s ease;
+  }
+  .progress-label {
+    font-size: 0.75em;
+    color: #a0aec0;
+    margin-top: 5px;
+  }
   .period-btn {
     background: rgba(255,255,255,0.1);
     border: 1px solid rgba(255,255,255,0.2);
@@ -351,8 +369,11 @@ const FULL_TEAM = {
   'Syamim': 'Syamim'
 };
 
-// Referral source labels (any source containing these = referral)
-const REFERRAL_KEYWORDS = ['referral'];
+// Monthly Team Targets
+const MONTHLY_TARGETS = {
+  noc: 77,
+  nob: 2695000
+};
 
 // XP Constants
 const XP_PER_NOC = 100;
@@ -706,10 +727,23 @@ function calculateBadges(items) {
 
 // ===== RENDERING =====
 function renderLeaderboard(results, badges, teamTotalNOC, teamTotalNOB) {
-  // Summary cards — full team totals (including AM)
+  // Summary cards — full team totals with progress toward targets
+  const nocPct = Math.min(100, Math.round((teamTotalNOC / MONTHLY_TARGETS.noc) * 100));
+  const nobPct = Math.min(100, Math.round((teamTotalNOB / MONTHLY_TARGETS.nob) * 100));
+
   document.getElementById('summaryCards').innerHTML = `
-    <div class="summary-card"><div class="value">${teamTotalNOC}</div><div class="label">Team NOC</div></div>
-    <div class="summary-card"><div class="value">RM ${teamTotalNOB.toLocaleString()}</div><div class="label">Team NOB</div></div>
+    <div class="summary-card">
+      <div class="value">${teamTotalNOC} <span style="font-size:0.5em; color:#a0aec0;">/ ${MONTHLY_TARGETS.noc}</span></div>
+      <div class="label">Team NOC</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${nocPct}%"></div></div>
+      <div class="progress-label">${nocPct}% achieved</div>
+    </div>
+    <div class="summary-card">
+      <div class="value">RM ${teamTotalNOB.toLocaleString()} <span style="font-size:0.4em; color:#a0aec0;">/ RM ${MONTHLY_TARGETS.nob.toLocaleString()}</span></div>
+      <div class="label">Team NOB</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${nobPct}%"></div></div>
+      <div class="progress-label">${nobPct}% achieved</div>
+    </div>
   `;
 
   // Leaderboard table
