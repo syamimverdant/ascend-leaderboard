@@ -602,12 +602,15 @@ function calculateXP(items) {
   results.sort((a, b) => b.xp - a.xp);
 
   if (results.length > 0 && items.length > 0) {
-    const nocChamp = [...results].sort((a,b) => b.noc - a.noc)[0];
-    if (nocChamp.noc > 0) { nocChamp.isNOCChampion = true; }
-    const refChamp = [...results].sort((a,b) => b.referrals - a.referrals)[0];
-    if (refChamp.referrals > 0) { refChamp.isRefChampion = true; }
-    const mqlChamp = [...results].sort((a,b) => b.mqls - a.mqls)[0];
-    if (mqlChamp.mqls > 0) { mqlChamp.isMQLChampion = true; }
+    // NOC Champion — all tied at the top get the label
+    const maxNOC = Math.max(...results.map(r => r.noc));
+    if (maxNOC > 0) results.filter(r => r.noc === maxNOC).forEach(r => { r.isNOCChampion = true; });
+    // Referral Champion
+    const maxRef = Math.max(...results.map(r => r.referrals));
+    if (maxRef > 0) results.filter(r => r.referrals === maxRef).forEach(r => { r.isRefChampion = true; });
+    // MQL Champion
+    const maxMQL = Math.max(...results.map(r => r.mqls));
+    if (maxMQL > 0) results.filter(r => r.mqls === maxMQL).forEach(r => { r.isMQLChampion = true; });
   }
 
   // Re-sort and re-calculate levels after champion bonuses
