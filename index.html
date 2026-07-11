@@ -1322,11 +1322,96 @@ setInterval(loadData, REFRESH_INTERVAL);
   </div>
 
   <div id="pk-inverters" class="pk-content" style="display:none;">
-    <div class="pk-coming">
-      <p style="font-size:2em;">⚡</p>
-      <p style="margin-top:10px; font-weight:600;">Inverters Notes</p>
-      <p>Coming soon — content will be added here.</p>
+    <h3>⚡ Solar Inverters Notes</h3>
+    <div class="pk-highlight">Full reference guide — scroll down for all sections</div>
+
+    <h3>1. What is a Solar Inverter?</h3>
+    <p><strong>The brain of the solar system.</strong> Converts DC (from panels) into AC (for your home).</p>
+    <p><strong>What it does:</strong></p>
+    <p>• DC → AC conversion (230V, 50Hz)</p>
+    <p>• MPPT — optimises panel output in real-time</p>
+    <p>• Grid synchronisation</p>
+    <p>• System monitoring (app/cloud)</p>
+    <p>• Safety protection (anti-islanding)</p>
+    <p>• Battery management (hybrid only)</p>
+    <div class="pk-highlight">💡 <strong>Analogy:</strong> Panels = engine. Inverter = gearbox. It decides how power is delivered — to home, battery, or grid.</div>
+
+    <h3>2. Types of Inverters</h3>
+    <table>
+      <tr><th></th><th>String</th><th>Hybrid</th><th>Micro</th></tr>
+      <tr><td>Function</td><td>DC→AC only</td><td><strong>DC→AC + battery + backup</strong></td><td>DC→AC at each panel</td></tr>
+      <tr><td>Battery</td><td>❌</td><td><strong>✅</strong></td><td>❌</td></tr>
+      <tr><td>Backup</td><td>❌</td><td><strong>✅</strong></td><td>❌</td></tr>
+      <tr><td>Shade Handling</td><td>Weakest link</td><td>Per-MPPT string</td><td>Each panel independent</td></tr>
+      <tr><td>Cost</td><td>$</td><td>$$</td><td>$$$</td></tr>
+      <tr><td>Location</td><td>Wall (central)</td><td>Wall (central)</td><td>Behind each panel (roof)</td></tr>
+      <tr><td>Maintenance</td><td>Easy</td><td>Easy</td><td>Harder (on roof)</td></tr>
+      <tr><td>Brands</td><td>Solis, Huawei</td><td><strong>Fox ESS, Solis, Huawei</strong></td><td>Hoymiles, Enphase</td></tr>
+    </table>
+    <div class="pk-highlight">💡 Verdant uses <strong>Hybrid Inverters</strong> — the all-in-one solution for solar + battery + backup.</div>
+
+    <h3>3. When to Use Each</h3>
+    <p><strong>Hybrid Inverter (Our Standard):</strong></p>
+    <p>• Customer wants battery or backup (now or future)</p>
+    <p>• Wants full energy management</p>
+    <p>• Frequent power outages area</p>
+    <p>• Wants to maximise self-consumption</p>
+    <p>• Not sure about battery yet → hybrid is future-proof</p>
+
+    <p><strong>String Inverter:</strong></p>
+    <p>• Cheapest solar-only, no battery ever</p>
+    <p>• Simple roof, no shading, budget priority</p>
+    <p style="color:#e53e3e; font-size:0.85em;">⚠️ If customer later wants battery → must replace entire inverter (pay twice)</p>
+
+    <p><strong>Micro Inverter:</strong></p>
+    <p>• Severe shading (trees, buildings)</p>
+    <p>• Multiple roof orientations</p>
+    <p>• Very small systems (2–4 panels)</p>
+    <p style="color:#e53e3e; font-size:0.85em;">⚠️ No battery/backup. Higher cost. Harder to service.</p>
+
+    <div class="pk-highlight">
+      <strong>Decision Flowchart:</strong><br>
+      Want battery/backup? → <strong>Hybrid</strong> ✅<br>
+      No battery, severe shading? → Micro<br>
+      No battery, simple roof, budget? → String<br>
+      Not sure? → <strong>Hybrid</strong> (future-proof) ✅
     </div>
+
+    <h3>4. Advantages & Disadvantages</h3>
+    <p><strong>Hybrid Inverter (Verdant's Standard):</strong></p>
+    <p style="color:#38a169;">✅ All-in-one (solar + battery + grid + backup)</p>
+    <p style="color:#38a169;">✅ Battery-ready (add later without replacing)</p>
+    <p style="color:#38a169;">✅ Backup power during blackouts</p>
+    <p style="color:#38a169;">✅ Smart energy management (auto-optimises)</p>
+    <p style="color:#38a169;">✅ Maximise self-consumption (store for night use)</p>
+    <p style="color:#38a169;">✅ Future-proof</p>
+    <p style="color:#38a169;">✅ Full monitoring (solar, battery, grid, consumption)</p>
+    <p style="color:#e53e3e;">⚠️ Higher cost than string (but far more value)</p>
+    <p style="color:#e53e3e;">⚠️ Needs battery for backup to work</p>
+
+    <p><strong>String Inverter:</strong></p>
+    <p style="color:#38a169;">✅ Lowest cost</p>
+    <p style="color:#38a169;">✅ Simple, proven</p>
+    <p style="color:#38a169;">✅ High efficiency (97–98%+)</p>
+    <p style="color:#e53e3e;">⚠️ No battery support</p>
+    <p style="color:#e53e3e;">⚠️ No backup power</p>
+    <p style="color:#e53e3e;">⚠️ Shading drags whole string down</p>
+    <p style="color:#e53e3e;">⚠️ Not future-proof</p>
+
+    <p><strong>Micro Inverter:</strong></p>
+    <p style="color:#38a169;">✅ Best shade tolerance (panel-independent)</p>
+    <p style="color:#38a169;">✅ Panel-level monitoring</p>
+    <p style="color:#38a169;">✅ No high-voltage DC on roof (safer)</p>
+    <p style="color:#e53e3e;">⚠️ Most expensive (1 per panel)</p>
+    <p style="color:#e53e3e;">⚠️ No battery/backup</p>
+    <p style="color:#e53e3e;">⚠️ On roof = harder to service</p>
+    <p style="color:#e53e3e;">⚠️ More failure points (20 panels = 20 inverters)</p>
+    <p style="color:#e53e3e;">⚠️ Overkill for simple roofs</p>
+
+    <div class="pk-highlight">
+      💬 <strong>Customer Pitch:</strong> "We use hybrid inverters because they give you the complete package — solar, battery, and backup in one system. Even if you don't want a battery today, the system is ready for one whenever you decide. No extra cost to upgrade later."
+    </div>
+    <p style="color:#718096; font-size:0.8em;">Competitor offers string inverter? Cheaper today, but if customer ever wants battery → replace everything = pay twice. Hybrid = invest once, upgrade anytime.</p>
   </div>
 
   <div id="pk-eps" class="pk-content" style="display:none;">
