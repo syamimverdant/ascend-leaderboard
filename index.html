@@ -1221,11 +1221,104 @@ setInterval(loadData, REFRESH_INTERVAL);
   </div>
 
   <div id="pk-panels" class="pk-content" style="display:none;">
-    <div class="pk-coming">
-      <p style="font-size:2em;">☀️</p>
-      <p style="margin-top:10px; font-weight:600;">Panels Notes</p>
-      <p>Coming soon — content will be added here.</p>
+    <h3>☀️ Solar PV Panels Notes</h3>
+    <div class="pk-highlight">Full reference guide — scroll down for all sections</div>
+
+    <h3>1. Function of Solar PV Panels</h3>
+    <p><strong>What it does:</strong> Converts sunlight directly into electricity. The primary energy-generating component of any solar system.</p>
+    <p><strong>How it works:</strong></p>
+    <p>1. Sunlight hits silicon cells → electrons knocked loose → DC electricity generated</p>
+    <p>2. Inverter converts DC → AC (usable power)</p>
+    <p>3. Home uses the power, excess charges battery or exports to grid</p>
+    <div class="pk-highlight">
+      💡 <strong>Key Numbers:</strong><br>
+      • Peak sun hours (Malaysia): <strong>3.4 hrs/day</strong><br>
+      • 10kW system → ~34 kWh/day<br>
+      • Verdant uses <strong>630Wp panels</strong><br>
+      • N-type panels: <strong>30-year performance warranty</strong>
     </div>
+    <p><strong>Daily Energy = System Size × 3.4 hrs × 85% efficiency</strong></p>
+    <p>Example: 10kW → 10 × 3.4 × 0.85 = <strong>28.9 kWh/day</strong></p>
+
+    <h3>2. Types of Solar PV Panels</h3>
+    <p><strong>By Cell Material:</strong></p>
+    <table>
+      <tr><th></th><th>Monocrystalline</th><th>Polycrystalline</th></tr>
+      <tr><td>Efficiency</td><td><strong>20–23%</strong></td><td>15–18%</td></tr>
+      <tr><td>Appearance</td><td><strong>Black, uniform</strong></td><td>Blue, speckled</td></tr>
+      <tr><td>Lifespan</td><td><strong>25–30 years</strong></td><td>25 years</td></tr>
+      <tr><td>Status</td><td><strong>Industry standard</strong></td><td>Declining/legacy</td></tr>
+    </table>
+    <div class="pk-highlight">💡 Verdant uses <strong>Monocrystalline</strong>. Poly is outdated.</div>
+
+    <p><strong>By Cell Design:</strong></p>
+    <table>
+      <tr><th></th><th>Half-Cut Cell</th><th>Full-Cell</th></tr>
+      <tr><td>Shade Tolerance</td><td><strong>Better</strong> (only half affected)</td><td>Worse (whole string affected)</td></tr>
+      <tr><td>Efficiency</td><td><strong>2–3% higher</strong></td><td>Baseline</td></tr>
+      <tr><td>Reliability</td><td><strong>Lower hotspot risk</strong></td><td>Higher risk</td></tr>
+      <tr><td>Status</td><td><strong>Current standard</strong></td><td>Older gen</td></tr>
+    </table>
+
+    <p><strong>By Cell Technology:</strong></p>
+    <table>
+      <tr><th></th><th>TOPCon (N-Type)</th><th>PERC (P-Type)</th></tr>
+      <tr><td>Efficiency</td><td><strong>22–24%</strong></td><td>20–22%</td></tr>
+      <tr><td>Temp Coefficient</td><td><strong>-0.30%/°C</strong></td><td>-0.35%/°C</td></tr>
+      <tr><td>Degradation</td><td><strong>~0.4%/yr</strong></td><td>~0.55%/yr</td></tr>
+      <tr><td>Performance Warranty</td><td><strong>30 years</strong></td><td>25 years</td></tr>
+      <tr><td>LID (first year loss)</td><td><strong>Negligible</strong></td><td>1–3%</td></tr>
+      <tr><td>Status</td><td><strong>Next-gen mainstream</strong></td><td>Being phased out</td></tr>
+    </table>
+    <div class="pk-highlight">💡 Industry is shifting PERC → <strong>TOPCon</strong>. Better efficiency, lower degradation, better in heat.</div>
+
+    <p><strong>By Light Capture:</strong></p>
+    <table>
+      <tr><th></th><th>Monofacial</th><th>Bifacial</th></tr>
+      <tr><td>Captures</td><td>Front only</td><td><strong>Front + rear</strong></td></tr>
+      <tr><td>Extra output</td><td>—</td><td><strong>+5–30%</strong></td></tr>
+      <tr><td>MY rooftop gain</td><td>—</td><td>Typical +5–10%</td></tr>
+      <tr><td>Best for</td><td>Standard roof</td><td>Flat/light roof, ground-mount</td></tr>
+    </table>
+
+    <p><strong>By Wattage:</strong></p>
+    <p>• 370–410W → Smaller roofs, single-phase</p>
+    <p>• 500–580W → Larger roofs, 3-phase</p>
+    <p>• <strong>600W+ → High-output residential (Verdant uses 630Wp)</strong></p>
+
+    <h3>3. Key Comparisons</h3>
+    <p><strong>Why TOPCon matters in Malaysia (hot climate):</strong></p>
+    <p>At 45°C above STC (typical MY rooftop):</p>
+    <p>• PERC loses: <strong>15.75%</strong> output</p>
+    <p>• TOPCon loses: <strong>13.5%</strong> output</p>
+    <p>→ TOPCon generates more on every hot day, all year round.</p>
+
+    <h3>4. Advantages & Disadvantages</h3>
+    <p><strong>Monocrystalline (Our Standard):</strong></p>
+    <p style="color:#38a169;">✅ Highest efficiency (more power per m²)</p>
+    <p style="color:#38a169;">✅ Better heat performance</p>
+    <p style="color:#38a169;">✅ Sleek black appearance</p>
+    <p style="color:#38a169;">✅ 25–30 year lifespan</p>
+    <p style="color:#e53e3e;">⚠️ Slightly higher cost (worth it for lifetime output)</p>
+
+    <p><strong>TOPCon N-Type (Next Gen):</strong></p>
+    <p style="color:#38a169;">✅ 22–24% efficiency</p>
+    <p style="color:#38a169;">✅ Lower degradation (0.4%/yr)</p>
+    <p style="color:#38a169;">✅ Better in Malaysia's heat (-0.30%/°C)</p>
+    <p style="color:#38a169;">✅ No first-year LID loss</p>
+    <p style="color:#38a169;">✅ 30-year performance warranty</p>
+    <p style="color:#e53e3e;">⚠️ Slightly higher cost than PERC (offset by lifetime gains)</p>
+
+    <p><strong>Bifacial:</strong></p>
+    <p style="color:#38a169;">✅ Extra 5–30% energy from rear side</p>
+    <p style="color:#38a169;">✅ Glass-glass = more durable</p>
+    <p style="color:#e53e3e;">⚠️ Gain depends on surface below (dark roof = less benefit)</p>
+    <p style="color:#e53e3e;">⚠️ Slightly heavier</p>
+
+    <div class="pk-highlight">
+      💬 <strong>Customer Pitch:</strong> "Our 630W panels use the latest N-type monocrystalline technology with half-cut cells. They're designed to handle Malaysia's heat with minimal output loss, and come with a 30-year performance warranty — so you get more power per panel, every day, for decades."
+    </div>
+    <p style="color:#718096; font-size:0.8em;">If competitor uses cheaper PERC/poly panels — explain: lower upfront = lower lifetime output. Premium panels today = more savings over 30 years.</p>
   </div>
 
   <div id="pk-inverters" class="pk-content" style="display:none;">
