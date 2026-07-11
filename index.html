@@ -1108,10 +1108,83 @@ setInterval(loadData, REFRESH_INTERVAL);
   </div>
 
   <div id="pk-batteries" class="pk-content">
-    <h3>Fox ESS CQ7 — Our HV Battery</h3>
-    <div class="pk-highlight">High Voltage | LFP (LiFePO₄) | 7.02 kWh per module | Scalable to 98.28 kWh</div>
+    <h3>🔋 Battery Notes: HV vs LV</h3>
+    <div class="pk-highlight">Full reference guide — scroll down for all sections</div>
+
+    <h3>1. Function of Solar PV Batteries</h3>
+    <p><strong>What it does:</strong> Stores excess solar energy during the day for use at night, during peak hours, or during blackouts.</p>
+    <p><strong>Why customers need it:</strong></p>
+    <p>• Energy Independence — reduce TNB reliance</p>
+    <p>• Backup Power — lights, fridge, WiFi during blackouts</p>
+    <p>• Maximise Savings — use stored energy at full value instead of selling to grid at lower rate</p>
+    <p>• Peak Shaving — use battery during expensive hours</p>
+    <p>• Future-Proofing — as costs rise, stored energy = control</p>
+    <div class="pk-highlight">💡 <strong>Pitch:</strong> "A solar system without a battery is like a water tank without a tap at night."</div>
+    <p><strong>How it works:</strong></p>
+    <p>1. Daytime → panels power home → excess charges battery</p>
+    <p>2. Battery full → excess goes to grid (NEM)</p>
+    <p>3. Night → battery discharges to power home</p>
+    <p>4. Battery empty → draws from grid</p>
+    <p>5. Blackout → battery provides backup (if EPS configured)</p>
+    <p style="color:#718096; font-size:0.8em;">The hybrid inverter manages all this automatically.</p>
+
+    <h3>2. Types of Solar PV Batteries</h3>
+    <p><strong>By Chemistry:</strong></p>
+    <table>
+      <tr><th>Type</th><th>Use</th><th>Notes</th></tr>
+      <tr><td><strong>LFP (LiFePO₄)</strong></td><td>Residential solar</td><td>Safest. 6000+ cycles. What Verdant uses.</td></tr>
+      <tr><td>NMC</td><td>EVs</td><td>Higher density but less safe</td></tr>
+      <tr><td>Lead Acid</td><td>Legacy/off-grid</td><td>Old tech. Short life. Not recommended.</td></tr>
+    </table>
+    <div class="pk-highlight">💡 If customer asks "what type?" → <strong>LFP (Lithium Iron Phosphate)</strong> — safest and longest lasting.</div>
+    <p><strong>By Voltage:</strong></p>
+    <table>
+      <tr><th></th><th>High Voltage (HV)</th><th>Low Voltage (LV)</th></tr>
+      <tr><td>Range</td><td>100–500V+</td><td>48–51.2V</td></tr>
+      <tr><td>Current</td><td>Lower (efficient)</td><td>Higher (more loss)</td></tr>
+      <tr><td>Cable</td><td>Thinner</td><td>Thicker</td></tr>
+    </table>
+    <p><strong>P = V × I</strong> → same power at higher voltage = less current = less loss</p>
+    <p>Example: 5kW at 400V = 12.5A | 5kW at 48V = 104A</p>
+
+    <h3>3. Comparison: HV vs LV</h3>
+    <table>
+      <tr><th>Criteria</th><th>HV (Ours)</th><th>LV</th></tr>
+      <tr><td>Efficiency</td><td><strong>Higher</strong></td><td>Lower (more heat loss)</td></tr>
+      <tr><td>Cables</td><td><strong>Thinner</strong></td><td>Thicker</td></tr>
+      <tr><td>Speed</td><td><strong>Faster charge/discharge</strong></td><td>Slower</td></tr>
+      <tr><td>Installation</td><td><strong>Cleaner</strong></td><td>More cables/clutter</td></tr>
+      <tr><td>Lifespan</td><td><strong>6,000–10,000 cycles</strong></td><td>4,000–6,000 cycles</td></tr>
+      <tr><td>Best For</td><td>Premium, whole-home</td><td>Budget, basic backup</td></tr>
+    </table>
+    <div class="pk-highlight">💡 <strong>Analogy:</strong> HV = high-pressure hose (efficient, fast). LV = wide low-pressure hose (needs more volume, loses more).</div>
+
+    <h3>4. Advantages & Disadvantages</h3>
+    <p><strong>HV Advantages:</strong></p>
+    <p style="color:#38a169;">✅ Higher efficiency (>95% round-trip)</p>
+    <p style="color:#38a169;">✅ Faster charge & discharge</p>
+    <p style="color:#38a169;">✅ Cleaner installation (thinner cables)</p>
+    <p style="color:#38a169;">✅ Better for whole-home backup</p>
+    <p style="color:#38a169;">✅ Future-proof (industry trend)</p>
+    <p style="color:#38a169;">✅ Longer lifespan</p>
+    <p><strong>HV Disadvantages:</strong></p>
+    <p style="color:#e53e3e;">⚠️ Higher upfront cost (offset by long-term value)</p>
+    <p style="color:#e53e3e;">⚠️ Requires certified installer (standard at Verdant)</p>
+    <p style="color:#e53e3e;">⚠️ Needs compatible hybrid inverter</p>
+    <p><strong>LV Advantages:</strong></p>
+    <p style="color:#38a169;">✅ Lower entry cost</p>
+    <p style="color:#38a169;">✅ Wider inverter compatibility</p>
+    <p style="color:#38a169;">✅ Easier handling (lower voltage)</p>
+    <p><strong>LV Disadvantages:</strong></p>
+    <p style="color:#e53e3e;">⚠️ Lower efficiency</p>
+    <p style="color:#e53e3e;">⚠️ Thicker cabling</p>
+    <p style="color:#e53e3e;">⚠️ Slower response</p>
+    <p style="color:#e53e3e;">⚠️ Shorter lifespan</p>
+
+    <h3>5. Our Battery: Fox ESS CQ7</h3>
     <table>
       <tr><th>Spec</th><th>Value</th></tr>
+      <tr><td>Type</td><td>LFP (LiFePO₄)</td></tr>
       <tr><td>Capacity/Module</td><td>7.02 kWh</td></tr>
       <tr><td>Voltage</td><td>115.2V – 806.4V</td></tr>
       <tr><td>Max Modules</td><td>14 in series (98.28 kWh)</td></tr>
@@ -1121,28 +1194,30 @@ setInterval(loadData, REFRESH_INTERVAL);
       <tr><td>IP Rating</td><td>IP65 (Outdoor ready)</td></tr>
       <tr><td>Fire Protection</td><td>Yes (built-in)</td></tr>
       <tr><td>Temp (Discharge)</td><td>-10°C to 55°C</td></tr>
+      <tr><td>Certifications</td><td>IEC 62619, UN38.3</td></tr>
     </table>
+    <p><strong>Why CQ7 stands out:</strong></p>
+    <p style="color:#38a169;">✅ Massive scalability (14–98 kWh)</p>
+    <p style="color:#38a169;">✅ IP65 — outdoor installation</p>
+    <p style="color:#38a169;">✅ Fire protection built-in</p>
+    <p style="color:#38a169;">✅ Plug & play (fast install)</p>
+    <p style="color:#38a169;">✅ 110A peak discharge</p>
 
-    <h3>Why HV > LV (Quick Pitch)</h3>
-    <p>• <strong>More efficient</strong> — less energy lost as heat (>95% round-trip)</p>
-    <p>• <strong>Thinner cables</strong> — cleaner installation</p>
-    <p>• <strong>IP65</strong> — can install outdoors (most LV = indoor only)</p>
-    <p>• <strong>Fire protection built-in</strong> — standard, not optional</p>
-    <p>• <strong>Faster response</strong> — handles high-power loads better</p>
-
-    <h3>vs LV Competitors (Quick Compare)</h3>
+    <h3>6. vs LV Competitors</h3>
     <table>
       <tr><th></th><th>CQ7 (HV)</th><th>Pylontech</th><th>Dyness</th><th>Hoymiles</th></tr>
       <tr><td>Voltage</td><td><strong>HV</strong></td><td>48V</td><td>48V</td><td>51.2V</td></tr>
+      <tr><td>Capacity</td><td><strong>7.02/mod</strong></td><td>14.4 kWh</td><td>14.4 kWh</td><td>15.36 kWh</td></tr>
       <tr><td>IP</td><td><strong>IP65</strong></td><td>IP20</td><td>IP20</td><td>IP65</td></tr>
       <tr><td>Fire Prot.</td><td><strong>Yes</strong></td><td>No</td><td>No</td><td>No</td></tr>
       <tr><td>Efficiency</td><td><strong>>95%</strong></td><td>>95%</td><td>~92%</td><td>~95%</td></tr>
-      <tr><td>Max Cap.</td><td><strong>98 kWh</strong></td><td>38 kWh</td><td>77 kWh</td><td>102 kWh</td></tr>
+      <tr><td>Max System</td><td><strong>98 kWh</strong></td><td>38 kWh</td><td>77 kWh</td><td>102 kWh</td></tr>
+      <tr><td>Connection</td><td>Series</td><td>Parallel</td><td>Parallel</td><td>Parallel</td></tr>
     </table>
-
     <div class="pk-highlight">
-      💬 <strong>Customer Pitch:</strong> "Our battery is high-voltage — meaning you get more usable energy, faster response for your appliances, and it can be installed outdoors with IP65 protection. It's safer too with built-in fire protection."
+      💬 <strong>Customer Pitch:</strong> "Our battery is high-voltage — you get more usable energy, faster response for appliances, and it can be installed outdoors with IP65 protection. Built-in fire protection too."
     </div>
+    <p style="color:#718096; font-size:0.8em; margin-top:15px;">LV batteries aren't bad — they suit simpler installs. But for premium whole-home solar, HV is the right fit.</p>
   </div>
 
   <div id="pk-panels" class="pk-content" style="display:none;">
