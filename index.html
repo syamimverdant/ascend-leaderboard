@@ -62,7 +62,7 @@
     <button class="period-btn active" data-period="month">Current Month</button>
     <button class="period-btn" data-period="h1">H1 (Jul–Dec)</button>
     <button class="period-btn" data-period="h2">H2 (Jan–Jun)</button>
-    <button class="period-btn gamification-btn" onclick="document.getElementById('gamPanel').style.display='flex'">🎮 Gamification</button>
+    <button class="period-btn gamification-btn" onclick="document.getElementById('gamPanel').style.display='flex'; updateGamificationProgress();">🎮 Gamification</button>
   </div>
 
   <!-- Daily Trivia & Motivation -->
@@ -1085,7 +1085,7 @@ setInterval(loadData, REFRESH_INTERVAL);
     <button onclick="document.getElementById('gamPanel').style.display='none'" style="position:absolute; top:15px; right:20px; background:none; border:none; color:#a0aec0; font-size:1.5em; cursor:pointer;">✕</button>
 
     <h2 style="color:#ffd700; font-size:1.4em; margin-bottom:5px;">🎮 Fast Start Sprint — July 2026</h2>
-    <p style="color:#718096; font-size:0.85em; margin-bottom:20px;">1st – 31st July | Budget: RM 1,750</p>
+    <p style="color:#718096; font-size:0.85em; margin-bottom:20px;">1st – 31st July 2026</p>
 
     <!-- Rules Section -->
     <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:18px; margin-bottom:20px;">
@@ -1222,12 +1222,10 @@ function updateGamificationProgress() {
   document.getElementById('gamProgress').innerHTML = html;
 }
 
-// Update gamification after data loads
-const origLoadData = loadData;
-loadData = async function() {
-  await origLoadData();
-  updateGamificationProgress();
-};
+// Update gamification when panel is opened
+document.getElementById('gamPanel').addEventListener('click', function(e) {
+  if (e.target === this) this.style.display = 'none'; // close on backdrop click
+});
 </script>
 
 <!-- Product Knowledge Floating Button -->
