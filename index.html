@@ -1066,25 +1066,22 @@ setInterval(loadData, REFRESH_INTERVAL);
 </script>
 
 <!-- Product Knowledge Floating Button -->
-<button id="pkBtn" onclick="document.getElementById('pkPanel').classList.toggle('open')" style="
+<button id="pkBtn" onclick="document.getElementById('pkPanel').style.display='flex'" style="
   position: fixed; top: 20px; right: 20px; z-index: 900;
   background: linear-gradient(135deg, #2b6cb0, #4299e1); color: white;
   border: none; border-radius: 50px; padding: 12px 20px;
   font-size: 0.9em; font-weight: 600; cursor: pointer;
   box-shadow: 0 4px 15px rgba(43,108,176,0.4);
-  transition: transform 0.2s, box-shadow 0.2s;
 ">📚 Product Notes</button>
 
-<!-- Product Knowledge Slide-Out Panel -->
+<!-- Product Knowledge Panel (Modal) -->
 <div id="pkPanel" style="
-  position: fixed; top: 0; right: 0; width: 400px; height: 100vh;
-  background: #1a202c; border-left: 2px solid rgba(255,255,255,0.1);
-  z-index: 950; overflow-y: auto;
-  padding: 20px; box-shadow: -5px 0 20px rgba(0,0,0,0.5);
-  transform: translateX(100%); transition: transform 0.3s ease;
+  display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.7); z-index: 950;
+  justify-content: flex-end; align-items: stretch;
 ">
+  <div style="width: 420px; max-width:90vw; height: 100vh; background: #1a202c; overflow-y: auto; padding: 25px; border-left: 2px solid rgba(255,255,255,0.1); box-shadow: -5px 0 20px rgba(0,0,0,0.5);">
   <style>
-    #pkPanel.open { transform: translateX(0); }
     .pk-close { position:absolute; top:15px; right:15px; background:none; border:none; color:#a0aec0; font-size:1.5em; cursor:pointer; }
     .pk-tabs { display:flex; gap:5px; margin:15px 0; flex-wrap:wrap; }
     .pk-tab { padding:6px 14px; border-radius:16px; border:1px solid rgba(255,255,255,0.2); background:transparent; color:#a0aec0; font-size:0.8em; cursor:pointer; transition:all 0.2s; }
@@ -1099,7 +1096,7 @@ setInterval(loadData, REFRESH_INTERVAL);
     .pk-coming { text-align:center; color:#718096; padding:40px 20px; }
   </style>
 
-  <button class="pk-close" onclick="document.getElementById('pkPanel').classList.remove('open')">✕</button>
+  <button class="pk-close" onclick="document.getElementById('pkPanel').style.display='none'">✕</button>
   <h2 style="color:#e2e8f0; font-size:1.2em; margin-bottom:5px;">📚 Product Knowledge</h2>
   <p style="color:#718096; font-size:0.8em;">Quick reference for the team</p>
 
@@ -1171,7 +1168,8 @@ setInterval(loadData, REFRESH_INTERVAL);
       <p>Coming soon — content will be added here.</p>
     </div>
   </div>
-</div>
+  </div><!-- close inner panel -->
+</div><!-- close modal overlay -->
 
 <script>
 function showPKTab(tab) {
