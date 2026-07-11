@@ -1064,5 +1064,122 @@ loadData();
 // Auto-refresh
 setInterval(loadData, REFRESH_INTERVAL);
 </script>
+
+<!-- Product Knowledge Floating Button -->
+<button id="pkBtn" onclick="document.getElementById('pkPanel').classList.toggle('open')" style="
+  position: fixed; bottom: 30px; right: 30px; z-index: 900;
+  background: linear-gradient(135deg, #2b6cb0, #4299e1); color: white;
+  border: none; border-radius: 50px; padding: 14px 22px;
+  font-size: 0.95em; font-weight: 600; cursor: pointer;
+  box-shadow: 0 4px 15px rgba(43,108,176,0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+">📚 Product Notes</button>
+
+<!-- Product Knowledge Slide-Out Panel -->
+<div id="pkPanel" style="
+  position: fixed; top: 0; right: -420px; width: 400px; height: 100vh;
+  background: #1a202c; border-left: 2px solid rgba(255,255,255,0.1);
+  z-index: 950; overflow-y: auto; transition: right 0.3s ease;
+  padding: 20px; box-shadow: -5px 0 20px rgba(0,0,0,0.5);
+">
+  <style>
+    #pkPanel.open { right: 0; }
+    .pk-close { position:absolute; top:15px; right:15px; background:none; border:none; color:#a0aec0; font-size:1.5em; cursor:pointer; }
+    .pk-tabs { display:flex; gap:5px; margin:15px 0; flex-wrap:wrap; }
+    .pk-tab { padding:6px 14px; border-radius:16px; border:1px solid rgba(255,255,255,0.2); background:transparent; color:#a0aec0; font-size:0.8em; cursor:pointer; transition:all 0.2s; }
+    .pk-tab.active, .pk-tab:hover { background:#2b6cb0; color:white; border-color:#2b6cb0; }
+    .pk-content { color:#e2e8f0; font-size:0.85em; line-height:1.6; }
+    .pk-content h3 { color:#ffd700; margin:15px 0 8px; font-size:1em; }
+    .pk-content p { margin-bottom:10px; }
+    .pk-content table { width:100%; border-collapse:collapse; margin:10px 0; font-size:0.85em; }
+    .pk-content th { background:rgba(43,108,176,0.3); color:#e2e8f0; padding:8px; text-align:left; border:1px solid rgba(255,255,255,0.1); }
+    .pk-content td { padding:8px; border:1px solid rgba(255,255,255,0.05); }
+    .pk-content .pk-highlight { background:rgba(43,108,176,0.15); border-left:3px solid #4299e1; padding:10px 12px; border-radius:4px; margin:10px 0; }
+    .pk-coming { text-align:center; color:#718096; padding:40px 20px; }
+  </style>
+
+  <button class="pk-close" onclick="document.getElementById('pkPanel').classList.remove('open')">✕</button>
+  <h2 style="color:#e2e8f0; font-size:1.2em; margin-bottom:5px;">📚 Product Knowledge</h2>
+  <p style="color:#718096; font-size:0.8em;">Quick reference for the team</p>
+
+  <div class="pk-tabs">
+    <button class="pk-tab active" onclick="showPKTab('batteries')">🔋 Batteries</button>
+    <button class="pk-tab" onclick="showPKTab('panels')">☀️ Panels</button>
+    <button class="pk-tab" onclick="showPKTab('inverters')">⚡ Inverters</button>
+    <button class="pk-tab" onclick="showPKTab('eps')">🔌 EPS Box</button>
+  </div>
+
+  <div id="pk-batteries" class="pk-content">
+    <h3>Fox ESS CQ7 — Our HV Battery</h3>
+    <div class="pk-highlight">High Voltage | LFP (LiFePO₄) | 7.02 kWh per module | Scalable to 98.28 kWh</div>
+    <table>
+      <tr><th>Spec</th><th>Value</th></tr>
+      <tr><td>Capacity/Module</td><td>7.02 kWh</td></tr>
+      <tr><td>Voltage</td><td>115.2V – 806.4V</td></tr>
+      <tr><td>Max Modules</td><td>14 in series (98.28 kWh)</td></tr>
+      <tr><td>DOD</td><td>90%</td></tr>
+      <tr><td>Efficiency</td><td>>95%</td></tr>
+      <tr><td>Max Current</td><td>80A (Peak: 110A @60s)</td></tr>
+      <tr><td>IP Rating</td><td>IP65 (Outdoor ready)</td></tr>
+      <tr><td>Fire Protection</td><td>Yes (built-in)</td></tr>
+      <tr><td>Temp (Discharge)</td><td>-10°C to 55°C</td></tr>
+    </table>
+
+    <h3>Why HV > LV (Quick Pitch)</h3>
+    <p>• <strong>More efficient</strong> — less energy lost as heat (>95% round-trip)</p>
+    <p>• <strong>Thinner cables</strong> — cleaner installation</p>
+    <p>• <strong>IP65</strong> — can install outdoors (most LV = indoor only)</p>
+    <p>• <strong>Fire protection built-in</strong> — standard, not optional</p>
+    <p>• <strong>Faster response</strong> — handles high-power loads better</p>
+
+    <h3>vs LV Competitors (Quick Compare)</h3>
+    <table>
+      <tr><th></th><th>CQ7 (HV)</th><th>Pylontech</th><th>Dyness</th><th>Hoymiles</th></tr>
+      <tr><td>Voltage</td><td><strong>HV</strong></td><td>48V</td><td>48V</td><td>51.2V</td></tr>
+      <tr><td>IP</td><td><strong>IP65</strong></td><td>IP20</td><td>IP20</td><td>IP65</td></tr>
+      <tr><td>Fire Prot.</td><td><strong>Yes</strong></td><td>No</td><td>No</td><td>No</td></tr>
+      <tr><td>Efficiency</td><td><strong>>95%</strong></td><td>>95%</td><td>~92%</td><td>~95%</td></tr>
+      <tr><td>Max Cap.</td><td><strong>98 kWh</strong></td><td>38 kWh</td><td>77 kWh</td><td>102 kWh</td></tr>
+    </table>
+
+    <div class="pk-highlight">
+      💬 <strong>Customer Pitch:</strong> "Our battery is high-voltage — meaning you get more usable energy, faster response for your appliances, and it can be installed outdoors with IP65 protection. It's safer too with built-in fire protection."
+    </div>
+  </div>
+
+  <div id="pk-panels" class="pk-content" style="display:none;">
+    <div class="pk-coming">
+      <p style="font-size:2em;">☀️</p>
+      <p style="margin-top:10px; font-weight:600;">Panels Notes</p>
+      <p>Coming soon — content will be added here.</p>
+    </div>
+  </div>
+
+  <div id="pk-inverters" class="pk-content" style="display:none;">
+    <div class="pk-coming">
+      <p style="font-size:2em;">⚡</p>
+      <p style="margin-top:10px; font-weight:600;">Inverters Notes</p>
+      <p>Coming soon — content will be added here.</p>
+    </div>
+  </div>
+
+  <div id="pk-eps" class="pk-content" style="display:none;">
+    <div class="pk-coming">
+      <p style="font-size:2em;">🔌</p>
+      <p style="margin-top:10px; font-weight:600;">EPS Box Notes</p>
+      <p>Coming soon — content will be added here.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPKTab(tab) {
+  document.querySelectorAll('.pk-content').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.pk-tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('pk-' + tab).style.display = 'block';
+  event.target.classList.add('active');
+}
+</script>
+
 </body>
 </html>
