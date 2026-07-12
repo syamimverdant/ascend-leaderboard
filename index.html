@@ -1210,23 +1210,72 @@ function updateGamificationProgress() {
     { noc: 3, label: '🔥 Ignition', color: '#ff9100' }
   ];
 
+  // Check crew ignition before rendering table
+  const allAbove5Check = Object.values(scNOC).every(n => n >= 5);
+
   let html = '<table style="width:100%; border-collapse:collapse; font-size:0.85em;">';
   html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.1);"><th style="text-align:left; padding:8px; color:#a0aec0;">SC</th><th style="padding:8px; color:#a0aec0;">NOC</th><th style="padding:8px; color:#a0aec0;">Milestone</th><th style="padding:8px; color:#a0aec0;">Rewards</th><th style="padding:8px; color:#a0aec0;">Progress</th></tr>';
 
   const sorted = Object.entries(scNOC).sort((a,b) => b[1] - a[1]);
+
+  // Determine speed bonus winners
+  const scByDateTo3 = [], scByDateTo6 = [], scByDateTo11 = [];
+  // For speed bonus, we need to find who reached each milestone first by date
+  // Group items by SC and sort by date to find when each SC hit milestones
+  const scItems = {};
+  Object.values(TEAM_MEMBERS).forEach(name => { scItems[name] = []; });
+  currentMonth.forEach(item => { if (scItems[item.sc]) scItems[item.sc].push(item); });
+  
+  let speedFirst3 = null, speedFirst6 = null, speedFirst11 = null;
+  const scMilestoneDate = {};
+  Object.entries(scItems).forEach(([name, items]) => {
+    const sortedItems = items.sort((a,b) => a.closedDate.localeCompare(b.closedDate));
+    scMilestoneDate[name] = {};
+    if (sortedItems.length >= 3) scMilestoneDate[name].d3 = sortedItems[2].closedDate;
+    if (sortedItems.length >= 6) scMilestoneDate[name].d6 = sortedItems[5].closedDate;
+    if (sortedItems.length >= 11) scMilestoneDate[name].d11 = sortedItems[10].closedDate;
+  });
+  
+  // Find first to 3
+  let earliest3 = null;
+  Object.entries(scMilestoneDate).forEach(([name, dates]) => {
+    if (dates.d3 && (!earliest3 || dates.d3 < earliest3.date)) { earliest3 = { name, date: dates.d3 }; }
+  });
+  if (earliest3) speedFirst3 = earliest3.name;
+  
+  // Find first to 6
+  let earliest6 = null;
+  Object.entries(scMilestoneDate).forEach(([name, dates]) => {
+    if (dates.d6 && (!earliest6 || dates.d6 < earliest6.date)) { earliest6 = { name, date: dates.d6 }; }
+  });
+  if (earliest6) speedFirst6 = earliest6.name;
+  
+  // Find first to 11
+  let earliest11 = null;
+  Object.entries(scMilestoneDate).forEach(([name, dates]) => {
+    if (dates.d11 && (!earliest11 || dates.d11 < earliest11.date)) { earliest11 = { name, date: dates.d11 }; }
+  });
+  if (earliest11) speedFirst11 = earliest11.name;
+
   sorted.forEach(([name, noc]) => {
     let ms = '— Launchpad';
     let msColor = '#718096';
     for (const m of milestones) {
       if (noc >= m.noc) { ms = m.label; msColor = m.color; break; }
     }
-    // Calculate rewards secured
+    // Calculate rewards secured (milestones + overachiever + speed bonus)
     let rewards = 0;
     if (noc >= 3) rewards += 25;
     if (noc >= 6) rewards += 40;
     if (noc >= 9) rewards += 60;
     if (noc >= 11) rewards += 85;
     if (noc > 11) rewards += (noc - 11) * 50; // overachiever
+    // Speed bonuses
+    if (name === speedFirst3) rewards += 50;
+    if (name === speedFirst6) rewards += 70;
+    if (name === speedFirst11) rewards += 100;
+    // Crew Ignition
+    if (allAbove5Check) rewards += 15;
     const pct = Math.min(100, Math.round((noc / 11) * 100));
     html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">';
     html += '<td style="padding:8px; font-weight:600; color:#e2e8f0;">' + name + '</td>';
@@ -1238,28 +1287,19 @@ function updateGamificationProgress() {
   });
   html += '</table>';
 
-  // Speed bonus
-  let first3 = null, first6 = null, first11 = null;
-  const byDate = Object.entries(scFirstDate).filter(([n,d]) => d).sort((a,b) => a[1].localeCompare(b[1]));
-  byDate.forEach(([name]) => {
-    if (scNOC[name] >= 3 && !first3) first3 = name;
-    if (scNOC[name] >= 6 && !first6) first6 = name;
-    if (scNOC[name] >= 11 && !first11) first11 = name;
-  });
-
+  // Speed bonus display
   html += '<div style="margin-top:15px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.1);">';
   html += '<p style="font-weight:600; color:#00e5ff; margin-bottom:8px;">⚡ Speed Bonus Race:</p>';
-  html += '<p>First to 3 NOC: <strong style="color:#e2e8f0;">' + (first3 || '🏁 UNCLAIMED') + '</strong></p>';
-  html += '<p>First to 6 NOC: <strong style="color:#e2e8f0;">' + (first6 || '🏁 UNCLAIMED') + '</strong></p>';
-  html += '<p>First to 11 NOC: <strong style="color:#e2e8f0;">' + (first11 || '🏁 UNCLAIMED') + '</strong></p>';
+  html += '<p>First to 3 NOC: <strong style="color:#e2e8f0;">' + (speedFirst3 ? speedFirst3 + ' ✅ +RM50' : '🏁 UNCLAIMED') + '</strong></p>';
+  html += '<p>First to 6 NOC: <strong style="color:#e2e8f0;">' + (speedFirst6 ? speedFirst6 + ' ✅ +RM70' : '🏁 UNCLAIMED') + '</strong></p>';
+  html += '<p>First to 11 NOC: <strong style="color:#e2e8f0;">' + (speedFirst11 ? speedFirst11 + ' ✅ +RM100' : '🏁 UNCLAIMED') + '</strong></p>';
   html += '</div>';
 
   // Crew Ignition
-  const allAbove5 = Object.values(scNOC).every(n => n >= 5);
   const below5 = Object.entries(scNOC).filter(([n,c]) => c < 5).map(([n]) => n);
   html += '<div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.1);">';
   html += '<p style="font-weight:600; color:#ce93d8; margin-bottom:8px;">🤝 Crew Ignition (All 7 ≥ 5 NOC):</p>';
-  if (allAbove5) {
+  if (allAbove5Check) {
     html += '<p style="color:#38a169; font-weight:700;">✅ UNLOCKED! Everyone gets +RM15!</p>';
   } else {
     html += '<p style="color:#e53e3e;">❌ Not yet — need: ' + below5.join(', ') + '</p>';
