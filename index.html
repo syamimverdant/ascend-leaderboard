@@ -672,14 +672,24 @@ function calculateBadges(items) {
     }
   });
 
-  // Hot Streak — NOC in 3 consecutive weeks
+  // Hot Streak — 2+ NOC in each of 3 consecutive weeks
   Object.values(TEAM_MEMBERS).forEach(name => {
     const scItems = items.filter(i => i.sc === name);
-    const weeks = [...new Set(scItems.map(i => getWeekKey(i.closedDate)))].sort();
-    for (let i = 0; i < weeks.length - 2; i++) {
-      const w1 = parseInt(weeks[i].split('W')[1]);
-      const w2 = parseInt(weeks[i+1].split('W')[1]);
-      const w3 = parseInt(weeks[i+2].split('W')[1]);
+    // Count NOC per week
+    const weekCounts = {};
+    scItems.forEach(item => {
+      const wk = getWeekKey(item.closedDate);
+      weekCounts[wk] = (weekCounts[wk] || 0) + 1;
+    });
+    // Only consider weeks with 2+ NOC
+    const qualifyingWeeks = Object.entries(weekCounts)
+      .filter(([, count]) => count >= 2)
+      .map(([wk]) => wk)
+      .sort();
+    for (let i = 0; i < qualifyingWeeks.length - 2; i++) {
+      const w1 = parseInt(qualifyingWeeks[i].split('W')[1]);
+      const w2 = parseInt(qualifyingWeeks[i+1].split('W')[1]);
+      const w3 = parseInt(qualifyingWeeks[i+2].split('W')[1]);
       if (w2 === w1 + 1 && w3 === w2 + 1) {
         if (!badges[name].some(b => b.name === 'Hot Streak')) {
           badges[name].push({ icon: '🔥', name: 'Hot Streak' });
