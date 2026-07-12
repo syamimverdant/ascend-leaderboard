@@ -1130,16 +1130,16 @@ setInterval(loadData, REFRESH_INTERVAL);
     <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:18px; margin-bottom:20px;">
       <h3 style="color:#00e676; font-size:1em; margin-bottom:12px;">🏆 Milestones (Cumulative)</h3>
       <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:8px; text-align:center; font-size:0.8em;">
-        <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:10px;">
+        <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:10px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
           <div>🔥</div><div style="color:#ff9100; font-weight:600;">Ignition</div><div style="color:#a0aec0;">3 NOC</div><div style="color:#ffd700; font-weight:700;">RM 25</div>
         </div>
-        <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:10px;">
+        <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:10px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
           <div>🚀</div><div style="color:#00e5ff; font-weight:600;">Liftoff</div><div style="color:#a0aec0;">6 NOC</div><div style="color:#ffd700; font-weight:700;">RM 40</div>
         </div>
-        <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:10px;">
+        <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:10px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
           <div>☁️</div><div style="color:#e2e8f0; font-weight:600;">Breaking Clouds</div><div style="color:#a0aec0;">9 NOC</div><div style="color:#ffd700; font-weight:700;">RM 60</div>
         </div>
-        <div style="background:rgba(255,215,0,0.1); border:1px solid rgba(255,215,0,0.3); border-radius:8px; padding:10px;">
+        <div style="background:rgba(255,215,0,0.1); border:1px solid rgba(255,215,0,0.3); border-radius:8px; padding:10px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
           <div>⭐</div><div style="color:#ffd700; font-weight:600;">Orbit</div><div style="color:#ffd700;">11 NOC</div><div style="color:#ffd700; font-weight:700;">RM 85</div>
         </div>
       </div>
@@ -1211,7 +1211,7 @@ function updateGamificationProgress() {
   ];
 
   let html = '<table style="width:100%; border-collapse:collapse; font-size:0.85em;">';
-  html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.1);"><th style="text-align:left; padding:8px; color:#a0aec0;">SC</th><th style="padding:8px; color:#a0aec0;">NOC</th><th style="padding:8px; color:#a0aec0;">Milestone</th><th style="padding:8px; color:#a0aec0;">Progress</th></tr>';
+  html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.1);"><th style="text-align:left; padding:8px; color:#a0aec0;">SC</th><th style="padding:8px; color:#a0aec0;">NOC</th><th style="padding:8px; color:#a0aec0;">Milestone</th><th style="padding:8px; color:#a0aec0;">Rewards</th><th style="padding:8px; color:#a0aec0;">Progress</th></tr>';
 
   const sorted = Object.entries(scNOC).sort((a,b) => b[1] - a[1]);
   sorted.forEach(([name, noc]) => {
@@ -1220,11 +1220,19 @@ function updateGamificationProgress() {
     for (const m of milestones) {
       if (noc >= m.noc) { ms = m.label; msColor = m.color; break; }
     }
+    // Calculate rewards secured
+    let rewards = 0;
+    if (noc >= 3) rewards += 25;
+    if (noc >= 6) rewards += 40;
+    if (noc >= 9) rewards += 60;
+    if (noc >= 11) rewards += 85;
+    if (noc > 11) rewards += (noc - 11) * 50; // overachiever
     const pct = Math.min(100, Math.round((noc / 11) * 100));
     html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">';
     html += '<td style="padding:8px; font-weight:600; color:#e2e8f0;">' + name + '</td>';
     html += '<td style="padding:8px; text-align:center; color:#ffd700; font-weight:700;">' + noc + '</td>';
-    html += '<td style="padding:8px; color:' + msColor + ';">' + ms + '</td>';
+    html += '<td style="padding:8px; text-align:center; color:' + msColor + ';">' + ms + '</td>';
+    html += '<td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">' + (rewards > 0 ? 'RM ' + rewards : '—') + '</td>';
     html += '<td style="padding:8px;"><div style="height:6px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:hidden;"><div style="height:100%; width:' + pct + '%; background:linear-gradient(90deg,#ffd700,#ff8c00); border-radius:3px;"></div></div></td>';
     html += '</tr>';
   });
