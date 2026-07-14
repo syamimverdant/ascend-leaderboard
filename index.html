@@ -1767,51 +1767,96 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
     <p style="color:#718096; font-size:0.8em; margin-top:15px;">LV batteries aren't bad — they suit simpler installs. But for premium whole-home solar, HV is the right fit.</p>
 
     <h3>7. FOX CQ Safety Spec</h3>
-    <p><strong>360° Protection System — Prevention · Control · Emergency</strong></p>
-    <p>The CQ7 battery uses a 5-layer safety architecture:</p>
-    <p>1. Full coverage + real-time temperature detection</p>
-    <p>2. Aerogel pads between cells (prevents thermal propagation)</p>
-    <p>3. Aerosol fire suppression unit (module-level)</p>
-    <p>4. Explosion vent (pressure relief valve per module)</p>
-    <p>5. High-temp resistance insulated pads</p>
+    <p><strong>🛡️ 360° Protection — Prevention · Control · Emergency</strong></p>
 
-    <p style="margin-top:12px;"><strong>Prevention:</strong></p>
-    <p>• Tier-1 REPT LiFePO₄ cells (passed nail penetration, drop & crush tests)</p>
-    <p>• AI-driven intelligent control based on big data algorithms</p>
-    <p>• Automotive-grade chips & system architecture</p>
-    <p>• Real-time alarm notification & alerting mechanism</p>
+    <!-- 5-Layer Protection Visual -->
+    <div style="background:rgba(128,90,213,0.08); border:1px solid rgba(128,90,213,0.3); border-radius:10px; padding:14px; margin:12px 0;">
+      <p style="color:#ce93d8; font-weight:700; margin-bottom:10px;">🔒 5 Layers of Battery Protection:</p>
+      <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; font-size:0.82em;">
+        <span style="background:rgba(255,255,255,0.08); border-radius:6px; padding:6px 10px;">1️⃣ Real-time Temp Detection</span>
+        <span style="color:#718096;">→</span>
+        <span style="background:rgba(255,255,255,0.08); border-radius:6px; padding:6px 10px;">2️⃣ Aerogel Pads</span>
+        <span style="color:#718096;">→</span>
+        <span style="background:rgba(255,255,255,0.08); border-radius:6px; padding:6px 10px;">3️⃣ Fire Suppression</span>
+        <span style="color:#718096;">→</span>
+        <span style="background:rgba(255,255,255,0.08); border-radius:6px; padding:6px 10px;">4️⃣ Explosion Vent</span>
+        <span style="color:#718096;">→</span>
+        <span style="background:rgba(255,255,255,0.08); border-radius:6px; padding:6px 10px;">5️⃣ Insulated Pads</span>
+      </div>
+    </div>
 
-    <p style="margin-top:12px;"><strong>Control:</strong></p>
-    <p>• Millisecond-level software control</p>
-    <p>• Module-level fuse and relay for physical disconnection</p>
-    <p>• Dual-relay redundant design</p>
-    <p>• DC circuit breaker protection</p>
+    <!-- Prevention / Control / Emergency Cards -->
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin:15px 0;">
+      <div style="background:rgba(56,161,105,0.1); border:1px solid rgba(56,161,105,0.3); border-radius:8px; padding:12px; cursor:pointer;" onclick="this.querySelector('.cq-detail').classList.toggle('open')">
+        <p style="color:#38a169; font-weight:700; font-size:0.85em; margin-bottom:6px;">🟢 Prevention <span style="color:#718096; font-size:0.8em;">▾</span></p>
+        <div class="cq-detail" style="display:none; color:#a0aec0; font-size:0.78em; line-height:1.7;">
+          <p>• Tier-1 REPT LiFePO₄ cells</p>
+          <p>• AI-driven intelligent control</p>
+          <p>• Automotive-grade chips</p>
+          <p>• Real-time alarm notification</p>
+          <p>• Passed nail, drop & crush tests</p>
+        </div>
+      </div>
+      <div style="background:rgba(66,153,225,0.1); border:1px solid rgba(66,153,225,0.3); border-radius:8px; padding:12px; cursor:pointer;" onclick="this.querySelector('.cq-detail').classList.toggle('open')">
+        <p style="color:#63b3ed; font-weight:700; font-size:0.85em; margin-bottom:6px;">🔵 Control <span style="color:#718096; font-size:0.8em;">▾</span></p>
+        <div class="cq-detail" style="display:none; color:#a0aec0; font-size:0.78em; line-height:1.7;">
+          <p>• Millisecond-level software control</p>
+          <p>• Module-level fuse & relay</p>
+          <p>• Dual-relay redundant design</p>
+          <p>• DC circuit breaker protection</p>
+        </div>
+      </div>
+      <div style="background:rgba(229,62,62,0.1); border:1px solid rgba(229,62,62,0.3); border-radius:8px; padding:12px; cursor:pointer;" onclick="this.querySelector('.cq-detail').classList.toggle('open')">
+        <p style="color:#fc8181; font-weight:700; font-size:0.85em; margin-bottom:6px;">🔴 Emergency <span style="color:#718096; font-size:0.8em;">▾</span></p>
+        <div class="cq-detail" style="display:none; color:#a0aec0; font-size:0.78em; line-height:1.7;">
+          <p>• Aerogel stops thermal propagation</p>
+          <p>• Aerosol fire suppression per module</p>
+          <p>• Pressure relief valves per module</p>
+        </div>
+      </div>
+    </div>
+    <style>.cq-detail.open { display:block !important; }</style>
 
-    <p style="margin-top:12px;"><strong>Emergency Response:</strong></p>
-    <p>• Aerogel insulation between cells to prevent thermal propagation</p>
-    <p>• Module-level aerosol fire suppression for rapid extinguishing</p>
-    <p>• Module-level pressure relief valves to prevent explosion</p>
+    <!-- Hardware & Install -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0;">
+      <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:12px;">
+        <p style="color:#ffd700; font-weight:700; font-size:0.85em; margin-bottom:8px;">⚙️ Hardware Design</p>
+        <p style="color:#a0aec0; font-size:0.78em; line-height:1.7;">
+          🔧 3-in-1 BMS (integrated, fewer wires)<br>
+          🔧 Die-cast high-strength enclosure<br>
+          🔧 CTP design → more power density<br>
+          🔧 Dual-relay redundancy
+        </p>
+      </div>
+      <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:12px;">
+        <p style="color:#ffd700; font-weight:700; font-size:0.85em; margin-bottom:8px;">⚡ Installation</p>
+        <p style="color:#a0aec0; font-size:0.78em; line-height:1.7;">
+          ⏱️ 30-second plug & play<br>
+          👤 Solo handling (48.8kg/module)<br>
+          ✅ Zero wiring errors<br>
+          📐 Vertical stacking → small footprint
+        </p>
+      </div>
+    </div>
 
-    <p style="margin-top:12px;"><strong>Hardware Design (3-in-1 BMS):</strong></p>
-    <p>• Safety Driven — eliminates connection risks via 3-in-1 integration</p>
-    <p>• CTP Optimized — reduced wiring, compact size, superior thermal management</p>
-    <p>• Die-cast high-strength enclosure (IP65 outdoor-ready)</p>
-
-    <p style="margin-top:12px;"><strong>Installation:</strong></p>
-    <p>• 30-second plug & play (error-proof design)</p>
-    <p>• Solo handling — 48.8kg per module (1 person install)</p>
-    <p>• Zero wiring errors, from unpacking to operation in 30 minutes</p>
-    <p>• Vertical stacking minimizes footprint</p>
-
-    <p style="margin-top:12px;"><strong>Certifications:</strong></p>
-    <p>• IEC 62619:2022 (incl. thermal runaway propagation)</p>
-    <p>• IEC 62477-1:2022 / EN IEC 62477-1:2023 (LVD)</p>
-    <p>• IEC 62040-1:2017</p>
-    <p>• UN38.3, CE, UL, EMC, SGS</p>
-
-    <p style="margin-top:12px;"><strong>Scalability:</strong></p>
-    <p>• 7.02 kWh per module, expandable from 14.04 kWh to 98.28 kWh</p>
-    <p>• Compatible with: H1 G2 (3-6kW), KH (7-10.5kW), P3-S (5-15kW), P3 Pro (15-30kW), P3 Plus (50-125kW)</p>
+    <!-- Certifications & Scalability -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0;">
+      <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:12px;">
+        <p style="color:#ffd700; font-weight:700; font-size:0.85em; margin-bottom:8px;">📜 Certifications</p>
+        <p style="color:#a0aec0; font-size:0.78em; line-height:1.7;">
+          ✓ IEC 62619:2022 (thermal runaway)<br>
+          ✓ IEC 62477-1:2022 (LVD)<br>
+          ✓ UN38.3 · CE · UL · EMC · SGS
+        </p>
+      </div>
+      <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:12px;">
+        <p style="color:#ffd700; font-weight:700; font-size:0.85em; margin-bottom:8px;">📈 Scalability</p>
+        <p style="color:#a0aec0; font-size:0.78em; line-height:1.7;">
+          7.02 kWh/module → max 98.28 kWh<br>
+          🔗 H1 G2 · KH · P3-S · P3 Pro · P3 Plus
+        </p>
+      </div>
+    </div>
 
     <div class="pk-highlight">
       💬 <strong>Customer Pitch:</strong> "Our battery has 5 layers of built-in protection — from AI monitoring to fire suppression in every single module. It's automotive-grade safety, certified globally, and installs in 30 minutes with zero wiring errors."
