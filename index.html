@@ -1313,9 +1313,68 @@ function updateGamificationProgress() {
 document.getElementById('gamPanel').addEventListener('click', function(e) {
   if (e.target === this) this.style.display = 'none'; // close on backdrop click
 });
+
+// Close onboarding panel on backdrop click
+document.getElementById('obPanel').addEventListener('click', function(e) {
+  if (e.target === this) this.style.display = 'none';
+});
+</script>
+
+<!-- Onboarding Material Floating Button (Left Side) -->
+<button id="obBtn" onclick="document.getElementById('obPanel').style.display='flex'" style="
+  position: fixed; top: 20px; left: 20px; z-index: 900;
+  background: linear-gradient(135deg, #e53e3e, #fc8181); color: white;
+  border: none; border-radius: 50px; padding: 12px 20px;
+  font-size: 0.9em; font-weight: 600; cursor: pointer;
+  box-shadow: 0 4px 15px rgba(229,62,62,0.4);
+">📘 Onboarding Material</button>
+
+<!-- Onboarding Material Panel (Modal) -->
+<div id="obPanel" style="
+  display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.7); z-index: 950;
+  justify-content: flex-start; align-items: stretch;
+">
+  <div style="width: 50vw; max-width:90vw; height: 100vh; background: #1a202c; overflow-y: auto; padding: 25px; border-right: 2px solid rgba(255,255,255,0.1); box-shadow: 5px 0 20px rgba(0,0,0,0.5);">
+    <button onclick="document.getElementById('obPanel').style.display='none'" style="position:absolute; top:15px; left:15px; background:none; border:none; color:#a0aec0; font-size:1.5em; cursor:pointer;">✕</button>
+    <h2 style="color:#e2e8f0; font-size:1.2em; margin-bottom:5px; margin-left:30px;">📘 Onboarding Material</h2>
+    <p style="color:#718096; font-size:0.8em; margin-bottom:20px; margin-left:30px;">Reference guide for new & existing Sales Consultants</p>
+
+    <p style="color:#718096; font-style:italic; text-align:center; padding:40px 20px;">Content coming soon.</p>
+  </div>
+</div>
+
+<script>
+// Close onboarding panel on backdrop click
+document.getElementById('obPanel').addEventListener('click', function(e) {
+  if (e.target === this) this.style.display = 'none';
+});
 </script>
 
 <!-- Product Knowledge Floating Button -->
+<button id="obBtn" onclick="document.getElementById('obPanel').style.display='flex'" style="
+  position: fixed; top: 20px; left: 20px; z-index: 900;
+  background: linear-gradient(135deg, #e53e3e, #fc8181); color: white;
+  border: none; border-radius: 50px; padding: 12px 20px;
+  font-size: 0.9em; font-weight: 600; cursor: pointer;
+  box-shadow: 0 4px 15px rgba(229,62,62,0.4);
+">📖 Onboarding Material</button>
+
+<!-- Onboarding Material Panel (Modal) -->
+<div id="obPanel" style="
+  display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.7); z-index: 950;
+  justify-content: flex-start; align-items: stretch;
+">
+  <div style="width: 50vw; max-width:90vw; height: 100vh; background: #1a202c; overflow-y: auto; padding: 25px; border-right: 2px solid rgba(255,255,255,0.1); box-shadow: 5px 0 20px rgba(0,0,0,0.5);">
+    <button onclick="document.getElementById('obPanel').style.display='none'" style="position:absolute; top:15px; left:15px; background:none; border:none; color:#a0aec0; font-size:1.5em; cursor:pointer;">✕</button>
+    <h2 style="color:#e2e8f0; font-size:1.2em; margin-bottom:5px; margin-left:30px;">📖 Onboarding Material</h2>
+    <p style="color:#718096; font-size:0.8em; margin-bottom:20px; margin-left:30px;">Quick reference for new & existing SCs</p>
+
+    <p style="color:#718096; font-style:italic; text-align:center; padding:40px 20px;">Content coming soon.</p>
+  </div>
+</div>
+
 <button id="pkBtn" onclick="document.getElementById('pkPanel').style.display='flex'" style="
   position: fixed; top: 20px; right: 20px; z-index: 900;
   background: linear-gradient(135deg, #2b6cb0, #4299e1); color: white;
@@ -1323,6 +1382,30 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
   font-size: 0.9em; font-weight: 600; cursor: pointer;
   box-shadow: 0 4px 15px rgba(43,108,176,0.4);
 ">📚 Product Notes</button>
+
+<!-- Onboarding Material Floating Button (Left Side) -->
+<button id="obBtn" onclick="document.getElementById('obPanel').style.display='flex'" style="
+  position: fixed; top: 20px; left: 20px; z-index: 900;
+  background: linear-gradient(135deg, #e53e3e, #fc8181); color: white;
+  border: none; border-radius: 50px; padding: 12px 20px;
+  font-size: 0.9em; font-weight: 600; cursor: pointer;
+  box-shadow: 0 4px 15px rgba(229,62,62,0.4);
+">📖 Onboarding Material</button>
+
+<!-- Onboarding Material Panel (Modal) -->
+<div id="obPanel" style="
+  display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.7); z-index: 950;
+  justify-content: flex-start; align-items: stretch;
+">
+  <div style="width: 50vw; max-width:90vw; height: 100vh; background: #1a202c; overflow-y: auto; padding: 25px; border-right: 2px solid rgba(255,255,255,0.1); box-shadow: 5px 0 20px rgba(0,0,0,0.5);">
+    <button onclick="document.getElementById('obPanel').style.display='none'" style="position:absolute; top:15px; left:calc(50vw - 40px); background:none; border:none; color:#a0aec0; font-size:1.5em; cursor:pointer;">✕</button>
+    <h2 style="color:#e2e8f0; font-size:1.2em; margin-bottom:5px;">📖 Onboarding Material</h2>
+    <p style="color:#718096; font-size:0.8em; margin-bottom:20px;">Quick start guide for new & existing SCs</p>
+
+    <p style="color:#718096; font-style:italic; text-align:center; padding:40px 20px;">Content coming soon.</p>
+  </div>
+</div>
 
 <button id="psBtn" onclick="document.getElementById('psPanel').style.display='flex'" style="
   position: fixed; top: 65px; right: 20px; z-index: 900;
