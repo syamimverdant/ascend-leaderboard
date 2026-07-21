@@ -500,15 +500,22 @@ function getMonthKey(dateStr) {
 }
 
 function getWeekNumber(dateStr) {
+  // ISO 8601 week number — weeks run Monday to Sunday
   const d = new Date(dateStr);
-  const startOfYear = new Date(d.getFullYear(), 0, 1);
-  const days = Math.floor((d - startOfYear) / 86400000);
-  return Math.ceil((days + startOfYear.getDay() + 1) / 7);
+  const dayOfWeek = d.getDay() || 7; // Make Sunday = 7 instead of 0
+  d.setDate(d.getDate() + 4 - dayOfWeek); // Set to nearest Thursday
+  const yearStart = new Date(d.getFullYear(), 0, 1);
+  return Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
 }
 
 function getWeekKey(dateStr) {
+  // Use ISO week: Mon-Sun grouping
   const d = new Date(dateStr);
-  return `${d.getFullYear()}-W${String(getWeekNumber(dateStr)).padStart(2,'0')}`;
+  const dayOfWeek = d.getDay() || 7;
+  const thursday = new Date(d);
+  thursday.setDate(d.getDate() + 4 - dayOfWeek);
+  const isoYear = thursday.getFullYear();
+  return `${isoYear}-W${String(getWeekNumber(dateStr)).padStart(2,'0')}`;
 }
 
 function isInPeriod(dateStr, period) {
