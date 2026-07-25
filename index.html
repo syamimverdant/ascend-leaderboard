@@ -1218,8 +1218,10 @@ function updateGamificationProgress() {
     { noc: 3, label: '🔥 Ignition', color: '#ff9100' }
   ];
 
-  // Check crew ignition before rendering table
-  const allAbove5Check = Object.values(scNOC).every(n => n >= 5);
+  // Check crew ignition before rendering table (exclude Norazwin - joined mid-month)
+  const CREW_IGNITION_EXCLUDED = ['Norazwin'];
+  const crewMembers = Object.entries(scNOC).filter(([name]) => !CREW_IGNITION_EXCLUDED.includes(name));
+  const allAbove5Check = crewMembers.every(([,n]) => n >= 5);
 
   let html = '<table style="width:100%; border-collapse:collapse; font-size:0.85em;">';
   html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.1);"><th style="text-align:left; padding:8px; color:#a0aec0;">SC</th><th style="padding:8px; color:#a0aec0;">NOC</th><th style="padding:8px; color:#a0aec0;">Milestone</th><th style="padding:8px; color:#a0aec0;">Rewards</th><th style="padding:8px; color:#a0aec0;">Progress</th></tr>';
@@ -1326,7 +1328,7 @@ function updateGamificationProgress() {
   html += '</div>';
 
   // Crew Ignition
-  const below5 = Object.entries(scNOC).filter(([n,c]) => c < 5).map(([n]) => n);
+  const below5 = Object.entries(scNOC).filter(([n,c]) => c < 5 && !CREW_IGNITION_EXCLUDED.includes(n)).map(([n]) => n);
   html += '<div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.1);">';
   html += '<p style="font-weight:600; color:#ce93d8; margin-bottom:8px;">🤝 Crew Ignition (All 7 ≥ 5 NOC):</p>';
   if (allAbove5Check) {
