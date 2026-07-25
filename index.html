@@ -1224,8 +1224,6 @@ function updateGamificationProgress() {
   let html = '<table style="width:100%; border-collapse:collapse; font-size:0.85em;">';
   html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.1);"><th style="text-align:left; padding:8px; color:#a0aec0;">SC</th><th style="padding:8px; color:#a0aec0;">NOC</th><th style="padding:8px; color:#a0aec0;">Milestone</th><th style="padding:8px; color:#a0aec0;">Rewards</th><th style="padding:8px; color:#a0aec0;">Progress</th></tr>';
 
-  const sorted = Object.entries(scNOC).sort((a,b) => b[1] - a[1]);
-
   // Determine speed bonus winners
   const scByDateTo3 = [], scByDateTo6 = [], scByDateTo11 = [];
   // For speed bonus, we need to find who reached each milestone first by date
@@ -1266,6 +1264,14 @@ function updateGamificationProgress() {
     if (dates.d11 && (!earliest11 || dates.d11 < earliest11.date)) { earliest11 = { name, date: dates.d11 }; }
   });
   if (earliest11) speedFirst11 = earliest11.name;
+
+  // Sort by NOC descending, tiebreaker: who reached milestone first
+  const sorted = Object.entries(scNOC).sort((a,b) => {
+    if (b[1] !== a[1]) return b[1] - a[1];
+    const aDate = scMilestoneDate[a[0]] && scMilestoneDate[a[0]]['d' + b[1]] || 'z';
+    const bDate = scMilestoneDate[b[0]] && scMilestoneDate[b[0]]['d' + b[1]] || 'z';
+    return aDate < bDate ? -1 : aDate > bDate ? 1 : 0;
+  });
 
   sorted.forEach(([name, noc]) => {
     let ms = '— Launchpad';
