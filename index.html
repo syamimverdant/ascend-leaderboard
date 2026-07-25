@@ -1257,6 +1257,8 @@ function updateGamificationProgress() {
     if (dates.d6 && (!earliest6 || dates.d6 < earliest6.date)) { earliest6 = { name, date: dates.d6 }; }
   });
   if (earliest6) speedFirst6 = earliest6.name;
+  // Manual override: Ashlynn confirmed first to 6 NOC
+  if (scMilestoneDate['Ashlynn'] && scMilestoneDate['Ashlynn'].d6) speedFirst6 = 'Ashlynn';
   
   // Find first to 11
   let earliest11 = null;
