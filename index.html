@@ -427,9 +427,11 @@ async function fetchMondayData() {
   let cursor = null;
   let hasMore = true;
 
-  // Fetch from FY27 start (July 2026) to now
+  // Fetch from FY27 start (July 2026) to now (Malaysia timezone)
   const startDate = '2026-07-01';
-  const endDate = new Date().toISOString().split('T')[0];
+  const now = new Date();
+  const myDate = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kuala_Lumpur' }));
+  const endDate = `${myDate.getFullYear()}-${String(myDate.getMonth()+1).padStart(2,'0')}-${String(myDate.getDate()).padStart(2,'0')}`;
 
   while (hasMore) {
     let query;
