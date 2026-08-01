@@ -60,6 +60,13 @@
   <!-- Period Selector -->
   <div id="periodSelector" style="text-align:center; margin-bottom:20px;">
     <button class="period-btn active" data-period="month">Current Month</button>
+    <select id="monthSelector" style="
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+      color: #e2e8f0; padding: 8px 15px; border-radius: 20px; cursor: pointer;
+      margin: 0 5px; font-size: 0.9em;
+    ">
+      <option value="" disabled selected>📅 Past Months</option>
+    </select>
     <button class="period-btn" data-period="h1">H1 (Jul–Dec)</button>
     <button class="period-btn" data-period="h2">H2 (Jan–Jun)</button>
     <button class="period-btn gamification-btn" onclick="document.getElementById('gamPanel').style.display='flex'; updateGamificationProgress();">🎮 Gamification</button>
@@ -534,6 +541,11 @@ function isInPeriod(dateStr, period) {
   if (period === 'month') {
     const now = new Date();
     return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+  }
+  // Specific month format: "2026-07"
+  if (period.match(/^\d{4}-\d{2}$/)) {
+    const [yr, mn] = period.split('-').map(Number);
+    return d.getFullYear() === yr && d.getMonth() === mn - 1;
   }
   return true;
 }
@@ -1105,6 +1117,7 @@ document.querySelectorAll('.period-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
+    document.getElementById('monthSelector').selectedIndex = 0; // Reset dropdown
     currentPeriod = btn.dataset.period;
     // Re-render with existing data
     const filtered = allItems.filter(item => isInPeriod(item.closedDate, currentPeriod));
@@ -1115,6 +1128,41 @@ document.querySelectorAll('.period-btn').forEach(btn => {
     const teamTotalNOB = filtered.reduce((s, item) => s + item.systemPrice, 0);
     renderLeaderboard(results, badges, teamTotalNOC, teamTotalNOB);
   });
+});
+
+// Month selector dropdown — populate with past months from Jul 2026 to last month
+(function populateMonthSelector() {
+  const select = document.getElementById('monthSelector');
+  const now = new Date();
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  // Start from Jul 2026, go up to previous month
+  let year = 2026, month = 6; // July = index 6
+  while (true) {
+    if (year > now.getFullYear() || (year === now.getFullYear() && month >= now.getMonth())) break;
+    const value = `${year}-${String(month+1).padStart(2,'0')}`;
+    const label = `${months[month]} ${year}`;
+    const opt = document.createElement('option');
+    opt.value = value;
+    opt.textContent = label;
+    select.appendChild(opt);
+    month++;
+    if (month > 11) { month = 0; year++; }
+  }
+})();
+
+// Month selector change handler
+document.getElementById('monthSelector').addEventListener('change', function() {
+  const selectedMonth = this.value;
+  if (!selectedMonth) return;
+  document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+  currentPeriod = selectedMonth;
+  const filtered = allItems.filter(item => isInPeriod(item.closedDate, currentPeriod));
+  const scFiltered = filtered.filter(item => !item.isAM);
+  const results = calculateXP(scFiltered);
+  const badges = calculateBadges(scFiltered);
+  const teamTotalNOC = filtered.length;
+  const teamTotalNOB = filtered.reduce((s, item) => s + item.systemPrice, 0);
+  renderLeaderboard(results, badges, teamTotalNOC, teamTotalNOB);
 });
 
 // Initial load
