@@ -388,10 +388,55 @@ const FULL_TEAM = {
 };
 
 // Monthly Team Targets
-const MONTHLY_TARGETS = {
-  noc: 82,
-  nob: 2870000
+const MONTHLY_TARGETS_BY_MONTH = {
+  '2026-07': { noc: 77, nob: 2695000 },
+  '2026-08': { noc: 82, nob: 2870000 },
+  '2026-09': { noc: 82, nob: 2870000 },
+  '2026-10': { noc: 82, nob: 2870000 },
+  '2026-11': { noc: 82, nob: 2870000 },
+  '2026-12': { noc: 82, nob: 2870000 },
+  '2027-01': { noc: 82, nob: 2870000 },
+  '2027-02': { noc: 82, nob: 2870000 },
+  '2027-03': { noc: 82, nob: 2870000 },
+  '2027-04': { noc: 82, nob: 2870000 },
+  '2027-05': { noc: 82, nob: 2870000 },
+  '2027-06': { noc: 82, nob: 2870000 }
 };
+
+// Get targets based on current period
+function getTargetsForPeriod(period) {
+  if (period === 'month') {
+    const now = new Date();
+    const key = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+    return MONTHLY_TARGETS_BY_MONTH[key] || { noc: 82, nob: 2870000 };
+  }
+  if (period.match(/^\d{4}-\d{2}$/)) {
+    return MONTHLY_TARGETS_BY_MONTH[period] || { noc: 82, nob: 2870000 };
+  }
+  if (period === 'h1') {
+    // Jul-Dec 2026
+    let noc = 0, nob = 0;
+    for (let m = 7; m <= 12; m++) {
+      const key = `2026-${String(m).padStart(2,'0')}`;
+      const t = MONTHLY_TARGETS_BY_MONTH[key] || { noc: 82, nob: 2870000 };
+      noc += t.noc; nob += t.nob;
+    }
+    return { noc, nob };
+  }
+  if (period === 'h2') {
+    // Jan-Jun 2027
+    let noc = 0, nob = 0;
+    for (let m = 1; m <= 6; m++) {
+      const key = `2027-${String(m).padStart(2,'0')}`;
+      const t = MONTHLY_TARGETS_BY_MONTH[key] || { noc: 82, nob: 2870000 };
+      noc += t.noc; nob += t.nob;
+    }
+    return { noc, nob };
+  }
+  return { noc: 82, nob: 2870000 };
+}
+
+const MONTHLY_TARGETS = getTargetsForPeriod('month');
 
 // Referral source labels (any source containing these = referral)
 const REFERRAL_KEYWORDS = ['referral'];
@@ -776,18 +821,19 @@ function calculateBadges(items) {
 // ===== RENDERING =====
 function renderLeaderboard(results, badges, teamTotalNOC, teamTotalNOB) {
   // Summary cards — full team totals with progress toward targets
-  const nocPct = Math.min(100, Math.round((teamTotalNOC / MONTHLY_TARGETS.noc) * 100));
-  const nobPct = Math.min(100, Math.round((teamTotalNOB / MONTHLY_TARGETS.nob) * 100));
+  const targets = getTargetsForPeriod(currentPeriod);
+  const nocPct = Math.min(100, Math.round((teamTotalNOC / targets.noc) * 100));
+  const nobPct = Math.min(100, Math.round((teamTotalNOB / targets.nob) * 100));
 
   document.getElementById('summaryCards').innerHTML = `
     <div class="summary-card">
-      <div class="value">${teamTotalNOC} <span style="font-size:0.5em; color:#a0aec0;">/ ${MONTHLY_TARGETS.noc}</span></div>
+      <div class="value">${teamTotalNOC} <span style="font-size:0.5em; color:#a0aec0;">/ ${targets.noc}</span></div>
       <div class="label">Team NOC</div>
       <div class="progress-bar"><div class="progress-fill" style="width:${nocPct}%"></div></div>
       <div class="progress-label">${nocPct}% achieved</div>
     </div>
     <div class="summary-card">
-      <div class="value">RM ${teamTotalNOB.toLocaleString()} <span style="font-size:0.4em; color:#a0aec0;">/ RM ${MONTHLY_TARGETS.nob.toLocaleString()}</span></div>
+      <div class="value">RM ${teamTotalNOB.toLocaleString()} <span style="font-size:0.4em; color:#a0aec0;">/ RM ${targets.nob.toLocaleString()}</span></div>
       <div class="label">Team NOB</div>
       <div class="progress-bar"><div class="progress-fill" style="width:${nobPct}%"></div></div>
       <div class="progress-label">${nobPct}% achieved</div>
