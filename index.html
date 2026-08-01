@@ -1485,28 +1485,42 @@ document.getElementById('currentGamPlaceholder').addEventListener('click', funct
     <div class="past-gam-item">
       <button class="past-gam-btn" onclick="this.nextElementSibling.classList.toggle('open')">🌱 July 2026 — FAST START Sprint <span style="color:#718096;">▾</span></button>
       <div class="past-gam-content">
-        <div style="margin-bottom:15px;">
-          <p style="color:#e2e8f0; font-weight:600; margin-bottom:5px;">📊 Team Results: 48 NOC | RM 1,637,190 NOB</p>
-          <p style="color:#718096; font-size:0.8em;">Target: 77 NOC | Achievement: 62.3%</p>
+
+        <!-- Rules -->
+        <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:14px; margin-bottom:15px;">
+          <p style="color:#00e676; font-weight:600; margin-bottom:8px;">📋 Rules & Milestones</p>
+          <p style="color:#a0aec0; font-size:0.82em; margin-bottom:8px;">Duration: 1st – 31st July 2026 | Only ATAP closings count</p>
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; font-size:0.78em; text-align:center; margin-bottom:10px;">
+            <div style="background:rgba(255,255,255,0.05); border-radius:6px; padding:8px;">🔥 Ignition<br><span style="color:#a0aec0;">3 NOC</span><br><span style="color:#ffd700;">RM 25</span></div>
+            <div style="background:rgba(255,255,255,0.05); border-radius:6px; padding:8px;">🚀 Liftoff<br><span style="color:#a0aec0;">6 NOC</span><br><span style="color:#ffd700;">RM 40</span></div>
+            <div style="background:rgba(255,255,255,0.05); border-radius:6px; padding:8px;">☁️ Breaking Clouds<br><span style="color:#a0aec0;">9 NOC</span><br><span style="color:#ffd700;">RM 60</span></div>
+            <div style="background:rgba(255,255,255,0.05); border-radius:6px; padding:8px;">⭐ Orbit<br><span style="color:#a0aec0;">11 NOC</span><br><span style="color:#ffd700;">RM 85</span></div>
+          </div>
+          <p style="color:#a0aec0; font-size:0.78em;">⚡ Speed Bonus: 1st to 3 NOC = RM50 | 1st to 6 NOC = RM70 | 1st to 11 NOC = RM100</p>
+          <p style="color:#a0aec0; font-size:0.78em;">🌙 Overachiever: RM50 per NOC above 11</p>
+          <p style="color:#a0aec0; font-size:0.78em;">🤝 Crew Ignition: All 7 SCs hit 5 NOC = +RM15 each</p>
         </div>
 
+        <!-- Results Table -->
         <table style="width:100%; border-collapse:collapse; font-size:0.82em; margin-bottom:15px;">
           <thead><tr style="border-bottom:1px solid rgba(255,255,255,0.15);">
             <th style="text-align:left; padding:8px; color:#a0aec0;">#</th>
             <th style="text-align:left; padding:8px; color:#a0aec0;">SC</th>
             <th style="padding:8px; color:#a0aec0;">NOC</th>
+            <th style="padding:8px; color:#a0aec0;">Ref</th>
+            <th style="padding:8px; color:#a0aec0;">MQL</th>
             <th style="padding:8px; color:#a0aec0;">Milestone</th>
             <th style="padding:8px; color:#a0aec0;">Rewards</th>
           </tr></thead>
           <tbody>
-            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">🥇</td><td style="padding:8px; font-weight:600; color:#ffd700;">Naim</td><td style="padding:8px; text-align:center;">10</td><td style="padding:8px; text-align:center; color:#ff9100;">☁️ Breaking Clouds</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 125</td></tr>
-            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">🥈</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Ashlynn</td><td style="padding:8px; text-align:center;">7</td><td style="padding:8px; text-align:center; color:#00e5ff;">🚀 Liftoff</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 135</td></tr>
-            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">🥉</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Sidik</td><td style="padding:8px; text-align:center;">6</td><td style="padding:8px; text-align:center; color:#00e5ff;">🚀 Liftoff</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 115</td></tr>
-            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">4</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Adi</td><td style="padding:8px; text-align:center;">7</td><td style="padding:8px; text-align:center; color:#00e5ff;">🚀 Liftoff</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 65</td></tr>
-            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">5</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Syaheed</td><td style="padding:8px; text-align:center;">7</td><td style="padding:8px; text-align:center; color:#00e5ff;">🚀 Liftoff</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 65</td></tr>
-            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">6</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Shirley</td><td style="padding:8px; text-align:center;">5</td><td style="padding:8px; text-align:center; color:#ff9100;">🔥 Ignition</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 25</td></tr>
-            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">7</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Mabel</td><td style="padding:8px; text-align:center;">3</td><td style="padding:8px; text-align:center; color:#ff9100;">🔥 Ignition</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 25</td></tr>
-            <tr><td style="padding:8px;">8</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Norazwin</td><td style="padding:8px; text-align:center;">3</td><td style="padding:8px; text-align:center; color:#ff9100;">🔥 Ignition</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 25</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">🥇</td><td style="padding:8px; font-weight:600; color:#ffd700;">Naim</td><td style="padding:8px; text-align:center;">10</td><td style="padding:8px; text-align:center;">4</td><td style="padding:8px; text-align:center;">6</td><td style="padding:8px; text-align:center; color:#ff9100;">☁️ Breaking Clouds</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 125</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">🥈</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Ashlynn</td><td style="padding:8px; text-align:center;">7</td><td style="padding:8px; text-align:center;">4</td><td style="padding:8px; text-align:center;">3</td><td style="padding:8px; text-align:center; color:#00e5ff;">🚀 Liftoff</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 135</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">🥉</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Sidik</td><td style="padding:8px; text-align:center;">6</td><td style="padding:8px; text-align:center;">3</td><td style="padding:8px; text-align:center;">3</td><td style="padding:8px; text-align:center; color:#00e5ff;">🚀 Liftoff</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 115</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">4</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Adi</td><td style="padding:8px; text-align:center;">7</td><td style="padding:8px; text-align:center;">1</td><td style="padding:8px; text-align:center;">6</td><td style="padding:8px; text-align:center; color:#00e5ff;">🚀 Liftoff</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 65</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">5</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Syaheed</td><td style="padding:8px; text-align:center;">7</td><td style="padding:8px; text-align:center;">2</td><td style="padding:8px; text-align:center;">5</td><td style="padding:8px; text-align:center; color:#00e5ff;">🚀 Liftoff</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 65</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">6</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Shirley</td><td style="padding:8px; text-align:center;">5</td><td style="padding:8px; text-align:center;">2</td><td style="padding:8px; text-align:center;">3</td><td style="padding:8px; text-align:center; color:#ff9100;">🔥 Ignition</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 25</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">7</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Mabel</td><td style="padding:8px; text-align:center;">3</td><td style="padding:8px; text-align:center;">2</td><td style="padding:8px; text-align:center;">1</td><td style="padding:8px; text-align:center; color:#ff9100;">🔥 Ignition</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 25</td></tr>
+            <tr><td style="padding:8px;">8</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Norazwin</td><td style="padding:8px; text-align:center;">3</td><td style="padding:8px; text-align:center;">0</td><td style="padding:8px; text-align:center;">3</td><td style="padding:8px; text-align:center; color:#ff9100;">🔥 Ignition</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 25</td></tr>
           </tbody>
         </table>
 
