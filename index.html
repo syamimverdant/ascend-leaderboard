@@ -60,12 +60,13 @@
   <!-- Period Selector -->
   <div id="periodSelector" style="text-align:center; margin-bottom:20px;">
     <button class="period-btn active" data-period="month">Current Month</button>
-    <select id="monthSelector" style="
+    <select id="monthSelector" class="period-btn" style="
       background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
       color: #e2e8f0; padding: 8px 15px; border-radius: 20px; cursor: pointer;
-      margin: 0 5px; font-size: 0.9em;
+      margin: 0 5px; font-size: 0.9em; appearance: none; -webkit-appearance: none;
+      padding-right: 10px;
     ">
-      <option value="" disabled selected>📅 Past Months</option>
+      <option value="" disabled selected style="background:#1a202c;">📅 Past Months</option>
     </select>
     <button class="period-btn" data-period="h1">H1 (Jul–Dec)</button>
     <button class="period-btn" data-period="h2">H2 (Jan–Jun)</button>
