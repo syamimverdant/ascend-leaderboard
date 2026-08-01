@@ -70,7 +70,7 @@
     </select>
     <button class="period-btn" data-period="h1">H1 (Jul–Dec)</button>
     <button class="period-btn" data-period="h2">H2 (Jan–Jun)</button>
-    <button class="period-btn gamification-btn" onclick="document.getElementById('gamPanel').style.display='flex'; updateGamificationProgress();">🎮 Current Month</button>
+    <button class="period-btn gamification-btn" onclick="document.getElementById('currentGamPlaceholder').style.display='flex';">🎮 Current Month</button>
     <button class="period-btn gamification-btn" onclick="document.getElementById('pastGamPanel').style.display='flex';">🏆 Past Month</button>
   </div>
 
@@ -1442,6 +1442,24 @@ function updateGamificationProgress() {
 // Update gamification when panel is opened
 document.getElementById('gamPanel').addEventListener('click', function(e) {
   if (e.target === this) this.style.display = 'none'; // close on backdrop click
+});
+</script>
+
+<!-- Current Month Gamification Placeholder -->
+<div id="currentGamPlaceholder" style="
+  display:none; position:fixed; top:0; left:0; width:100vw; height:100vh;
+  background:rgba(0,0,0,0.85); z-index:1100;
+  justify-content:center; align-items:center;
+">
+  <div style="width:90vw; max-width:500px; background:#1a202c; border-radius:16px; padding:30px; position:relative; border:1px solid rgba(255,255,255,0.1); text-align:center;">
+    <button onclick="document.getElementById('currentGamPlaceholder').style.display='none'" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#a0aec0; font-size:1.5em; cursor:pointer;">✕</button>
+    <h2 style="color:#ffd700; margin-bottom:10px;">🎮 August 2026 Gamification</h2>
+    <p style="color:#718096; font-size:0.9em; padding:30px 20px;">Content will be available soon.</p>
+  </div>
+</div>
+<script>
+document.getElementById('currentGamPlaceholder').addEventListener('click', function(e) {
+  if (e.target === this) this.style.display = 'none';
 });
 </script>
 
