@@ -1445,21 +1445,179 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
 });
 </script>
 
-<!-- Current Month Gamification Placeholder -->
+<!-- Current Month Gamification Panel -->
 <div id="currentGamPlaceholder" style="
   display:none; position:fixed; top:0; left:0; width:100vw; height:100vh;
   background:rgba(0,0,0,0.85); z-index:1100;
   justify-content:center; align-items:center;
 ">
-  <div style="width:90vw; max-width:500px; background:#1a202c; border-radius:16px; padding:30px; position:relative; border:1px solid rgba(255,255,255,0.1); text-align:center;">
+  <div style="width:90vw; max-width:700px; max-height:90vh; background:#1a202c; border-radius:16px; padding:30px; overflow-y:auto; position:relative; border:1px solid rgba(255,255,255,0.1);">
     <button onclick="document.getElementById('currentGamPlaceholder').style.display='none'" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#a0aec0; font-size:1.5em; cursor:pointer;">✕</button>
-    <h2 style="color:#ffd700; margin-bottom:10px;">🎮 August 2026 Gamification</h2>
-    <p style="color:#718096; font-size:0.9em; padding:30px 20px;">Content will be available soon.</p>
+    <h2 style="color:#ffd700; margin-bottom:5px;">🏗️ Build Momentum — August 2026</h2>
+    <p style="color:#718096; font-size:0.85em; margin-bottom:20px;">1st – 31st August 2026 | Team Competition</p>
+
+    <!-- Rules Section -->
+    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:18px; margin-bottom:20px;">
+      <h3 style="color:#448aff; font-size:1em; margin-bottom:12px;">👥 Groups</h3>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:0.85em;">
+        <div style="background:rgba(66,153,225,0.1); border:1px solid rgba(66,153,225,0.3); border-radius:8px; padding:12px; text-align:center;">
+          <div style="color:#4299e1; font-weight:700;">🔵 Group 1</div>
+          <div style="color:#e2e8f0; margin-top:5px;">Naim + Mabel</div>
+        </div>
+        <div style="background:rgba(56,161,105,0.1); border:1px solid rgba(56,161,105,0.3); border-radius:8px; padding:12px; text-align:center;">
+          <div style="color:#38a169; font-weight:700;">🟢 Group 2</div>
+          <div style="color:#e2e8f0; margin-top:5px;">Syaheed + Shirley</div>
+        </div>
+        <div style="background:rgba(214,158,46,0.1); border:1px solid rgba(214,158,46,0.3); border-radius:8px; padding:12px; text-align:center;">
+          <div style="color:#d69e2e; font-weight:700;">🟡 Group 3</div>
+          <div style="color:#e2e8f0; margin-top:5px;">Ashlynn + Sidik</div>
+        </div>
+        <div style="background:rgba(229,62,62,0.1); border:1px solid rgba(229,62,62,0.3); border-radius:8px; padding:12px; text-align:center;">
+          <div style="color:#e53e3e; font-weight:700;">🔴 Group 4</div>
+          <div style="color:#e2e8f0; margin-top:5px;">Adi + Nora</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rewards -->
+    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:18px; margin-bottom:20px;">
+      <h3 style="color:#ffd700; font-size:1em; margin-bottom:12px;">🏆 Rewards</h3>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:0.82em;">
+        <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:12px; text-align:center;">
+          <div style="font-size:1.3em;">🏗️</div>
+          <div style="color:#e2e8f0; font-weight:600;">Foundation</div>
+          <div style="color:#a0aec0;">16 NOC as team</div>
+          <div style="color:#ffd700; font-weight:700;">RM 300/team</div>
+          <div style="color:#718096; font-size:0.85em;">(RM 150 each)</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:12px; text-align:center;">
+          <div style="font-size:1.3em;">🤝</div>
+          <div style="color:#e2e8f0; font-weight:600;">Referral Champion</div>
+          <div style="color:#a0aec0;">Highest Referral NOC</div>
+          <div style="color:#ffd700; font-weight:700;">RM 200/team</div>
+          <div style="color:#718096; font-size:0.85em;">(RM 100 each)</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:12px; text-align:center;">
+          <div style="font-size:1.3em;">💡</div>
+          <div style="color:#e2e8f0; font-weight:600;">MQL Champion</div>
+          <div style="color:#a0aec0;">Highest MQL NOC</div>
+          <div style="color:#ffd700; font-weight:700;">RM 200/team</div>
+          <div style="color:#718096; font-size:0.85em;">(RM 100 each)</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.05); border-radius:8px; padding:12px; text-align:center;">
+          <div style="font-size:1.3em;">⭐</div>
+          <div style="color:#e2e8f0; font-weight:600;">Individual MVP</div>
+          <div style="color:#a0aec0;">Highest Individual NOC</div>
+          <div style="color:#ffd700; font-weight:700;">RM 100</div>
+          <div style="color:#718096; font-size:0.85em;">(1 SC)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rules -->
+    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:18px; margin-bottom:20px;">
+      <h3 style="color:#00e5ff; font-size:1em; margin-bottom:10px;">📋 Rules</h3>
+      <ul style="list-style:none; padding:0; margin:0; color:#e2e8f0; font-size:0.85em; line-height:2;">
+        <li>✅ Only ATAP category closings count</li>
+        <li>✅ Based on Closed Date in Monday.com</li>
+        <li>✅ Both SCs must contribute minimum 5 NOC each to qualify for team reward</li>
+        <li>✅ All 4 groups can earn the Foundation reward independently</li>
+        <li>✅ If tied for Champion titles, both groups receive the reward</li>
+      </ul>
+    </div>
+
+    <!-- Live Progress -->
+    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:18px;">
+      <h3 style="color:#00e676; font-size:1em; margin-bottom:12px;">📊 Live Progress</h3>
+      <div id="augGamProgress"><p style="color:#718096; font-style:italic;">Loading...</p></div>
+    </div>
+
   </div>
 </div>
 <script>
 document.getElementById('currentGamPlaceholder').addEventListener('click', function(e) {
   if (e.target === this) this.style.display = 'none';
+});
+
+// August Gamification Live Progress
+function updateAugGamification() {
+  const groups = [
+    { name: 'Group 1', color: '#4299e1', members: ['Naim', 'Mabel'] },
+    { name: 'Group 2', color: '#38a169', members: ['Syaheed', 'Shirley'] },
+    { name: 'Group 3', color: '#d69e2e', members: ['Ashlynn', 'Sidik'] },
+    { name: 'Group 4', color: '#e53e3e', members: ['Adi', 'Norazwin'] }
+  ];
+
+  // Filter current month items
+  const now = new Date();
+  const currentMonth = allItems.filter(item => {
+    if (!item.closedDate) return false;
+    const parts = item.closedDate.split('-');
+    const d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+  }).filter(item => !item.isAM);
+
+  let html = '';
+  let groupData = [];
+
+  groups.forEach(g => {
+    const items = currentMonth.filter(i => g.members.includes(i.sc));
+    const totalNOC = items.length;
+    const refNOC = items.filter(i => i.isReferral).length;
+    const mqlNOC = items.filter(i => !i.isReferral).length;
+    const memberNOC = {};
+    g.members.forEach(m => { memberNOC[m] = items.filter(i => i.sc === m).length; });
+    const pct = Math.min(100, Math.round((totalNOC / 16) * 100));
+    const qualified = Object.values(memberNOC).every(n => n >= 5) && totalNOC >= 16;
+
+    groupData.push({ ...g, totalNOC, refNOC, mqlNOC, memberNOC, pct, qualified });
+
+    html += '<div style="margin-bottom:12px; padding:10px; background:rgba(255,255,255,0.03); border-radius:8px; border-left:3px solid ' + g.color + ';">';
+    html += '<div style="display:flex; justify-content:space-between; align-items:center;">';
+    html += '<span style="color:' + g.color + '; font-weight:700;">' + g.name + '</span>';
+    html += '<span style="color:#ffd700; font-weight:700;">' + totalNOC + ' / 16 NOC</span>';
+    html += '</div>';
+    html += '<div style="display:flex; gap:10px; margin-top:6px; font-size:0.8em; color:#a0aec0;">';
+    g.members.forEach(m => { html += '<span>' + m + ': ' + (memberNOC[m] || 0) + '</span>'; });
+    html += '<span>| Ref: ' + refNOC + ' | MQL: ' + mqlNOC + '</span>';
+    html += '</div>';
+    html += '<div style="height:6px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:hidden; margin-top:6px;"><div style="height:100%; width:' + pct + '%; background:' + g.color + '; border-radius:3px;"></div></div>';
+    if (qualified) html += '<p style="color:#38a169; font-size:0.8em; margin-top:4px;">✅ QUALIFIED!</p>';
+    html += '</div>';
+  });
+
+  // Champions
+  const maxRef = Math.max(...groupData.map(g => g.refNOC));
+  const maxMQL = Math.max(...groupData.map(g => g.mqlNOC));
+  const allSCNOC = {};
+  currentMonth.forEach(i => { if (!i.isAM) allSCNOC[i.sc] = (allSCNOC[i.sc] || 0) + 1; });
+  const maxIndividual = Math.max(0, ...Object.values(allSCNOC));
+  const mvp = Object.entries(allSCNOC).filter(([,n]) => n === maxIndividual && maxIndividual > 0).map(([name]) => name);
+
+  html += '<div style="margin-top:15px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.1); font-size:0.85em;">';
+  html += '<p style="color:#38a169; font-weight:600;">🤝 Referral Champion: ';
+  if (maxRef > 0) {
+    const winners = groupData.filter(g => g.refNOC === maxRef).map(g => g.name);
+    html += '<strong>' + winners.join(', ') + '</strong> (' + maxRef + ' Ref NOC)';
+  } else { html += '🏁 Race ongoing'; }
+  html += '</p>';
+  html += '<p style="color:#4299e1; font-weight:600;">💡 MQL Champion: ';
+  if (maxMQL > 0) {
+    const winners = groupData.filter(g => g.mqlNOC === maxMQL).map(g => g.name);
+    html += '<strong>' + winners.join(', ') + '</strong> (' + maxMQL + ' MQL NOC)';
+  } else { html += '🏁 Race ongoing'; }
+  html += '</p>';
+  html += '<p style="color:#ffd700; font-weight:600;">⭐ Individual MVP: ';
+  if (mvp.length > 0) { html += '<strong>' + mvp.join(', ') + '</strong> (' + maxIndividual + ' NOC)'; }
+  else { html += '🏁 Race ongoing'; }
+  html += '</p></div>';
+
+  document.getElementById('augGamProgress').innerHTML = html;
+}
+
+// Call on panel open
+document.querySelector('[onclick*="currentGamPlaceholder"]').addEventListener('click', function() {
+  setTimeout(updateAugGamification, 100);
 });
 </script>
 
