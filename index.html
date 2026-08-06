@@ -883,9 +883,9 @@ function renderLeaderboard(results, badges, teamTotalNOC, teamTotalNOB) {
     if (r.isMQLChampion) champLabels.push('💡 MQL Champ');
 
     cardsHTML += `
-      <div class="sc-card">
+      <div class="sc-card" onclick="openSCPanel('${r.name}')" style="cursor:pointer;">
         <div class="sc-card-header">
-          <h3>${r.name}</h3>
+          <h3>${r.name} <span style="font-size:0.6em; color:#718096;">🔒</span></h3>
           <span class="level-badge level-${r.level.toLowerCase().replace(' ','-')}">${r.level}</span>
         </div>
         ${champLabels.length ? `<p style="color:#ffd700;font-size:0.8em;margin-bottom:10px;">${champLabels.join(' | ')}</p>` : ''}
@@ -1218,7 +1218,100 @@ loadData();
 
 // Auto-refresh
 setInterval(loadData, REFRESH_INTERVAL);
+
+// ===== SC P&C PANEL =====
+const SC_PASSWORDS = {
+  'Naim': 'naim2026',
+  'Adi': 'adi2026',
+  'Ashlynn': 'ashlynn2026',
+  'Syaheed': 'syaheed2026',
+  'Sidik': 'sidik2026',
+  'Shirley': 'shirley2026',
+  'Mabel': 'mabel2026',
+  'Norazwin': 'nora2026'
+};
+
+const SC_PNC_DATA = {
+  'Naim': {
+    july: { leads: 100, mqlLead: 89, refLead: 11, appointments: 21, apptCR: '21%', proposals: 62, totalNOC: 10, nocCR: '10%', mqlNOC: 6, mqlCR: '7%', refNOC: 4, refCR: '36%', fcd: 0.02, external: 9, extPct: '90%' }
+  },
+  'Adi': {
+    july: { leads: 76, mqlLead: 71, refLead: 5, appointments: 11, apptCR: '14%', proposals: 39, totalNOC: 7, nocCR: '9%', mqlNOC: 6, mqlCR: '8%', refNOC: 1, refCR: '20%', fcd: 2.92, external: 4, extPct: '57%' }
+  },
+  'Ashlynn': {
+    july: { leads: 80, mqlLead: 68, refLead: 12, appointments: 8, apptCR: '10%', proposals: 45, totalNOC: 7, nocCR: '9%', mqlNOC: 3, mqlCR: '4%', refNOC: 4, refCR: '33%', fcd: 5.22, external: 7, extPct: '100%' }
+  },
+  'Syaheed': {
+    july: { leads: 85, mqlLead: 82, refLead: 3, appointments: 10, apptCR: '12%', proposals: 45, totalNOC: 7, nocCR: '8%', mqlNOC: 5, mqlCR: '6%', refNOC: 2, refCR: '67%', fcd: 4.12, external: 6, extPct: '86%' }
+  },
+  'Sidik': {
+    july: { leads: 84, mqlLead: 77, refLead: 7, appointments: 8, apptCR: '10%', proposals: 12, totalNOC: 6, nocCR: '7%', mqlNOC: 3, mqlCR: '4%', refNOC: 3, refCR: '43%', fcd: 9.78, external: 1, extPct: '17%' }
+  },
+  'Shirley': {
+    july: { leads: 111, mqlLead: 100, refLead: 11, appointments: 12, apptCR: '11%', proposals: 46, totalNOC: 5, nocCR: '5%', mqlNOC: 3, mqlCR: '3%', refNOC: 2, refCR: '18%', fcd: 1.46, external: 3, extPct: '60%' }
+  },
+  'Mabel': {
+    july: { leads: 113, mqlLead: 109, refLead: 4, appointments: 8, apptCR: '7%', proposals: 76, totalNOC: 3, nocCR: '3%', mqlNOC: 1, mqlCR: '1%', refNOC: 2, refCR: '50%', fcd: 1.06, external: 2, extPct: '67%' }
+  },
+  'Norazwin': {
+    july: { leads: 19, mqlLead: 19, refLead: 0, appointments: 3, apptCR: '16%', proposals: 13, totalNOC: 3, nocCR: '16%', mqlNOC: 3, mqlCR: '16%', refNOC: 0, refCR: '0%', fcd: 6.93, external: 1, extPct: '33%' }
+  }
+};
+
+function openSCPanel(scName) {
+  const pwd = prompt('🔒 Enter password for ' + scName + ':');
+  if (!pwd) return;
+  if (pwd !== SC_PASSWORDS[scName]) {
+    alert('❌ Incorrect password.');
+    return;
+  }
+  // Show P&C panel
+  const data = SC_PNC_DATA[scName];
+  if (!data) { alert('No data available for ' + scName); return; }
+
+  let html = '<div style="width:90vw; max-width:700px; max-height:90vh; background:#1a202c; border-radius:16px; padding:30px; overflow-y:auto; position:relative; border:1px solid rgba(255,255,255,0.1);">';
+  html += '<button onclick="document.getElementById(\'scPncPanel\').style.display=\'none\'" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#a0aec0; font-size:1.5em; cursor:pointer;">✕</button>';
+  html += '<h2 style="color:#ffd700; margin-bottom:5px;">🔒 ' + scName + ' — P&C Performance Data</h2>';
+  html += '<p style="color:#718096; font-size:0.85em; margin-bottom:20px;">Confidential — Monthly breakdown</p>';
+
+  // Render each month
+  Object.entries(data).forEach(([month, d]) => {
+    const monthLabel = month.charAt(0).toUpperCase() + month.slice(1) + ' 2026';
+    html += '<div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:18px; margin-bottom:15px;">';
+    html += '<h3 style="color:#448aff; font-size:1em; margin-bottom:12px;">📅 ' + monthLabel + '</h3>';
+    html += '<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:8px; font-size:0.82em;">';
+
+    const metrics = [
+      ['Lead #', d.leads], ['MQL Lead', d.mqlLead], ['Referral Lead', d.refLead],
+      ['Appointments', d.appointments], ['Appt CR', d.apptCR], ['Proposals', d.proposals],
+      ['Total NOC', d.totalNOC], ['NOC CR', d.nocCR], ['MQL NOC', d.mqlNOC],
+      ['MQL CR', d.mqlCR], ['Referral NOC', d.refNOC], ['Referral CR', d.refCR],
+      ['FCD (hrs)', d.fcd], ['External Cases', d.external], ['External %', d.extPct]
+    ];
+
+    metrics.forEach(([label, value]) => {
+      html += '<div style="background:rgba(255,255,255,0.05); border-radius:6px; padding:8px; text-align:center;">';
+      html += '<div style="color:#718096; font-size:0.85em;">' + label + '</div>';
+      html += '<div style="color:#e2e8f0; font-weight:700; font-size:1.2em;">' + value + '</div>';
+      html += '</div>';
+    });
+
+    html += '</div></div>';
+  });
+
+  html += '</div>';
+
+  document.getElementById('scPncPanel').innerHTML = html;
+  document.getElementById('scPncPanel').style.display = 'flex';
+}
 </script>
+
+<!-- SC P&C Panel (Modal) -->
+<div id="scPncPanel" style="
+  display:none; position:fixed; top:0; left:0; width:100vw; height:100vh;
+  background:rgba(0,0,0,0.85); z-index:1200;
+  justify-content:center; align-items:center;
+" onclick="if(event.target===this)this.style.display='none'"></div>
 
 <!-- Gamification Panel (Modal) -->
 <div id="gamPanel" style="
