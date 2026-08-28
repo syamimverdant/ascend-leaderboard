@@ -529,9 +529,9 @@ function parseItems(items) {
     const shortName = FULL_TEAM[scFull];
     if (!shortName) return null; // Not a Northern team member
 
-    // Only count ATAP category
+    // Only count ATAP and SELCO categories
     const category = (cols['dropdown5'] || '').toLowerCase();
-    if (!category.includes('atap')) return null;
+    if (!category.includes('atap') && !category.includes('selco')) return null;
 
     const source = (cols['status5'] || '').toLowerCase();
     const isReferral = REFERRAL_KEYWORDS.some(kw => source.includes(kw));
@@ -1611,7 +1611,7 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
     <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:18px; margin-bottom:20px;">
       <h3 style="color:#00e5ff; font-size:1em; margin-bottom:10px;">📋 Rules</h3>
       <ul style="list-style:none; padding:0; margin:0; color:#e2e8f0; font-size:0.85em; line-height:2;">
-        <li>✅ Only ATAP category closings count</li>
+        <li>✅ ATAP and SELCO category closings count</li>
         <li>✅ Based on Closed Date in Monday.com</li>
         <li>✅ Both SCs must contribute minimum 5 NOC each to qualify for team reward</li>
         <li>✅ All 4 groups can earn the Foundation reward independently</li>
