@@ -824,20 +824,22 @@ function calculateBadges(items) {
 function renderLeaderboard(results, badges, teamTotalNOC, teamTotalNOB) {
   // Summary cards — full team totals with progress toward targets
   const targets = getTargetsForPeriod(currentPeriod);
-  const nocPct = Math.min(100, Math.round((teamTotalNOC / targets.noc) * 100));
-  const nobPct = Math.min(100, Math.round((teamTotalNOB / targets.nob) * 100));
+  const nocPct = Math.round((teamTotalNOC / targets.noc) * 100);
+  const nobPct = Math.round((teamTotalNOB / targets.nob) * 100);
+  const nocBarPct = Math.min(100, nocPct);
+  const nobBarPct = Math.min(100, nobPct);
 
   document.getElementById('summaryCards').innerHTML = `
     <div class="summary-card">
       <div class="value">${teamTotalNOC} <span style="font-size:0.5em; color:#a0aec0;">/ ${targets.noc}</span></div>
       <div class="label">Team NOC</div>
-      <div class="progress-bar"><div class="progress-fill" style="width:${nocPct}%"></div></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${nocBarPct}%"></div></div>
       <div class="progress-label">${nocPct}% achieved</div>
     </div>
     <div class="summary-card">
       <div class="value">RM ${teamTotalNOB.toLocaleString()} <span style="font-size:0.4em; color:#a0aec0;">/ RM ${targets.nob.toLocaleString()}</span></div>
       <div class="label">Team NOB</div>
-      <div class="progress-bar"><div class="progress-fill" style="width:${nobPct}%"></div></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${nobBarPct}%"></div></div>
       <div class="progress-label">${nobPct}% achieved</div>
     </div>
   `;
