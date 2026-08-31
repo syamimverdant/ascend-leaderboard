@@ -1736,6 +1736,84 @@ document.querySelector('[onclick*="currentGamPlaceholder"]').addEventListener('c
     </style>
 
     <div class="past-gam-item">
+      <button class="past-gam-btn" onclick="this.nextElementSibling.classList.toggle('open')">🏗️ August 2026 — BUILD MOMENTUM <span style="color:#718096;">▾</span></button>
+      <div class="past-gam-content">
+
+        <!-- Rules -->
+        <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:14px; margin-bottom:15px;">
+          <p style="color:#448aff; font-weight:600; margin-bottom:8px;">📋 Rules & Rewards</p>
+          <p style="color:#a0aec0; font-size:0.82em; margin-bottom:8px;">Duration: 1st – 31st August 2026 | Paired competition (4 groups of 2) | Only ATAP closings count</p>
+          <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:6px; font-size:0.78em; text-align:center; margin-bottom:10px;">
+            <div style="background:rgba(255,255,255,0.05); border-radius:6px; padding:8px;">🏗️ Team Target<br><span style="color:#a0aec0;">Group hits 16 NOC (both ≥5)</span><br><span style="color:#ffd700;">RM 150 each</span></div>
+            <div style="background:rgba(255,255,255,0.05); border-radius:6px; padding:8px;">🤝 Referral Champion<br><span style="color:#a0aec0;">Highest group Ref NOC</span><br><span style="color:#ffd700;">RM 100 each</span></div>
+            <div style="background:rgba(255,255,255,0.05); border-radius:6px; padding:8px;">💡 MQL Champion<br><span style="color:#a0aec0;">Highest group MQL NOC</span><br><span style="color:#ffd700;">RM 100 each</span></div>
+            <div style="background:rgba(255,255,255,0.05); border-radius:6px; padding:8px;">⭐ Individual MVP<br><span style="color:#a0aec0;">Highest individual NOC</span><br><span style="color:#ffd700;">RM 100</span></div>
+          </div>
+          <p style="color:#a0aec0; font-size:0.78em;">🎯 Individual Target: 11 NOC per SC | Group Target: 16 NOC combined</p>
+        </div>
+
+        <!-- Group Standings -->
+        <p style="color:#448aff; font-weight:600; margin-bottom:8px;">🏗️ Group Standings</p>
+        <table style="width:100%; border-collapse:collapse; font-size:0.82em; margin-bottom:15px;">
+          <thead><tr style="border-bottom:1px solid rgba(255,255,255,0.15);">
+            <th style="text-align:left; padding:8px; color:#a0aec0;">Group</th>
+            <th style="text-align:left; padding:8px; color:#a0aec0;">Members</th>
+            <th style="padding:8px; color:#a0aec0;">NOC</th>
+            <th style="padding:8px; color:#a0aec0;">Ref</th>
+            <th style="padding:8px; color:#a0aec0;">MQL</th>
+            <th style="padding:8px; color:#a0aec0;">Target</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px; color:#4299e1; font-weight:600;">🔵 Group 1</td><td style="padding:8px;">Naim + Mabel</td><td style="padding:8px; text-align:center; font-weight:700;">24</td><td style="padding:8px; text-align:center;">7</td><td style="padding:8px; text-align:center;">17</td><td style="padding:8px; text-align:center; color:#38a169;">✅ Hit</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px; color:#48bb78; font-weight:600;">🟢 Group 2</td><td style="padding:8px;">Syaheed + Shirley</td><td style="padding:8px; text-align:center; font-weight:700;">19</td><td style="padding:8px; text-align:center;">5</td><td style="padding:8px; text-align:center;">14</td><td style="padding:8px; text-align:center; color:#38a169;">✅ Hit</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px; color:#ecc94b; font-weight:600;">🟡 Group 3</td><td style="padding:8px;">Ashlynn + Sidik</td><td style="padding:8px; text-align:center; font-weight:700;">23</td><td style="padding:8px; text-align:center;">4</td><td style="padding:8px; text-align:center;">19</td><td style="padding:8px; text-align:center; color:#38a169;">✅ Hit</td></tr>
+            <tr><td style="padding:8px; color:#f56565; font-weight:600;">🔴 Group 4</td><td style="padding:8px;">Adi + Nora</td><td style="padding:8px; text-align:center; font-weight:700;">17</td><td style="padding:8px; text-align:center;">5</td><td style="padding:8px; text-align:center;">12</td><td style="padding:8px; text-align:center; color:#38a169;">✅ Hit</td></tr>
+          </tbody>
+        </table>
+
+        <!-- Individual Results Table -->
+        <p style="color:#448aff; font-weight:600; margin-bottom:8px;">👤 Individual Results & Payout</p>
+        <table style="width:100%; border-collapse:collapse; font-size:0.82em; margin-bottom:15px;">
+          <thead><tr style="border-bottom:1px solid rgba(255,255,255,0.15);">
+            <th style="text-align:left; padding:8px; color:#a0aec0;">#</th>
+            <th style="text-align:left; padding:8px; color:#a0aec0;">SC</th>
+            <th style="padding:8px; color:#a0aec0;">NOC</th>
+            <th style="padding:8px; color:#a0aec0;">Ref</th>
+            <th style="padding:8px; color:#a0aec0;">MQL</th>
+            <th style="padding:8px; color:#a0aec0;">Awards</th>
+            <th style="padding:8px; color:#a0aec0;">Rewards</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">🥇</td><td style="padding:8px; font-weight:600; color:#ffd700;">Naim</td><td style="padding:8px; text-align:center;">16</td><td style="padding:8px; text-align:center;">7</td><td style="padding:8px; text-align:center;">9</td><td style="padding:8px; text-align:center; font-size:0.9em; color:#a0aec0;">Team + Ref + MVP</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 350</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">🥇</td><td style="padding:8px; font-weight:600; color:#ffd700;">Sidik</td><td style="padding:8px; text-align:center;">16</td><td style="padding:8px; text-align:center;">3</td><td style="padding:8px; text-align:center;">13</td><td style="padding:8px; text-align:center; font-size:0.9em; color:#a0aec0;">Team + MQL + MVP</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 350</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">🥉</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Nora</td><td style="padding:8px; text-align:center;">11</td><td style="padding:8px; text-align:center;">2</td><td style="padding:8px; text-align:center;">9</td><td style="padding:8px; text-align:center; font-size:0.9em; color:#a0aec0;">Team</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 150</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">4</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Shirley</td><td style="padding:8px; text-align:center;">10</td><td style="padding:8px; text-align:center;">3</td><td style="padding:8px; text-align:center;">7</td><td style="padding:8px; text-align:center; font-size:0.9em; color:#a0aec0;">Team</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 150</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">5</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Syaheed</td><td style="padding:8px; text-align:center;">9</td><td style="padding:8px; text-align:center;">2</td><td style="padding:8px; text-align:center;">7</td><td style="padding:8px; text-align:center; font-size:0.9em; color:#a0aec0;">Team</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 150</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">6</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Mabel</td><td style="padding:8px; text-align:center;">8</td><td style="padding:8px; text-align:center;">0</td><td style="padding:8px; text-align:center;">8</td><td style="padding:8px; text-align:center; font-size:0.9em; color:#a0aec0;">Team + Ref</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 250</td></tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px;">7</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Ashlynn</td><td style="padding:8px; text-align:center;">7</td><td style="padding:8px; text-align:center;">1</td><td style="padding:8px; text-align:center;">6</td><td style="padding:8px; text-align:center; font-size:0.9em; color:#a0aec0;">Team + MQL</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 250</td></tr>
+            <tr><td style="padding:8px;">8</td><td style="padding:8px; font-weight:600; color:#e2e8f0;">Adi</td><td style="padding:8px; text-align:center;">6</td><td style="padding:8px; text-align:center;">3</td><td style="padding:8px; text-align:center;">3</td><td style="padding:8px; text-align:center; font-size:0.9em; color:#a0aec0;">Team</td><td style="padding:8px; text-align:center; color:#38a169; font-weight:700;">RM 150</td></tr>
+          </tbody>
+        </table>
+
+        <div style="border-top:1px solid rgba(255,255,255,0.1); padding-top:12px; margin-top:10px;">
+          <p style="color:#00e5ff; font-weight:600; margin-bottom:8px;">🏆 Champions:</p>
+          <p style="color:#e2e8f0;">🤝 Referral Champion: <strong>🔵 Group 1 (Naim + Mabel)</strong> — 7 Ref NOC ✅ +RM100 each</p>
+          <p style="color:#e2e8f0;">💡 MQL Champion: <strong>🟡 Group 3 (Ashlynn + Sidik)</strong> — 19 MQL NOC ✅ +RM100 each</p>
+          <p style="color:#e2e8f0;">⭐ Individual MVP: <strong>Naim & Sidik</strong> (tied, 16 NOC) ✅ +RM100 each</p>
+        </div>
+
+        <div style="border-top:1px solid rgba(255,255,255,0.1); padding-top:12px; margin-top:12px;">
+          <p style="color:#ce93d8; font-weight:600; margin-bottom:8px;">🏗️ Team Target (Foundation):</p>
+          <p style="color:#38a169;">✅ All 4 groups hit 16 NOC combined (both members ≥5 NOC) — RM 150 each SC</p>
+        </div>
+
+        <div style="border-top:1px solid rgba(255,255,255,0.1); padding-top:12px; margin-top:12px;">
+          <p style="color:#ffd700; font-weight:600;">💰 Total Payout: RM 1,800</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="past-gam-item">
       <button class="past-gam-btn" onclick="this.nextElementSibling.classList.toggle('open')">🌱 July 2026 — FAST START Sprint <span style="color:#718096;">▾</span></button>
       <div class="past-gam-content">
 
