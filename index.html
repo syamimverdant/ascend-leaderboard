@@ -1694,32 +1694,47 @@ function updateWorldCup() {
 
   let resultsHtml = '';
 
+  // Determine which gameweeks have actually been "played".
+  // A gameweek counts only once its window has fully ended (or the month is over).
+  const now = new Date();
+  const isSeptember = now.getFullYear() === 2026 && now.getMonth() === 8; // month 8 = September
+  const todayDay = now.getDate();
+
   WC_GAMEWEEKS.forEach(gwObj => {
-    resultsHtml += '<p style="color:#00e5ff; font-weight:600; margin:12px 0 6px;">' + gwObj.label + '</p>';
+    // Played if: not currently September (month done/not started as far as this campaign),
+    // or today is past the gameweek's end day.
+    const played = !isSeptember || todayDay > gwObj.end;
+
+    resultsHtml += '<p style="color:#00e5ff; font-weight:600; margin:12px 0 6px;">' + gwObj.label +
+      (played ? '' : ' <span style="color:#718096; font-weight:400; font-size:0.85em;">· in progress</span>') + '</p>';
+
     WC_FIXTURES[gwObj.gw].forEach(([tA, tB]) => {
       const sA = wcTeamStats(tA, gwObj.start, gwObj.end);
       const sB = wcTeamStats(tB, gwObj.start, gwObj.end);
-      const [pA, pB] = wcScoreMatch(sA, sB);
-
-      // Update standings
-      table[tA].P++; table[tB].P++;
-      table[tA].gf += sA.noc; table[tB].gf += sB.noc;
-      table[tA].ref += sA.ref; table[tB].ref += sB.ref;
-      table[tA].pts += pA; table[tB].pts += pB;
-      if (sA.noc > sB.noc) { table[tA].W++; table[tB].L++; }
-      else if (sB.noc > sA.noc) { table[tB].W++; table[tA].L++; }
-      else { table[tA].D++; table[tB].D++; }
-
-      // Head-to-head (by NOC result)
-      const key = tA + '|' + tB;
-      h2h[key] = sA.noc > sB.noc ? tA : (sB.noc > sA.noc ? tB : 'draw');
-
       const eA = WC_TEAMS[tA], eB = WC_TEAMS[tB];
-      resultsHtml += '<div style="display:flex; justify-content:space-between; align-items:center; padding:7px 10px; margin-bottom:4px; background:rgba(255,255,255,0.03); border-radius:6px; font-size:0.82em;">';
+
+      if (played) {
+        const [pA, pB] = wcScoreMatch(sA, sB);
+        // Update standings (only for completed gameweeks)
+        table[tA].P++; table[tB].P++;
+        table[tA].gf += sA.noc; table[tB].gf += sB.noc;
+        table[tA].ref += sA.ref; table[tB].ref += sB.ref;
+        table[tA].pts += pA; table[tB].pts += pB;
+        if (sA.noc > sB.noc) { table[tA].W++; table[tB].L++; }
+        else if (sB.noc > sA.noc) { table[tB].W++; table[tA].L++; }
+        else { table[tA].D++; table[tB].D++; }
+        h2h[tA + '|' + tB] = sA.noc > sB.noc ? tA : (sB.noc > sA.noc ? tB : 'draw');
+      }
+
+      // Match row (always show; live score shown even while in progress)
+      const ptsLabel = played
+        ? '<span style="margin-left:10px; color:#38a169; font-weight:700; white-space:nowrap;">+' + wcScoreMatch(sA, sB)[0] + ' / +' + wcScoreMatch(sA, sB)[1] + '</span>'
+        : '<span style="margin-left:10px; color:#718096; font-weight:600; white-space:nowrap;">live</span>';
+      resultsHtml += '<div style="display:flex; justify-content:space-between; align-items:center; padding:7px 10px; margin-bottom:4px; background:rgba(255,255,255,0.03); border-radius:6px; font-size:0.82em;' + (played ? '' : ' opacity:0.7;') + '">';
       resultsHtml += '<span style="flex:1; text-align:right; color:#e2e8f0;">' + eA.emoji + ' ' + tA + ' <span style="color:#718096;">(R' + sA.ref + ')</span></span>';
       resultsHtml += '<span style="margin:0 12px; font-weight:700; color:#ffd700; white-space:nowrap;">' + sA.noc + ' - ' + sB.noc + '</span>';
       resultsHtml += '<span style="flex:1; text-align:left; color:#e2e8f0;"><span style="color:#718096;">(R' + sB.ref + ')</span> ' + tB + ' ' + eB.emoji + '</span>';
-      resultsHtml += '<span style="margin-left:10px; color:#38a169; font-weight:700; white-space:nowrap;">+' + pA + ' / +' + pB + '</span>';
+      resultsHtml += ptsLabel;
       resultsHtml += '</div>';
     });
   });
