@@ -1737,10 +1737,12 @@ function updateWorldCup() {
       else if (isLive) ptsLabel = '<span style="margin-left:10px; color:#00e676; font-weight:700; white-space:nowrap;">+' + pA + ' / +' + pB + ' 🔴</span>';
       else ptsLabel = '<span style="margin-left:10px; color:#38a169; font-weight:700; white-space:nowrap;">+' + pA + ' / +' + pB + '</span>';
 
+      const membersA = WC_TEAMS[tA].members.join(' + ');
+      const membersB = WC_TEAMS[tB].members.join(' + ');
       resultsHtml += '<div style="display:flex; justify-content:space-between; align-items:center; padding:7px 10px; margin-bottom:4px; background:rgba(255,255,255,0.03); border-radius:6px; font-size:0.82em;' + (isFuture ? ' opacity:0.55;' : '') + '">';
-      resultsHtml += '<span style="flex:1; text-align:right; color:#e2e8f0;">' + eA.emoji + ' ' + tA + ' <span style="color:#718096;">(R' + sA.ref + ')</span></span>';
+      resultsHtml += '<span style="flex:1; text-align:right; color:#e2e8f0;">' + eA.emoji + ' ' + tA + ' <span style="color:#718096;">(R' + sA.ref + ')</span><br><span style="color:#718096; font-size:0.85em;">' + membersA + '</span></span>';
       resultsHtml += '<span style="margin:0 12px; font-weight:700; color:#ffd700; white-space:nowrap;">' + sA.noc + ' - ' + sB.noc + '</span>';
-      resultsHtml += '<span style="flex:1; text-align:left; color:#e2e8f0;"><span style="color:#718096;">(R' + sB.ref + ')</span> ' + tB + ' ' + eB.emoji + '</span>';
+      resultsHtml += '<span style="flex:1; text-align:left; color:#e2e8f0;"><span style="color:#718096;">(R' + sB.ref + ')</span> ' + tB + ' ' + eB.emoji + '<br><span style="color:#718096; font-size:0.85em;">' + membersB + '</span></span>';
       resultsHtml += ptsLabel;
       resultsHtml += '</div>';
     });
