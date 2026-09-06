@@ -1606,7 +1606,8 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
 
     <!-- Standings -->
     <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:18px; margin-bottom:20px;">
-      <h3 style="color:#00e676; font-size:1em; margin-bottom:12px;">🏆 Group Standings</h3>
+      <h3 style="color:#00e676; font-size:1em; margin-bottom:4px;">🏆 Group Standings <span style="color:#718096; font-size:0.75em; font-weight:400;">· live running total</span></h3>
+      <p style="color:#718096; font-size:0.78em; margin-bottom:12px;">Includes all started gameweeks — current gameweek updates live 🔴</p>
       <div id="wcStandings"><p style="color:#718096; font-style:italic;">Loading...</p></div>
     </div>
 
@@ -1701,21 +1702,25 @@ function updateWorldCup() {
   const todayDay = now.getDate();
 
   WC_GAMEWEEKS.forEach(gwObj => {
-    // Played if: not currently September (month done/not started as far as this campaign),
-    // or today is past the gameweek's end day.
-    const played = !isSeptember || todayDay > gwObj.end;
+    // A gameweek counts once its window has STARTED (past + current gameweeks).
+    // Current gameweek scores live; past ones are effectively locked; future ones don't count yet.
+    const started = !isSeptember || todayDay >= gwObj.start;
+    const isLive = isSeptember && todayDay >= gwObj.start && todayDay <= gwObj.end;
+    const isFuture = isSeptember && todayDay < gwObj.start;
 
-    resultsHtml += '<p style="color:#00e5ff; font-weight:600; margin:12px 0 6px;">' + gwObj.label +
-      (played ? '' : ' <span style="color:#718096; font-weight:400; font-size:0.85em;">· in progress</span>') + '</p>';
+    let tag = '';
+    if (isLive) tag = ' <span style="color:#00e676; font-weight:400; font-size:0.85em;">· LIVE 🔴</span>';
+    else if (isFuture) tag = ' <span style="color:#718096; font-weight:400; font-size:0.85em;">· upcoming</span>';
+    resultsHtml += '<p style="color:#00e5ff; font-weight:600; margin:12px 0 6px;">' + gwObj.label + tag + '</p>';
 
     WC_FIXTURES[gwObj.gw].forEach(([tA, tB]) => {
       const sA = wcTeamStats(tA, gwObj.start, gwObj.end);
       const sB = wcTeamStats(tB, gwObj.start, gwObj.end);
       const eA = WC_TEAMS[tA], eB = WC_TEAMS[tB];
+      const [pA, pB] = wcScoreMatch(sA, sB);
 
-      if (played) {
-        const [pA, pB] = wcScoreMatch(sA, sB);
-        // Update standings (only for completed gameweeks)
+      if (started) {
+        // Add to running standings (live for current GW, final for past GWs)
         table[tA].P++; table[tB].P++;
         table[tA].gf += sA.noc; table[tB].gf += sB.noc;
         table[tA].ref += sA.ref; table[tB].ref += sB.ref;
@@ -1726,11 +1731,13 @@ function updateWorldCup() {
         h2h[tA + '|' + tB] = sA.noc > sB.noc ? tA : (sB.noc > sA.noc ? tB : 'draw');
       }
 
-      // Match row (always show; live score shown even while in progress)
-      const ptsLabel = played
-        ? '<span style="margin-left:10px; color:#38a169; font-weight:700; white-space:nowrap;">+' + wcScoreMatch(sA, sB)[0] + ' / +' + wcScoreMatch(sA, sB)[1] + '</span>'
-        : '<span style="margin-left:10px; color:#718096; font-weight:600; white-space:nowrap;">live</span>';
-      resultsHtml += '<div style="display:flex; justify-content:space-between; align-items:center; padding:7px 10px; margin-bottom:4px; background:rgba(255,255,255,0.03); border-radius:6px; font-size:0.82em;' + (played ? '' : ' opacity:0.7;') + '">';
+      // Points label
+      let ptsLabel;
+      if (isFuture) ptsLabel = '<span style="margin-left:10px; color:#718096; font-weight:600; white-space:nowrap;">—</span>';
+      else if (isLive) ptsLabel = '<span style="margin-left:10px; color:#00e676; font-weight:700; white-space:nowrap;">+' + pA + ' / +' + pB + ' 🔴</span>';
+      else ptsLabel = '<span style="margin-left:10px; color:#38a169; font-weight:700; white-space:nowrap;">+' + pA + ' / +' + pB + '</span>';
+
+      resultsHtml += '<div style="display:flex; justify-content:space-between; align-items:center; padding:7px 10px; margin-bottom:4px; background:rgba(255,255,255,0.03); border-radius:6px; font-size:0.82em;' + (isFuture ? ' opacity:0.55;' : '') + '">';
       resultsHtml += '<span style="flex:1; text-align:right; color:#e2e8f0;">' + eA.emoji + ' ' + tA + ' <span style="color:#718096;">(R' + sA.ref + ')</span></span>';
       resultsHtml += '<span style="margin:0 12px; font-weight:700; color:#ffd700; white-space:nowrap;">' + sA.noc + ' - ' + sB.noc + '</span>';
       resultsHtml += '<span style="flex:1; text-align:left; color:#e2e8f0;"><span style="color:#718096;">(R' + sB.ref + ')</span> ' + tB + ' ' + eB.emoji + '</span>';
