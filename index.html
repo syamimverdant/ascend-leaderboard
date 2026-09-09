@@ -1604,6 +1604,33 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
       <p style="color:#718096; font-size:0.78em; margin-top:4px;">ATAP &amp; SELCO closings count · based on Closed Date in Monday.com</p>
     </div>
 
+    <!-- Prizes -->
+    <div style="background:rgba(255,215,0,0.05); border:1px solid rgba(255,215,0,0.2); border-radius:10px; padding:18px; margin-bottom:20px;">
+      <h3 style="color:#ffd700; font-size:1em; margin-bottom:12px;">💰 Prize Structure</h3>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:0.85em;">
+        <div style="background:rgba(255,215,0,0.08); border:1px solid rgba(255,215,0,0.25); border-radius:8px; padding:14px; text-align:center;">
+          <div style="font-size:1.3em; margin-bottom:4px;">🏆</div>
+          <div style="color:#ffd700; font-weight:700; margin-bottom:4px;">Champion Team</div>
+          <div style="color:#a0aec0; font-size:0.8em; margin-bottom:6px;">Highest points at month-end</div>
+          <div style="color:#68d391; font-weight:700; font-size:1.1em;">RM 1,000</div>
+          <div style="color:#718096; font-size:0.75em;">RM 500 each</div>
+        </div>
+        <div style="background:rgba(72,187,120,0.08); border:1px solid rgba(72,187,120,0.25); border-radius:8px; padding:14px; text-align:center;">
+          <div style="font-size:1.3em; margin-bottom:4px;">🎯</div>
+          <div style="color:#68d391; font-weight:700; margin-bottom:4px;">Referral Champion</div>
+          <div style="color:#a0aec0; font-size:0.8em; margin-bottom:6px;">Most referral NOC · min. 8 required</div>
+          <div style="color:#68d391; font-weight:700; font-size:1.1em;">RM 600</div>
+          <div style="color:#718096; font-size:0.75em;">RM 300 each</div>
+        </div>
+      </div>
+      <div style="margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px; font-size:0.8em; color:#a0aec0;">
+        <p style="margin-bottom:4px;">💡 Same team can win both — max <strong style="color:#ffd700;">RM 800 per SC</strong></p>
+        <p style="margin-bottom:4px;">⚠️ Referral prize requires <strong style="color:#fc8181;">minimum 8 combined referral NOC</strong> to qualify</p>
+        <p>📅 Referral threshold reviewed at GW3 if no team hits 8</p>
+      </div>
+      <div id="wcReferralRace" style="margin-top:12px;"><p style="color:#718096; font-style:italic; font-size:0.8em;">Loading referral standings...</p></div>
+    </div>
+
     <!-- Standings -->
     <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:18px; margin-bottom:20px;">
       <h3 style="color:#00e676; font-size:1em; margin-bottom:4px;">🏆 Group Standings <span style="color:#718096; font-size:0.75em; font-weight:400;">· live running total</span></h3>
@@ -1787,6 +1814,45 @@ function updateWorldCup() {
 
   document.getElementById('wcStandings').innerHTML = sHtml;
   document.getElementById('wcResults').innerHTML = resultsHtml;
+
+  // ===== Referral Race (full month, 1–30 Sep) =====
+  const refRace = Object.entries(WC_TEAMS).map(([teamName, team]) => {
+    const stats = wcTeamStats(teamName, 1, 30);
+    return { teamName, emoji: team.emoji, color: team.color, referrals: stats.referrals, noc: stats.noc };
+  }).sort((a, b) => b.referrals - a.referrals || b.noc - a.noc);
+
+  const REFERRAL_MIN = 8;
+  let rrHtml = '<table style="width:100%; border-collapse:collapse; font-size:0.82em;">';
+  rrHtml += '<thead><tr>';
+  rrHtml += '<th style="padding:6px 8px; color:#a0aec0; text-align:left;">#</th>';
+  rrHtml += '<th style="padding:6px 8px; color:#a0aec0; text-align:left;">Team</th>';
+  rrHtml += '<th style="padding:6px 8px; color:#a0aec0; text-align:center;">Referral NOC</th>';
+  rrHtml += '<th style="padding:6px 8px; color:#a0aec0; text-align:center;">Qualified?</th>';
+  rrHtml += '</tr></thead><tbody>';
+
+  refRace.forEach((t, i) => {
+    const qualified = t.referrals >= REFERRAL_MIN;
+    const rankIcon = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i+1}`;
+    const qualBadge = qualified
+      ? '<span style="color:#68d391; font-weight:700;">✅ Yes</span>'
+      : `<span style="color:#fc8181;">${t.referrals}/${REFERRAL_MIN}</span>`;
+    const rowBg = i === 0 && qualified ? 'background:rgba(72,187,120,0.07);' : '';
+    rrHtml += `<tr style="border-bottom:1px solid rgba(255,255,255,0.05); ${rowBg}">`;
+    rrHtml += `<td style="padding:6px 8px;">${rankIcon}</td>`;
+    rrHtml += `<td style="padding:6px 8px; color:${t.color}; font-weight:600;">${t.emoji} ${t.teamName}</td>`;
+    rrHtml += `<td style="padding:6px 8px; text-align:center; font-weight:700; color:#ffd700;">${t.referrals}</td>`;
+    rrHtml += `<td style="padding:6px 8px; text-align:center;">${qualBadge}</td>`;
+    rrHtml += '</tr>';
+  });
+  rrHtml += '</tbody></table>';
+
+  const leader = refRace[0];
+  const leaderQualified = leader.referrals >= REFERRAL_MIN;
+  const prizeNote = leaderQualified
+    ? `<p style="color:#68d391; font-size:0.8em; margin-top:8px;">🎯 <strong>${leader.emoji} ${leader.teamName}</strong> leads & qualifies — on track for RM 600!</p>`
+    : `<p style="color:#fc8181; font-size:0.8em; margin-top:8px;">⚠️ No team has hit 8 referral NOC yet — prize undecided until GW3 review.</p>`;
+
+  document.getElementById('wcReferralRace').innerHTML = rrHtml + prizeNote;
 }
 
 // Call on panel open
