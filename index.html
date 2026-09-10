@@ -1611,7 +1611,8 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
         <div style="background:rgba(255,215,0,0.08); border:1px solid rgba(255,215,0,0.25); border-radius:8px; padding:14px; text-align:center;">
           <div style="font-size:1.3em; margin-bottom:4px;">🏆</div>
           <div style="color:#ffd700; font-weight:700; margin-bottom:4px;">Champion Team</div>
-          <div style="color:#a0aec0; font-size:0.8em; margin-bottom:6px;">Highest points at month-end</div>
+          <div style="color:#a0aec0; font-size:0.8em; margin-bottom:4px;">Highest points at month-end</div>
+          <div style="display:inline-block; background:rgba(252,129,129,0.15); border:1px solid rgba(252,129,129,0.4); border-radius:4px; padding:2px 8px; font-size:0.72em; color:#fc8181; font-weight:700; margin-bottom:6px;">MIN. 18 NOC TO QUALIFY</div>
           <div style="color:#68d391; font-weight:700; font-size:1.1em;">RM 1,000</div>
           <div style="color:#718096; font-size:0.75em;">RM 500 each</div>
         </div>
@@ -1625,8 +1626,9 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
       </div>
       <div style="margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px; font-size:0.8em; color:#a0aec0;">
         <p style="margin-bottom:4px;">💡 Same team can win both — max <strong style="color:#ffd700;">RM 800 per SC</strong></p>
+        <p style="margin-bottom:4px;">⚠️ Champion prize requires <strong style="color:#fc8181;">minimum 18 combined NOC</strong> to qualify</p>
         <p style="margin-bottom:4px;">⚠️ Referral prize requires <strong style="color:#fc8181;">minimum 8 combined referral NOC</strong> to qualify</p>
-        <p>📅 Referral threshold reviewed at GW3 if no team hits 8</p>
+        <p>📅 Both thresholds tracked live below</p>
       </div>
       <div style="margin-top:12px; background:rgba(0,229,255,0.05); border:1px solid rgba(0,229,255,0.2); border-radius:8px; padding:10px; font-size:0.82em; color:#e2e8f0;">
         📝 <strong style="color:#00e5ff;">Reminder:</strong> Please key in all your referral leads in Monday.com — whether closed or still in progress — as it will help you track and win the Referral Champion prize too!
@@ -1801,9 +1803,13 @@ function updateWorldCup() {
     const members = WC_TEAMS[t.name].members.join(' + ');
     const medal = i === 0 ? '🥇' : (i === 1 ? '🥈' : (i === 2 ? '🥉' : (i + 1)));
     const topBg = i === 0 ? 'background:rgba(255,215,0,0.08);' : '';
+    const nocQualified = t.gf >= 18;
+    const nocBadge = nocQualified
+      ? '<span style="font-size:0.7em; color:#68d391; font-weight:700;"> ✅</span>'
+      : '<span style="font-size:0.7em; color:#fc8181;"> ' + t.gf + '/18</span>';
     sHtml += '<tr style="border-bottom:1px solid rgba(255,255,255,0.05);' + topBg + '">';
     sHtml += '<td style="padding:8px 5px;">' + medal + '</td>';
-    sHtml += '<td style="padding:8px 5px;"><span style="color:' + e.color + '; font-weight:700;">' + e.emoji + ' ' + t.name + '</span><br><span style="color:#718096; font-size:0.85em;">' + members + '</span></td>';
+    sHtml += '<td style="padding:8px 5px;"><span style="color:' + e.color + '; font-weight:700;">' + e.emoji + ' ' + t.name + '</span>' + nocBadge + '<br><span style="color:#718096; font-size:0.85em;">' + members + '</span></td>';
     sHtml += '<td style="padding:8px 4px; text-align:center;">' + t.P + '</td>';
     sHtml += '<td style="padding:8px 4px; text-align:center;">' + t.W + '</td>';
     sHtml += '<td style="padding:8px 4px; text-align:center;">' + t.D + '</td>';
