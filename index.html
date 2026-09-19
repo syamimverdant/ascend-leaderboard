@@ -89,6 +89,12 @@
   <!-- Badges Section -->
   <div id="badgesSection" class="badges-section"></div>
 
+  <!-- Diagnostics (NOC/NOB reconciliation) -->
+  <div style="text-align:center; margin: 10px 0 30px;">
+    <button id="diagToggle" class="period-btn" style="cursor:pointer;">🔍 Show NOC/NOB Diagnostics</button>
+  </div>
+  <div id="diagnostics" class="leaderboard-section hidden" style="border-color: rgba(255,215,0,0.25);"></div>
+
   <!-- Loading Overlay -->
   <div id="loading" class="loading-overlay">
     <div class="spinner"></div>
@@ -343,6 +349,7 @@
     z-index: 1000;
   }
   .loading-overlay.hidden { display: none; }
+  .hidden { display: none; }
   .spinner {
     width: 50px; height: 50px;
     border: 4px solid rgba(255,215,0,0.2);
@@ -521,34 +528,73 @@ async function fetchMondayData() {
 }
 
 // ===== DATA PROCESSING =====
+// Diagnostics: collects every raw item that was dropped, with the reason why.
+let excludedItems = [];
+
 function parseItems(items) {
-  return items.map(item => {
+  excludedItems = [];
+  const parsed = [];
+
+  items.forEach(item => {
     const cols = {};
     item.column_values.forEach(cv => { cols[cv.id] = cv.text; });
     const scFull = cols['person'] || '';
-    const shortName = FULL_TEAM[scFull];
-    if (!shortName) return null; // Not a Northern team member
+    const rawCategory = cols['dropdown5'] || '';
+    const rawClosed = cols['date4'] || '';
+    const rawPrice = cols['numbers8'] || '';
 
-    // Only count ATAP and SELCO categories
-    const category = (cols['dropdown5'] || '').toLowerCase();
-    if (!category.includes('atap') && !category.includes('selco')) return null;
+    // Base record used both for accepted items and for diagnostics
+    const record = {
+      id: item.id,
+      customer: item.name,
+      scFull: scFull,
+      category: rawCategory,
+      closedDate: rawClosed || null,
+      systemPrice: parseFloat(rawPrice) || 0,
+      rawPrice: rawPrice,
+      source: cols['status5'] || 'Unknown'
+    };
+
+    // Filter 1: person must map to a known team member
+    const shortName = FULL_TEAM[scFull];
+    if (!shortName) {
+      excludedItems.push({ ...record, reason: scFull ? `Owner "${scFull}" not in team map` : 'No owner assigned' });
+      return;
+    }
+
+    // Filter 2: category must be ATAP or SELCO
+    const category = rawCategory.toLowerCase();
+    if (!category.includes('atap') && !category.includes('selco')) {
+      excludedItems.push({ ...record, sc: shortName, reason: rawCategory ? `Category "${rawCategory}" not ATAP/SELCO` : 'No category set' });
+      return;
+    }
+
+    // Filter 3: must have a closed date
+    if (!rawClosed) {
+      excludedItems.push({ ...record, sc: shortName, reason: 'No closed date (date4 empty)' });
+      return;
+    }
 
     const source = (cols['status5'] || '').toLowerCase();
     const isReferral = REFERRAL_KEYWORDS.some(kw => source.includes(kw));
 
-    return {
+    parsed.push({
       id: item.id,
       customer: item.name,
       sc: shortName,
       scFull: scFull,
-      systemPrice: parseFloat(cols['numbers8']) || 0,
-      closedDate: cols['date4'] || null,
+      systemPrice: parseFloat(rawPrice) || 0,
+      closedDate: rawClosed || null,
       depositDate: cols['date19'] || null,
       source: cols['status5'] || 'Unknown',
       isReferral: isReferral,
-      isAM: shortName === 'Syamim'
-    };
-  }).filter(x => x !== null && x.closedDate);
+      isAM: shortName === 'Syamim',
+      category: rawCategory,
+      zeroPrice: (parseFloat(rawPrice) || 0) === 0
+    });
+  });
+
+  return parsed;
 }
 
 function getMonthKey(dateStr) {
@@ -1131,6 +1177,85 @@ function getDailyTrivia() {
 getDailyTrivia();
 
 
+// ===== DIAGNOSTICS =====
+// Shows, for the currently selected period, which raw Monday.com items were
+// EXCLUDED and why — plus any INCLUDED items with a zero/blank price (count
+// toward NOC but add nothing to NOB). This reconciles the leaderboard NOC/NOB
+// against the raw Monday.com totals.
+function renderDiagnostics() {
+  const box = document.getElementById('diagnostics');
+  if (!box) return;
+
+  const money = n => 'RM' + Number(n || 0).toLocaleString('en-MY');
+
+  // Included items for the current period (what the leaderboard counts)
+  const included = allItems.filter(item => isInPeriod(item.closedDate, currentPeriod));
+  const includedNOC = included.length;
+  const includedNOB = included.reduce((s, i) => s + i.systemPrice, 0);
+  const zeroPriceIncluded = included.filter(i => i.zeroPrice);
+
+  // Excluded items whose closed date falls in the current period.
+  // (Items excluded for having no closed date can't be period-matched, so we
+  //  always surface them too — they may belong to this month on Monday.com.)
+  const excludedInPeriod = excludedItems.filter(e =>
+    (e.closedDate && isInPeriod(e.closedDate, currentPeriod)) ||
+    e.reason === 'No closed date (date4 empty)'
+  );
+
+  const rejectRows = excludedInPeriod.map(e => `
+    <tr>
+      <td>${e.customer || '(no name)'}</td>
+      <td>${e.scFull || '—'}</td>
+      <td>${e.category || '—'}</td>
+      <td>${e.closedDate || '—'}</td>
+      <td>${e.rawPrice ? money(e.rawPrice) : '—'}</td>
+      <td style="color:#f6ad55;">${e.reason}</td>
+    </tr>
+  `).join('');
+
+  const zeroRows = zeroPriceIncluded.map(i => `
+    <tr>
+      <td>${i.customer || '(no name)'}</td>
+      <td>${i.scFull || '—'}</td>
+      <td>${i.category || '—'}</td>
+      <td>${i.closedDate || '—'}</td>
+      <td style="color:#f6ad55;">RM0 / blank</td>
+    </tr>
+  `).join('');
+
+  box.innerHTML = `
+    <h2 style="color:#ffd700; margin-top:0;">🔍 NOC / NOB Diagnostics — ${currentPeriod}</h2>
+    <p style="color:#a0aec0; margin-top:0;">
+      Leaderboard is counting <strong style="color:#fff;">${includedNOC} NOC</strong>
+      and <strong style="color:#fff;">${money(includedNOB)} NOB</strong> for this period.
+      If Monday.com shows more, the excluded rows below explain the gap. Each excluded
+      row is a closed deal that failed one of the leaderboard filters
+      (owner not in team, category not ATAP/SELCO, or no closed date).
+    </p>
+
+    <h3 style="color:#e2e8f0;">Excluded deals in this period (${excludedInPeriod.length})</h3>
+    ${excludedInPeriod.length ? `
+    <table class="lb-table">
+      <thead><tr><th>Customer</th><th>Owner</th><th>Category</th><th>Closed Date</th><th>Price</th><th>Why Excluded</th></tr></thead>
+      <tbody>${rejectRows}</tbody>
+    </table>` : `<p style="color:#68d391;">None — no closed deals were filtered out for this period.</p>`}
+
+    <h3 style="color:#e2e8f0; margin-top:25px;">Included deals with zero/blank price (${zeroPriceIncluded.length})</h3>
+    <p style="color:#a0aec0; margin-top:0;">These count toward NOC but add RM0 to NOB — a possible cause of a low NOB.</p>
+    ${zeroPriceIncluded.length ? `
+    <table class="lb-table">
+      <thead><tr><th>Customer</th><th>Owner</th><th>Category</th><th>Closed Date</th><th>Price</th></tr></thead>
+      <tbody>${zeroRows}</tbody>
+    </table>` : `<p style="color:#68d391;">None — every counted deal has a price.</p>`}
+
+    <p style="color:#718096; font-size:0.85em; margin-top:20px;">
+      Reconciliation: Monday.com NOC = Leaderboard NOC (${includedNOC}) + excluded deals shown above.
+      If a deal is missing entirely (not even excluded here), its closed date (date4) is likely blank
+      or set outside this month on Monday.com.
+    </p>
+  `;
+}
+
 async function loadData() {
   try {
     document.getElementById('loading').classList.remove('hidden');
@@ -1150,6 +1275,7 @@ async function loadData() {
     const teamTotalNOB = filtered.reduce((s, item) => s + item.systemPrice, 0);
 
     renderLeaderboard(results, badges, teamTotalNOC, teamTotalNOB);
+    renderDiagnostics();
 
     document.getElementById('lastUpdate').textContent =
       'Last updated: ' + new Date().toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
@@ -1177,7 +1303,16 @@ document.querySelectorAll('.period-btn').forEach(btn => {
     const teamTotalNOC = filtered.length;
     const teamTotalNOB = filtered.reduce((s, item) => s + item.systemPrice, 0);
     renderLeaderboard(results, badges, teamTotalNOC, teamTotalNOB);
+    renderDiagnostics();
   });
+});
+
+// Diagnostics toggle
+document.getElementById('diagToggle').addEventListener('click', function() {
+  const box = document.getElementById('diagnostics');
+  const hidden = box.classList.toggle('hidden');
+  this.textContent = hidden ? '🔍 Show NOC/NOB Diagnostics' : '✕ Hide NOC/NOB Diagnostics';
+  if (!hidden) renderDiagnostics();
 });
 
 // Month selector dropdown — populate with past months from Jul 2026 to last month
@@ -1213,6 +1348,7 @@ document.getElementById('monthSelector').addEventListener('change', function() {
   const teamTotalNOC = filtered.length;
   const teamTotalNOB = filtered.reduce((s, item) => s + item.systemPrice, 0);
   renderLeaderboard(results, badges, teamTotalNOC, teamTotalNOB);
+  renderDiagnostics();
 });
 
 // Initial load
