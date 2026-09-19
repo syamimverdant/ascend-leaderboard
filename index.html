@@ -531,6 +531,39 @@ async function fetchMondayData() {
 // Diagnostics: collects every raw item that was dropped, with the reason why.
 let excludedItems = [];
 
+// Normalize a name so invisible differences (non-breaking spaces, double
+// spaces, casing, leading/trailing whitespace) don't cause exact-match misses.
+function normalizeName(s) {
+  return (s || '')
+    .replace(/\u00a0/g, ' ')   // non-breaking space -> normal space
+    .replace(/\s+/g, ' ')      // collapse runs of whitespace
+    .trim()
+    .toUpperCase();
+}
+
+// Pre-build a normalized lookup of FULL_TEAM keys -> short name.
+const NORMALIZED_TEAM = (() => {
+  const m = {};
+  Object.entries(FULL_TEAM).forEach(([full, short]) => { m[normalizeName(full)] = short; });
+  return m;
+})();
+
+// Resolve a Monday.com person field to a team short-name.
+// Handles multi-assignee fields (comma / newline / semicolon separated) by
+// matching the first assignee that maps to a known member.
+function resolveTeamMember(personText) {
+  if (!personText) return null;
+  const direct = NORMALIZED_TEAM[normalizeName(personText)];
+  if (direct) return direct;
+  // Try each assignee individually
+  const parts = personText.split(/[,;\n]+/);
+  for (const p of parts) {
+    const hit = NORMALIZED_TEAM[normalizeName(p)];
+    if (hit) return hit;
+  }
+  return null;
+}
+
 function parseItems(items) {
   excludedItems = [];
   const parsed = [];
@@ -555,8 +588,8 @@ function parseItems(items) {
       source: cols['status5'] || 'Unknown'
     };
 
-    // Filter 1: person must map to a known team member
-    const shortName = FULL_TEAM[scFull];
+    // Filter 1: person must map to a known team member (whitespace/case tolerant)
+    const shortName = resolveTeamMember(scFull);
     if (!shortName) {
       excludedItems.push({ ...record, reason: scFull ? `Owner "${scFull}" not in team map` : 'No owner assigned' });
       return;
@@ -1223,6 +1256,27 @@ function renderDiagnostics() {
     </tr>
   `).join('');
 
+  // Per-SC breakdown: included vs excluded counts for this period
+  const perSc = {};
+  included.forEach(i => {
+    perSc[i.sc] = perSc[i.sc] || { included: 0, excluded: 0, reasons: {} };
+    perSc[i.sc].included++;
+  });
+  excludedInPeriod.forEach(e => {
+    const key = e.sc || e.scFull || '(unmapped)';
+    perSc[key] = perSc[key] || { included: 0, excluded: 0, reasons: {} };
+    perSc[key].excluded++;
+    perSc[key].reasons[e.reason] = (perSc[key].reasons[e.reason] || 0) + 1;
+  });
+  const perScRows = Object.entries(perSc).sort((a,b) => b[1].excluded - a[1].excluded).map(([name, v]) => `
+    <tr>
+      <td>${name}</td>
+      <td style="text-align:center;">${v.included}</td>
+      <td style="text-align:center; color:${v.excluded ? '#f6ad55' : '#68d391'};">${v.excluded}</td>
+      <td style="color:#a0aec0; font-size:0.9em;">${Object.entries(v.reasons).map(([r,c]) => `${r} ×${c}`).join('; ') || '—'}</td>
+    </tr>
+  `).join('');
+
   box.innerHTML = `
     <h2 style="color:#ffd700; margin-top:0;">🔍 NOC / NOB Diagnostics — ${currentPeriod}</h2>
     <p style="color:#a0aec0; margin-top:0;">
@@ -1233,7 +1287,13 @@ function renderDiagnostics() {
       (owner not in team, category not ATAP/SELCO, or no closed date).
     </p>
 
-    <h3 style="color:#e2e8f0;">Excluded deals in this period (${excludedInPeriod.length})</h3>
+    <h3 style="color:#e2e8f0;">Per-consultant breakdown (included vs excluded)</h3>
+    <table class="lb-table">
+      <thead><tr><th>Consultant</th><th style="text-align:center;">Counted (NOC)</th><th style="text-align:center;">Excluded</th><th>Exclusion Reasons</th></tr></thead>
+      <tbody>${perScRows}</tbody>
+    </table>
+
+    <h3 style="color:#e2e8f0; margin-top:25px;">Excluded deals in this period (${excludedInPeriod.length})</h3>
     ${excludedInPeriod.length ? `
     <table class="lb-table">
       <thead><tr><th>Customer</th><th>Owner</th><th>Category</th><th>Closed Date</th><th>Price</th><th>Why Excluded</th></tr></thead>
