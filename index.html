@@ -1841,10 +1841,13 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
     </div>
 
     <!-- Match Results -->
-    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:18px;">
+    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:18px; margin-bottom:20px;">
       <h3 style="color:#00e676; font-size:1em; margin-bottom:12px;">📊 Match Results by Gameweek</h3>
       <div id="wcResults"><p style="color:#718096; font-style:italic;">Loading...</p></div>
     </div>
+
+    <!-- Champion -->
+    <div id="wcChampion"><p style="color:#718096; font-style:italic;">Loading...</p></div>
 
   </div>
 </div>
@@ -2020,6 +2023,45 @@ function updateWorldCup() {
 
   document.getElementById('wcStandings').innerHTML = sHtml;
   document.getElementById('wcResults').innerHTML = resultsHtml;
+
+  // ===== Champion (most points AND >= 16 combined NOC) =====
+  const CHAMPION_MIN_NOC = 16;
+  const allPlayed = !isSeptember || todayDay > 30; // all 3 gameweeks fully finished
+  const leaderC = ranked[0];
+  const leaderQualifiesC = leaderC && leaderC.gf >= CHAMPION_MIN_NOC;
+  const cEmoji = leaderC ? WC_TEAMS[leaderC.name].emoji : '';
+  const cColor = leaderC ? WC_TEAMS[leaderC.name].color : '#ffd700';
+  const cMembers = leaderC ? WC_TEAMS[leaderC.name].members.join(' + ') : '';
+  const headingC = allPlayed ? '🏆 World Cup Champion' : '🏆 Champion — Projected (live)';
+
+  let cHtml = '<div style="background:linear-gradient(135deg, rgba(255,215,0,0.12), rgba(255,140,0,0.06)); border:1px solid rgba(255,215,0,0.35); border-radius:12px; padding:20px; text-align:center;">';
+  cHtml += '<h3 style="color:#ffd700; font-size:1.05em; margin-bottom:4px;">' + headingC + '</h3>';
+  if (!allPlayed) cHtml += '<p style="color:#718096; font-size:0.75em; margin-bottom:12px;">Standings still live — final winner confirmed at month-end</p>';
+  else cHtml += '<p style="color:#718096; font-size:0.75em; margin-bottom:12px;">Final result · all 3 gameweeks complete</p>';
+
+  if (leaderC && leaderQualifiesC) {
+    cHtml += '<div style="font-size:2em; margin-bottom:6px;">' + cEmoji + '</div>';
+    cHtml += '<div style="color:' + cColor + '; font-weight:700; font-size:1.3em; margin-bottom:2px;">' + leaderC.name + '</div>';
+    cHtml += '<div style="color:#a0aec0; font-size:0.85em; margin-bottom:10px;">' + cMembers + '</div>';
+    cHtml += '<div style="display:inline-flex; gap:16px; justify-content:center; margin-bottom:12px; font-size:0.85em; color:#e2e8f0;">';
+    cHtml += '<span><strong style="color:#ffd700;">' + leaderC.pts + '</strong> pts</span>';
+    cHtml += '<span><strong style="color:#ffd700;">' + leaderC.gf + '</strong> NOC ✅</span>';
+    cHtml += '<span><strong style="color:#ffd700;">' + leaderC.ref + '</strong> ref</span>';
+    cHtml += '</div>';
+    cHtml += '<div style="font-family:sans-serif; font-size:1.8em; color:#ffd700; font-weight:800; line-height:1;">RM 1,000</div>';
+    cHtml += '<div style="color:#a0aec0; font-size:0.8em; margin-top:2px;">RM 500 per SC</div>';
+  } else if (leaderC) {
+    // Top on points but hasn't hit the NOC threshold
+    cHtml += '<div style="font-size:2em; margin-bottom:6px;">⏳</div>';
+    cHtml += '<div style="color:' + cColor + '; font-weight:700; font-size:1.15em; margin-bottom:2px;">' + cEmoji + ' ' + leaderC.name + '</div>';
+    cHtml += '<div style="color:#a0aec0; font-size:0.85em; margin-bottom:10px;">' + cMembers + ' · leads with ' + leaderC.pts + ' pts</div>';
+    cHtml += '<div style="color:#fc8181; font-size:0.9em; font-weight:600;">Needs ' + Math.max(0, CHAMPION_MIN_NOC - leaderC.gf) + ' more NOC to qualify (' + leaderC.gf + '/' + CHAMPION_MIN_NOC + ')</div>';
+    cHtml += '<p style="color:#718096; font-size:0.78em; margin-top:8px;">' + (allPlayed ? '⚠️ Top team did not reach ' + CHAMPION_MIN_NOC + ' NOC — Champion prize not awarded.' : 'Prize awarded only if the top-points team finishes with ≥ ' + CHAMPION_MIN_NOC + ' combined NOC.') + '</p>';
+  } else {
+    cHtml += '<p style="color:#718096; font-size:0.85em;">No matches played yet.</p>';
+  }
+  cHtml += '</div>';
+  document.getElementById('wcChampion').innerHTML = cHtml;
 
   // ===== Referral Race (full month, 1–30 Sep) =====
   const refRace = Object.entries(WC_TEAMS).map(([teamName, team]) => {
