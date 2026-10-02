@@ -2065,7 +2065,7 @@ function updateWorldCup() {
   // ===== Referral Race (full month, 1–30 Sep) =====
   const refRace = Object.entries(WC_TEAMS).map(([teamName, team]) => {
     const stats = wcTeamStats(teamName, 1, 30);
-    return { teamName, emoji: team.emoji, color: team.color, referrals: stats.referrals, noc: stats.noc };
+    return { teamName, emoji: team.emoji, color: team.color, referrals: stats.ref, noc: stats.noc };
   }).sort((a, b) => b.referrals - a.referrals || b.noc - a.noc);
 
   const REFERRAL_MIN = 8;
@@ -2093,13 +2093,7 @@ function updateWorldCup() {
   });
   rrHtml += '</tbody></table>';
 
-  const leader = refRace[0];
-  const leaderQualified = leader.referrals >= REFERRAL_MIN;
-  const prizeNote = leaderQualified
-    ? `<p style="color:#68d391; font-size:0.8em; margin-top:8px;">🎯 <strong>${leader.emoji} ${leader.teamName}</strong> leads & qualifies — on track for RM 600!</p>`
-    : `<p style="color:#fc8181; font-size:0.8em; margin-top:8px;">⚠️ No team has hit 8 referral NOC yet — prize undecided until GW3 review.</p>`;
-
-  document.getElementById('wcReferralRace').innerHTML = rrHtml + prizeNote;
+  document.getElementById('wcReferralRace').innerHTML = rrHtml;
 }
 
 // Call on panel open
