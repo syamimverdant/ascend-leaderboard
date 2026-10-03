@@ -451,6 +451,14 @@ const MONTHLY_TARGETS = getTargetsForPeriod('month');
 // Referral source labels (any source containing these = referral)
 const REFERRAL_KEYWORDS = ['referral'];
 
+// First Strike manual overrides (month key "YYYY-MM" -> SC short name).
+// The Monday.com close date (date4) has no time component, so same-day closings
+// can't be ordered automatically. Use this to award First Strike to whoever
+// actually closed first in real life. Update each month as needed.
+const FIRST_STRIKE_OVERRIDE = {
+  '2026-10': 'Shirley'
+};
+
 // XP Constants
 const XP_PER_NOC = 100;
 const XP_REFERRAL_BONUS = 50;
@@ -800,8 +808,11 @@ function calculateBadges(items) {
   Object.entries(byMonth).forEach(([month, monthItems]) => {
     monthItems.sort((a,b) => new Date(a.closedDate) - new Date(b.closedDate));
     if (monthItems.length > 0) {
-      const first = monthItems[0];
-      badges[first.sc].push({ icon: '🥇', name: 'First Strike', month });
+      // Manual override wins if set and that SC has a closing this month
+      const override = FIRST_STRIKE_OVERRIDE[month];
+      const overrideValid = override && monthItems.some(i => i.sc === override) && badges[override];
+      const winner = overrideValid ? override : monthItems[0].sc;
+      badges[winner].push({ icon: '🥇', name: 'First Strike', month });
     }
   });
 
