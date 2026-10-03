@@ -70,7 +70,7 @@
     </select>
     <button class="period-btn" data-period="h1">H1 (Jul–Dec)</button>
     <button class="period-btn" data-period="h2">H2 (Jan–Jun)</button>
-    <button class="period-btn gamification-btn" onclick="document.getElementById('currentGamPlaceholder').style.display='flex';">🎮 Current Month</button>
+    <button class="period-btn gamification-btn" onclick="document.getElementById('octoberGamPanel').style.display='flex';">🎮 Current Month</button>
     <button class="period-btn gamification-btn" onclick="document.getElementById('pastGamPanel').style.display='flex';">🏆 Past Month</button>
   </div>
 
@@ -1737,7 +1737,28 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
 });
 </script>
 
-<!-- Current Month Gamification Panel -->
+<!-- October 2026 — Current Month Placeholder -->
+<div id="octoberGamPanel" style="
+  display:none; position:fixed; top:0; left:0; width:100vw; height:100vh;
+  background:rgba(0,0,0,0.85); z-index:1100;
+  justify-content:center; align-items:center;
+">
+  <div style="width:90vw; max-width:560px; max-height:90vh; background:#1a202c; border-radius:16px; padding:40px 30px; overflow-y:auto; position:relative; border:1px solid rgba(255,255,255,0.1); text-align:center;">
+    <button onclick="document.getElementById('octoberGamPanel').style.display='none'" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#a0aec0; font-size:1.5em; cursor:pointer;">✕</button>
+    <div style="font-size:3em; margin-bottom:10px;">🎮</div>
+    <h2 style="color:#ff9100; margin-bottom:6px;">October 2026 Gamification</h2>
+    <div style="display:inline-block; background:rgba(255,145,0,0.12); border:1px solid rgba(255,145,0,0.4); border-radius:20px; padding:6px 18px; font-size:0.9em; color:#ff9100; font-weight:700; margin:12px 0;">⏳ In Progress</div>
+    <p style="color:#a0aec0; font-size:0.9em; margin-top:10px; line-height:1.6;">This month's challenge is being finalised. Details and live tracking will appear here soon.</p>
+    <p style="color:#718096; font-size:0.82em; margin-top:16px;">Looking for last month? Check <strong style="color:#ce93d8;">🏆 Past Month</strong> for the September Titans World Cup results.</p>
+  </div>
+</div>
+<script>
+document.getElementById('octoberGamPanel').addEventListener('click', function(e) {
+  if (e.target === this) this.style.display = 'none';
+});
+</script>
+
+<!-- September 2026 Titans World Cup — now archived under Past Month (opened via Past Month panel) -->
 <div id="currentGamPlaceholder" style="
   display:none; position:fixed; top:0; left:0; width:100vw; height:100vh;
   background:rgba(0,0,0,0.85); z-index:1100;
@@ -1745,8 +1766,8 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
 ">
   <div style="width:90vw; max-width:700px; max-height:90vh; background:#1a202c; border-radius:16px; padding:30px; overflow-y:auto; position:relative; border:1px solid rgba(255,255,255,0.1);">
     <button onclick="document.getElementById('currentGamPlaceholder').style.display='none'" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#a0aec0; font-size:1.5em; cursor:pointer;">✕</button>
-    <h2 style="color:#ffd700; margin-bottom:5px;">🏆 Titans World Cup — September 2026</h2>
-    <p style="color:#718096; font-size:0.85em; margin-bottom:20px;">1st – 30th September 2026 | Group Stage · Makan Edition 🇲🇾</p>
+    <h2 style="color:#ffd700; margin-bottom:5px;">🏆 Titans World Cup — September 2026 <span style="font-size:0.6em; color:#68d391; background:rgba(72,187,120,0.12); border:1px solid rgba(72,187,120,0.35); border-radius:12px; padding:2px 10px; vertical-align:middle;">✓ Completed</span></h2>
+    <p style="color:#718096; font-size:0.85em; margin-bottom:20px;">1st – 30th September 2026 | Group Stage · Makan Edition 🇲🇾 · Final Results</p>
 
     <!-- Teams -->
     <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:18px; margin-bottom:20px;">
@@ -2096,10 +2117,7 @@ function updateWorldCup() {
   document.getElementById('wcReferralRace').innerHTML = rrHtml;
 }
 
-// Call on panel open
-document.querySelector('[onclick*="currentGamPlaceholder"]').addEventListener('click', function() {
-  setTimeout(updateWorldCup, 100);
-});
+// September panel is opened from the Past Month list, which calls updateWorldCup() inline.
 </script>
 
 <!-- Past Month Gamification Panel -->
@@ -2120,6 +2138,10 @@ document.querySelector('[onclick*="currentGamPlaceholder"]').addEventListener('c
       .past-gam-content { display:none; padding:12px 16px; margin-top:4px; background:rgba(255,255,255,0.02); border-radius:8px; border-left:3px solid #805ad5; color:#a0aec0; font-size:0.85em; line-height:1.6; }
       .past-gam-content.open { display:block; }
     </style>
+
+    <div class="past-gam-item">
+      <button class="past-gam-btn" onclick="document.getElementById('pastGamPanel').style.display='none'; document.getElementById('currentGamPlaceholder').style.display='flex'; setTimeout(updateWorldCup, 100);">🏆 September 2026 — TITANS WORLD CUP <span style="color:#718096;">↗ view full results</span></button>
+    </div>
 
     <div class="past-gam-item">
       <button class="past-gam-btn" onclick="this.nextElementSibling.classList.toggle('open')">🏗️ August 2026 — BUILD MOMENTUM <span style="color:#718096;">▾</span></button>
