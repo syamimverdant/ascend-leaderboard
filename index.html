@@ -1754,18 +1754,148 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
   background:rgba(0,0,0,0.85); z-index:1100;
   justify-content:center; align-items:center;
 ">
-  <div style="width:90vw; max-width:560px; max-height:90vh; background:#1a202c; border-radius:16px; padding:40px 30px; overflow-y:auto; position:relative; border:1px solid rgba(255,255,255,0.1); text-align:center;">
+  <div style="width:90vw; max-width:700px; max-height:90vh; background:#1a202c; border-radius:16px; padding:30px; overflow-y:auto; position:relative; border:1px solid rgba(255,255,255,0.1);">
     <button onclick="document.getElementById('octoberGamPanel').style.display='none'" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#a0aec0; font-size:1.5em; cursor:pointer;">✕</button>
-    <div style="font-size:3em; margin-bottom:10px;">🎮</div>
-    <h2 style="color:#ff9100; margin-bottom:6px;">October 2026 Gamification</h2>
-    <div style="display:inline-block; background:rgba(255,145,0,0.12); border:1px solid rgba(255,145,0,0.4); border-radius:20px; padding:6px 18px; font-size:0.9em; color:#ff9100; font-weight:700; margin:12px 0;">⏳ In Progress</div>
-    <p style="color:#a0aec0; font-size:0.9em; margin-top:10px; line-height:1.6;">This month's challenge is being finalised. Details and live tracking will appear here soon.</p>
-    <p style="color:#718096; font-size:0.82em; margin-top:16px;">Looking for last month? Check <strong style="color:#ce93d8;">🏆 Past Month</strong> for the September Titans World Cup results.</p>
+    <h2 style="color:#ff9100; margin-bottom:5px;">📈 Raise The Bar — October 2026</h2>
+    <p style="color:#718096; font-size:0.85em; margin-bottom:20px;">8th – 31st October 2026 | Individual Challenge · Budget RM 700</p>
+
+    <!-- Milestones -->
+    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,145,0,0.3); border-radius:10px; padding:18px; margin-bottom:20px;">
+      <h3 style="color:#ff9100; font-size:1em; margin-bottom:12px;">📈 Milestone Rewards (cumulative)</h3>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; text-align:center; font-size:0.85em;">
+        <div style="background:rgba(205,127,50,0.1); border:1px solid rgba(205,127,50,0.4); border-radius:8px; padding:12px;">🔥 Warm Up<br><span style="color:#a0aec0;">3 NOC</span><br><span style="color:#ffd700; font-weight:700;">RM 15</span></div>
+        <div style="background:rgba(192,192,192,0.1); border:1px solid rgba(192,192,192,0.4); border-radius:8px; padding:12px;">💪 Momentum<br><span style="color:#a0aec0;">6 NOC</span><br><span style="color:#ffd700; font-weight:700;">RM 40 cum</span></div>
+        <div style="background:rgba(255,145,0,0.12); border:1px solid rgba(255,145,0,0.5); border-radius:8px; padding:12px;">🎯 Breakthrough<br><span style="color:#a0aec0;">9 NOC · target</span><br><span style="color:#ffd700; font-weight:700;">RM 80 cum</span></div>
+      </div>
+    </div>
+
+    <!-- Bonuses -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
+      <div style="background:rgba(255,215,0,0.05); border:1px solid rgba(255,215,0,0.3); border-radius:10px; padding:16px; text-align:center;">
+        <h3 style="color:#ffd700; font-size:0.95em; margin-bottom:6px;">🚀 No Ceiling</h3>
+        <p style="color:#a0aec0; font-size:0.8em;">Every NOC above 9</p>
+        <p style="color:#ff9100; font-weight:700; font-size:1.2em; margin-top:4px;">RM 10 each · no cap</p>
+      </div>
+      <div style="background:rgba(0,229,255,0.05); border:1px solid rgba(0,229,255,0.3); border-radius:10px; padding:16px; text-align:center;">
+        <h3 style="color:#00e5ff; font-size:0.95em; margin-bottom:6px;">⚡ Speed Bonus</h3>
+        <p style="color:#a0aec0; font-size:0.8em;">First SC to 9 NOC</p>
+        <p style="color:#00e5ff; font-weight:700; font-size:1.2em; margin-top:4px;">RM 60</p>
+      </div>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:12px; margin-bottom:20px; font-size:0.82em; color:#a0aec0; text-align:center;">
+      ✅ ATAP &amp; SELCO closings count · 📅 Based on Closed Date (8–31 Oct) · 👥 All 8 Titans SCs
+    </div>
+
+    <!-- Live Progress -->
+    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:18px;">
+      <h3 style="color:#ff9100; font-size:1em; margin-bottom:4px;">📊 Live Progress <span style="color:#718096; font-size:0.75em; font-weight:400;">· running total</span></h3>
+      <p style="color:#718096; font-size:0.78em; margin-bottom:12px;">NOC closed 8–31 Oct · updates live 🔴</p>
+      <div id="rtbProgress"><p style="color:#718096; font-style:italic;">Loading...</p></div>
+    </div>
+
   </div>
 </div>
 <script>
 document.getElementById('octoberGamPanel').addEventListener('click', function(e) {
   if (e.target === this) this.style.display = 'none';
+});
+
+// ===== October 2026 — Raise The Bar (individual NOC milestones) =====
+// Order mirrors the leaderboard team order.
+// { data: short-name as stored in TEAM_MEMBERS (item.sc), display: name shown }
+// Note: Nora's data key is 'Norazwin' (same as the September World Cup mapping).
+const RTB_SCS = [
+  { data: 'Naim',     display: 'Naim' },
+  { data: 'Ashlynn',  display: 'Ashlynn' },
+  { data: 'Sidik',    display: 'Sidik' },
+  { data: 'Adi',      display: 'Adi' },
+  { data: 'Syaheed',  display: 'Syaheed' },
+  { data: 'Mabel',    display: 'Mabel' },
+  { data: 'Norazwin', display: 'Nora' },
+  { data: 'Shirley',  display: 'Shirley' }
+];
+const RTB_START_DAY = 8;   // campaign starts 8 Oct
+const RTB_MILESTONES = [
+  { noc: 3, label: '🔥 Warm Up', reward: 15, cum: 15, color: '#cd7f32' },
+  { noc: 6, label: '💪 Momentum', reward: 25, cum: 40, color: '#c0c0c0' },
+  { noc: 9, label: '🎯 Breakthrough', reward: 40, cum: 80, color: '#ff9100' }
+];
+const RTB_OVERACHIEVER = 10; // RM per NOC above 9
+const RTB_SPEED_BONUS = 60;  // first SC to 9 NOC
+
+// Count a single SC's NOC within the campaign window (8–31 Oct, current year).
+function rtbNocForSC(scName) {
+  const now = new Date();
+  const year = now.getFullYear();
+  let noc = 0;
+  allItems.forEach(item => {
+    if (item.isAM || !item.closedDate || item.sc !== scName) return;
+    const parts = item.closedDate.split('-');
+    const y = parseInt(parts[0]), mo = parseInt(parts[1]), day = parseInt(parts[2]);
+    if (y !== year || mo !== 10) return;          // October only
+    if (day < RTB_START_DAY) return;               // from 8 Oct
+    noc++;
+  });
+  return noc;
+}
+
+function rtbRewardForNOC(noc) {
+  let reward = 0;
+  RTB_MILESTONES.forEach(m => { if (noc >= m.noc) reward = m.cum; });
+  if (noc > 9) reward += (noc - 9) * RTB_OVERACHIEVER;
+  return reward;
+}
+
+function updateRaiseTheBar() {
+  const rows = RTB_SCS.map(sc => ({ sc: sc.display, noc: rtbNocForSC(sc.data) }));
+  rows.sort((a, b) => b.noc - a.noc);
+
+  let html = '<table style="width:100%; border-collapse:collapse; font-size:0.82em;">';
+  html += '<thead><tr style="border-bottom:1px solid rgba(255,255,255,0.15); color:#a0aec0;">';
+  html += '<th style="text-align:left; padding:7px 6px;">#</th>';
+  html += '<th style="text-align:left; padding:7px 6px;">SC</th>';
+  html += '<th style="padding:7px 6px; text-align:center;">NOC</th>';
+  html += '<th style="padding:7px 6px; text-align:left;">Milestone</th>';
+  html += '<th style="padding:7px 6px; text-align:center;">Reward</th></tr></thead><tbody>';
+
+  rows.forEach((r, i) => {
+    // Current milestone label + progress to next
+    let msLabel = '<span style="color:#718096;">— warming up</span>';
+    let reached = null;
+    RTB_MILESTONES.forEach(m => { if (r.noc >= m.noc) reached = m; });
+    if (reached) msLabel = '<span style="color:' + reached.color + '; font-weight:600;">' + reached.label + '</span>';
+    if (r.noc > 9) msLabel += ' <span style="color:#ffd700;">+' + (r.noc - 9) + ' 🚀</span>';
+
+    const reward = rtbRewardForNOC(r.noc);
+    const rewardStr = reward > 0 ? 'RM ' + reward : '—';
+    const medal = i === 0 && r.noc > 0 ? '🥇' : (i === 1 && r.noc > 0 ? '🥈' : (i === 2 && r.noc > 0 ? '🥉' : (i + 1)));
+    const rowBg = reached && reached.noc === 9 ? 'background:rgba(255,145,0,0.07);' : '';
+    html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.05); ' + rowBg + '">';
+    html += '<td style="padding:8px 6px;">' + medal + '</td>';
+    html += '<td style="padding:8px 6px; font-weight:600;">' + r.sc + '</td>';
+    html += '<td style="padding:8px 6px; text-align:center; color:#ffd700; font-weight:700;">' + r.noc + '</td>';
+    html += '<td style="padding:8px 6px;">' + msLabel + '</td>';
+    html += '<td style="padding:8px 6px; text-align:center; color:#38a169; font-weight:700;">' + rewardStr + '</td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+
+  // Speed bonus status — first SC to reach 9 NOC
+  const atBreakthrough = rows.filter(r => r.noc >= 9);
+  let speedNote;
+  if (atBreakthrough.length === 0) {
+    speedNote = '<p style="color:#718096; font-size:0.8em; margin-top:10px;">⚡ Speed Bonus (RM 60): no SC has hit 9 NOC yet — race is on! 🏁</p>';
+  } else {
+    speedNote = '<p style="color:#00e5ff; font-size:0.8em; margin-top:10px;">⚡ Speed Bonus (RM 60): ' + atBreakthrough.length + ' SC(s) have reached 9 NOC — winner confirmed by earliest Closed Date.</p>';
+  }
+
+  document.getElementById('rtbProgress').innerHTML = html + speedNote;
+}
+
+// Recalculate when the panel opens.
+document.querySelector('[onclick*="octoberGamPanel"]').addEventListener('click', function() {
+  setTimeout(updateRaiseTheBar, 100);
 });
 </script>
 
