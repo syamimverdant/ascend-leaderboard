@@ -1757,7 +1757,7 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
   <div style="width:90vw; max-width:700px; max-height:90vh; background:#1a202c; border-radius:16px; padding:30px; overflow-y:auto; position:relative; border:1px solid rgba(255,255,255,0.1);">
     <button onclick="document.getElementById('octoberGamPanel').style.display='none'" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#a0aec0; font-size:1.5em; cursor:pointer;">✕</button>
     <h2 style="color:#ff9100; margin-bottom:5px;">📈 Raise The Bar — October 2026</h2>
-    <p style="color:#718096; font-size:0.85em; margin-bottom:20px;">8th – 31st October 2026 | Individual Challenge · Budget RM 700</p>
+    <p style="color:#718096; font-size:0.85em; margin-bottom:20px;">1st – 31st October 2026 | Individual Challenge · Budget RM 700</p>
 
     <!-- Milestones -->
     <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,145,0,0.3); border-radius:10px; padding:18px; margin-bottom:20px;">
@@ -1784,13 +1784,13 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
     </div>
 
     <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:12px; margin-bottom:20px; font-size:0.82em; color:#a0aec0; text-align:center;">
-      ✅ ATAP &amp; SELCO closings count · 📅 Based on Closed Date (8–31 Oct) · 👥 All 8 Titans SCs
+      ✅ ATAP &amp; SELCO closings count · 📅 Based on Closed Date (1–31 Oct) · 👥 All 8 Titans SCs
     </div>
 
     <!-- Live Progress -->
     <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:18px;">
       <h3 style="color:#ff9100; font-size:1em; margin-bottom:4px;">📊 Live Progress <span style="color:#718096; font-size:0.75em; font-weight:400;">· running total</span></h3>
-      <p style="color:#718096; font-size:0.78em; margin-bottom:12px;">NOC closed 8–31 Oct · updates live 🔴</p>
+      <p style="color:#718096; font-size:0.78em; margin-bottom:12px;">NOC closed 1–31 Oct · updates live 🔴</p>
       <div id="rtbProgress"><p style="color:#718096; font-style:italic;">Loading...</p></div>
     </div>
 
@@ -1815,7 +1815,7 @@ const RTB_SCS = [
   { data: 'Norazwin', display: 'Nora' },
   { data: 'Shirley',  display: 'Shirley' }
 ];
-const RTB_START_DAY = 8;   // campaign starts 8 Oct
+const RTB_START_DAY = 1;   // campaign counts from 1 Oct
 const RTB_MILESTONES = [
   { noc: 3, label: '🔥 Warm Up', reward: 15, cum: 15, color: '#cd7f32' },
   { noc: 6, label: '💪 Momentum', reward: 25, cum: 40, color: '#c0c0c0' },
@@ -1824,7 +1824,7 @@ const RTB_MILESTONES = [
 const RTB_OVERACHIEVER = 10; // RM per NOC above 9
 const RTB_SPEED_BONUS = 60;  // first SC to 9 NOC
 
-// Count a single SC's NOC within the campaign window (8–31 Oct, current year).
+// Count a single SC's NOC within the campaign window (1–31 Oct, current year).
 function rtbNocForSC(scName) {
   const now = new Date();
   const year = now.getFullYear();
@@ -1834,7 +1834,7 @@ function rtbNocForSC(scName) {
     const parts = item.closedDate.split('-');
     const y = parseInt(parts[0]), mo = parseInt(parts[1]), day = parseInt(parts[2]);
     if (y !== year || mo !== 10) return;          // October only
-    if (day < RTB_START_DAY) return;               // from 8 Oct
+    if (day < RTB_START_DAY) return;               // from 1 Oct
     noc++;
   });
   return noc;
