@@ -1877,9 +1877,43 @@ function rtbRewardForNOC(noc) {
   return reward;
 }
 
+// Date (YYYY-MM-DD) on which an SC recorded their 9th in-window NOC,
+// i.e. when they hit Breakthrough. Returns null if they haven't reached 9.
+function rtbBreakthroughDate(scName) {
+  const now = new Date();
+  const year = now.getFullYear();
+  const dates = [];
+  allItems.forEach(item => {
+    if (item.isAM || !item.closedDate || item.sc !== scName) return;
+    const parts = item.closedDate.split('-');
+    const y = parseInt(parts[0]), mo = parseInt(parts[1]), day = parseInt(parts[2]);
+    if (y !== year || mo !== 10) return;
+    if (day < RTB_START_DAY) return;
+    dates.push(item.closedDate);
+  });
+  if (dates.length < 9) return null;
+  dates.sort((a, b) => a.localeCompare(b));
+  return dates[8]; // the 9th closing (0-indexed)
+}
+
+// The first SC to reach 9 NOC wins the RM60 speed bonus (earliest Breakthrough date).
+function rtbSpeedBonusWinner() {
+  let winner = null, winnerDate = null;
+  RTB_SCS.forEach(sc => {
+    const d = rtbBreakthroughDate(sc.data);
+    if (d && (winnerDate === null || d.localeCompare(winnerDate) < 0)) {
+      winnerDate = d;
+      winner = sc.display;
+    }
+  });
+  return winner;
+}
+
 function updateRaiseTheBar() {
   const rows = RTB_SCS.map(sc => ({ sc: sc.display, noc: rtbNocForSC(sc.data) }));
   rows.sort((a, b) => b.noc - a.noc);
+
+  const speedWinner = rtbSpeedBonusWinner();
 
   let html = '<table style="width:100%; border-collapse:collapse; font-size:0.82em;">';
   html += '<thead><tr style="border-bottom:1px solid rgba(255,255,255,0.15); color:#a0aec0;">';
@@ -1897,8 +1931,10 @@ function updateRaiseTheBar() {
     if (reached) msLabel = '<span style="color:' + reached.color + '; font-weight:600;">' + reached.label + '</span>';
     if (r.noc > 9) msLabel += ' <span style="color:#ffd700;">+' + (r.noc - 9) + ' 🚀</span>';
 
-    const reward = rtbRewardForNOC(r.noc);
-    const rewardStr = reward > 0 ? 'RM ' + reward : '—';
+    const isSpeedWinner = speedWinner && r.sc === speedWinner;
+    const reward = rtbRewardForNOC(r.noc) + (isSpeedWinner ? RTB_SPEED_BONUS : 0);
+    let rewardStr = reward > 0 ? 'RM ' + reward : '—';
+    if (isSpeedWinner) rewardStr += ' <span style="color:#00e5ff;">⚡</span>';
     const medal = i === 0 && r.noc > 0 ? '🥇' : (i === 1 && r.noc > 0 ? '🥈' : (i === 2 && r.noc > 0 ? '🥉' : (i + 1)));
     const rowBg = reached && reached.noc === 9 ? 'background:rgba(255,145,0,0.07);' : '';
     html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.05); ' + rowBg + '">';
@@ -1912,12 +1948,11 @@ function updateRaiseTheBar() {
   html += '</tbody></table>';
 
   // Speed bonus status — first SC to reach 9 NOC
-  const atBreakthrough = rows.filter(r => r.noc >= 9);
   let speedNote;
-  if (atBreakthrough.length === 0) {
+  if (!speedWinner) {
     speedNote = '<p style="color:#718096; font-size:0.8em; margin-top:10px;">⚡ Speed Bonus (RM 60): no SC has hit 9 NOC yet — race is on! 🏁</p>';
   } else {
-    speedNote = '<p style="color:#00e5ff; font-size:0.8em; margin-top:10px;">⚡ Speed Bonus (RM 60): ' + atBreakthrough.length + ' SC(s) have reached 9 NOC — winner confirmed by earliest Closed Date.</p>';
+    speedNote = '<p style="color:#00e5ff; font-size:0.8em; margin-top:10px;">⚡ Speed Bonus (RM 60): won by <strong>' + speedWinner + '</strong> — first to 9 NOC (earliest Closed Date). Included in the reward above.</p>';
   }
 
   document.getElementById('rtbProgress').innerHTML = html + speedNote;
