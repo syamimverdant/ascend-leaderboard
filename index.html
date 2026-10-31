@@ -1910,10 +1910,15 @@ function rtbSpeedBonusWinner() {
 }
 
 function updateRaiseTheBar() {
-  const rows = RTB_SCS.map(sc => ({ sc: sc.display, noc: rtbNocForSC(sc.data) }));
-  rows.sort((a, b) => b.noc - a.noc);
-
   const speedWinner = rtbSpeedBonusWinner();
+
+  // Rank by NOC; on a tie, the higher total reward (incl. speed bonus) ranks first.
+  const rows = RTB_SCS.map(sc => {
+    const noc = rtbNocForSC(sc.data);
+    const total = rtbRewardForNOC(noc) + (sc.display === speedWinner ? RTB_SPEED_BONUS : 0);
+    return { sc: sc.display, noc, total };
+  });
+  rows.sort((a, b) => (b.noc - a.noc) || (b.total - a.total));
 
   let html = '<table style="width:100%; border-collapse:collapse; font-size:0.82em;">';
   html += '<thead><tr style="border-bottom:1px solid rgba(255,255,255,0.15); color:#a0aec0;">';
