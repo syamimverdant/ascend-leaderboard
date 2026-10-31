@@ -1877,9 +1877,10 @@ function rtbRewardForNOC(noc) {
   return reward;
 }
 
-// Date (YYYY-MM-DD) on which an SC recorded their 9th in-window NOC,
-// i.e. when they hit Breakthrough. Returns null if they haven't reached 9.
-function rtbBreakthroughDate(scName) {
+// Date (YYYY-MM-DD) on which an SC recorded their Nth in-window NOC.
+// Returns null if they haven't reached N.
+function rtbDateOfNth(scName, n) {
+  if (n <= 0) return null;
   const now = new Date();
   const year = now.getFullYear();
   const dates = [];
@@ -1891,9 +1892,14 @@ function rtbBreakthroughDate(scName) {
     if (day < RTB_START_DAY) return;
     dates.push(item.closedDate);
   });
-  if (dates.length < 9) return null;
+  if (dates.length < n) return null;
   dates.sort((a, b) => a.localeCompare(b));
-  return dates[8]; // the 9th closing (0-indexed)
+  return dates[n - 1];
+}
+
+// Date an SC hit Breakthrough (9th NOC).
+function rtbBreakthroughDate(scName) {
+  return rtbDateOfNth(scName, 9);
 }
 
 // The first SC to reach 9 NOC wins the RM60 speed bonus (earliest Breakthrough date).
@@ -1912,13 +1918,29 @@ function rtbSpeedBonusWinner() {
 function updateRaiseTheBar() {
   const speedWinner = rtbSpeedBonusWinner();
 
-  // Rank by NOC; on a tie, the higher total reward (incl. speed bonus) ranks first.
+  // Rank by NOC. On a tie:
+  //   1. whoever reached their current tier first (earliest date of 3rd / 6th / 9th NOC)
+  //   2. whoever reached their current NOC count first
+  //   3. higher total reward (incl. speed bonus)
   const rows = RTB_SCS.map(sc => {
     const noc = rtbNocForSC(sc.data);
     const total = rtbRewardForNOC(noc) + (sc.display === speedWinner ? RTB_SPEED_BONUS : 0);
-    return { sc: sc.display, noc, total };
+    let tierNoc = 0;
+    RTB_MILESTONES.forEach(m => { if (noc >= m.noc) tierNoc = m.noc; });
+    return {
+      sc: sc.display,
+      noc,
+      total,
+      tierDate: rtbDateOfNth(sc.data, tierNoc) || '9999-99-99',
+      nocDate: rtbDateOfNth(sc.data, noc) || '9999-99-99'
+    };
   });
-  rows.sort((a, b) => (b.noc - a.noc) || (b.total - a.total));
+  rows.sort((a, b) =>
+    (b.noc - a.noc) ||
+    a.tierDate.localeCompare(b.tierDate) ||
+    a.nocDate.localeCompare(b.nocDate) ||
+    (b.total - a.total)
+  );
 
   let html = '<table style="width:100%; border-collapse:collapse; font-size:0.82em;">';
   html += '<thead><tr style="border-bottom:1px solid rgba(255,255,255,0.15); color:#a0aec0;">';
