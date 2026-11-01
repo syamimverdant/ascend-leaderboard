@@ -1842,6 +1842,13 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
       </div>
     </div>
 
+    <!-- Total October Rewards (Raise The Bar + PG Homedec) -->
+    <div style="background:rgba(56,161,105,0.05); border:1px solid rgba(56,161,105,0.4); border-radius:10px; padding:18px; margin-top:20px;">
+      <h3 style="color:#68d391; font-size:1em; margin-bottom:4px;">💰 Total October Rewards <span style="color:#718096; font-size:0.75em; font-weight:400;">· Raise The Bar + PG Homedec</span></h3>
+      <p style="color:#718096; font-size:0.78em; margin-bottom:12px;">Combined payout per SC</p>
+      <div id="rtbCombined"><p style="color:#718096; font-style:italic;">Loading...</p></div>
+    </div>
+
   </div>
 </div>
 <script>
@@ -2001,7 +2008,48 @@ function updateRaiseTheBar() {
   }
 
   document.getElementById('rtbProgress').innerHTML = html + speedNote;
+
+  // ---- Total October rewards: Raise The Bar + PG Homedec ----
+  const combined = rows.map(r => {
+    const pg = PG_HOMEDEC_REWARDS[r.sc] || 0;
+    return { sc: r.sc, rtb: r.total, pg, sum: r.total + pg };
+  });
+  combined.sort((a, b) => (b.sum - a.sum) || (b.rtb - a.rtb));
+
+  let ch = '<table style="width:100%; border-collapse:collapse; font-size:0.82em;">';
+  ch += '<thead><tr style="border-bottom:1px solid rgba(255,255,255,0.15); color:#a0aec0;">';
+  ch += '<th style="text-align:left; padding:7px 6px;">#</th>';
+  ch += '<th style="text-align:left; padding:7px 6px;">SC</th>';
+  ch += '<th style="padding:7px 6px; text-align:center;">Raise The Bar</th>';
+  ch += '<th style="padding:7px 6px; text-align:center;">PG Homedec</th>';
+  ch += '<th style="padding:7px 6px; text-align:center;">Total</th></tr></thead><tbody>';
+  let gRtb = 0, gPg = 0;
+  combined.forEach((c, i) => {
+    gRtb += c.rtb; gPg += c.pg;
+    ch += '<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">';
+    ch += '<td style="padding:8px 6px;">' + (i + 1) + '</td>';
+    ch += '<td style="padding:8px 6px; font-weight:600;">' + c.sc + '</td>';
+    ch += '<td style="padding:8px 6px; text-align:center; color:#e2e8f0;">' + (c.rtb ? 'RM ' + c.rtb : '—') + '</td>';
+    ch += '<td style="padding:8px 6px; text-align:center; color:#e2e8f0;">' + (c.pg ? 'RM ' + c.pg : '—') + '</td>';
+    ch += '<td style="padding:8px 6px; text-align:center; color:#68d391; font-weight:700;">RM ' + c.sum + '</td>';
+    ch += '</tr>';
+  });
+  const grand = gRtb + gPg;
+  ch += '<tr style="border-top:2px solid rgba(255,255,255,0.2);">';
+  ch += '<td></td><td style="padding:9px 6px; font-weight:700; color:#e2e8f0;">Total</td>';
+  ch += '<td style="padding:9px 6px; text-align:center; font-weight:700; color:#e2e8f0;">RM ' + gRtb + '</td>';
+  ch += '<td style="padding:9px 6px; text-align:center; font-weight:700; color:#e2e8f0;">RM ' + gPg + '</td>';
+  ch += '<td style="padding:9px 6px; text-align:center; font-weight:700; color:#ffd700;">RM ' + grand.toLocaleString() + '</td>';
+  ch += '</tr></tbody></table>';
+  const left = OCT_BUDGET - grand;
+  ch += '<p style="color:' + (left >= 0 ? '#68d391' : '#e53e3e') + '; font-size:0.8em; margin-top:10px;">💼 Budget RM ' +
+        OCT_BUDGET.toLocaleString() + ' · ' + (left >= 0 ? 'RM ' + left + ' remaining' : 'RM ' + (-left) + ' over budget') + '</p>';
+  document.getElementById('rtbCombined').innerHTML = ch;
 }
+
+// PG Homedec Gamification results (October) — keyed by RTB display name.
+const PG_HOMEDEC_REWARDS = { 'Naim': 150, 'Shirley': 100, 'Mabel': 50 };
+const OCT_BUDGET = 1044;
 
 // October panel is opened from the Past Month list, which calls updateRaiseTheBar() inline.
 </script>
