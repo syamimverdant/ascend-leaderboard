@@ -70,7 +70,7 @@
     </select>
     <button class="period-btn" data-period="h1">H1 (Jul–Dec)</button>
     <button class="period-btn" data-period="h2">H2 (Jan–Jun)</button>
-    <button class="period-btn gamification-btn" onclick="document.getElementById('octoberGamPanel').style.display='flex';">🎮 Current Month</button>
+    <button class="period-btn gamification-btn" onclick="document.getElementById('novemberGamPanel').style.display='flex';">🎮 Current Month</button>
     <button class="period-btn gamification-btn" onclick="document.getElementById('pastGamPanel').style.display='flex';">🏆 Past Month</button>
   </div>
 
@@ -403,7 +403,7 @@ const MONTHLY_TARGETS_BY_MONTH = {
   '2026-08': { noc: 82, nob: 2870000 },
   '2026-09': { noc: 117, nob: 3510000 },
   '2026-10': { noc: 126, nob: 3780000 },
-  '2026-11': { noc: 108, nob: 3240000 },
+  '2026-11': { noc: 88, nob: 2640000 },
   '2026-12': { noc: 81, nob: 2430000 },
   '2027-01': { noc: 82, nob: 2870000 },
   '2027-02': { noc: 82, nob: 2870000 },
@@ -1748,7 +1748,25 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
 });
 </script>
 
-<!-- October 2026 — Current Month Placeholder -->
+<!-- November 2026 — Current Month (In Progress) -->
+<div id="novemberGamPanel" style="
+  display:none; position:fixed; top:0; left:0; width:100vw; height:100vh;
+  background:rgba(0,0,0,0.85); z-index:1100;
+  justify-content:center; align-items:center;
+" onclick="if (event.target === this) this.style.display='none';">
+  <div style="width:90vw; max-width:700px; max-height:90vh; background:#1a202c; border-radius:16px; padding:30px; overflow-y:auto; position:relative; border:1px solid rgba(255,255,255,0.1);">
+    <button onclick="document.getElementById('novemberGamPanel').style.display='none'" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#a0aec0; font-size:1.5em; cursor:pointer;">✕</button>
+    <h2 style="color:#00e5ff; margin-bottom:5px;">🎮 November 2026 Gamification <span style="font-size:0.6em; color:#f6ad55; background:rgba(246,173,85,0.12); border:1px solid rgba(246,173,85,0.35); border-radius:12px; padding:2px 10px; vertical-align:middle;">🚧 In Progress</span></h2>
+    <p style="color:#718096; font-size:0.85em; margin-bottom:20px;">1st – 30th November 2026 | Chapter 05 — Power Up ⚡</p>
+    <div style="background:rgba(255,255,255,0.03); border:1px dashed rgba(255,255,255,0.2); border-radius:10px; padding:30px 20px; text-align:center;">
+      <div style="font-size:2.4em; margin-bottom:8px;">🚧</div>
+      <p style="color:#e2e8f0; font-weight:600; margin-bottom:6px;">November gamification is in progress</p>
+      <p style="color:#a0aec0; font-size:0.85em;">Rules, rewards and live progress will be announced soon. Keep closing — every NOC from 1 Nov counts! 💪</p>
+    </div>
+  </div>
+</div>
+
+<!-- October 2026 — Raise The Bar (now archived under Past Month) -->
 <div id="octoberGamPanel" style="
   display:none; position:fixed; top:0; left:0; width:100vw; height:100vh;
   background:rgba(0,0,0,0.85); z-index:1100;
@@ -1756,8 +1774,8 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
 ">
   <div style="width:90vw; max-width:700px; max-height:90vh; background:#1a202c; border-radius:16px; padding:30px; overflow-y:auto; position:relative; border:1px solid rgba(255,255,255,0.1);">
     <button onclick="document.getElementById('octoberGamPanel').style.display='none'" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#a0aec0; font-size:1.5em; cursor:pointer;">✕</button>
-    <h2 style="color:#ff9100; margin-bottom:5px;">📈 Raise The Bar — October 2026</h2>
-    <p style="color:#718096; font-size:0.85em; margin-bottom:20px;">1st – 31st October 2026 | Individual Challenge · Budget RM 1,044</p>
+    <h2 style="color:#ff9100; margin-bottom:5px;">📈 Raise The Bar — October 2026 <span style="font-size:0.6em; color:#68d391; background:rgba(72,187,120,0.12); border:1px solid rgba(72,187,120,0.35); border-radius:12px; padding:2px 10px; vertical-align:middle;">✓ Completed</span></h2>
+    <p style="color:#718096; font-size:0.85em; margin-bottom:20px;">1st – 31st October 2026 | Individual Challenge · Budget RM 1,044 · Final Results</p>
 
     <!-- Milestones -->
     <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,145,0,0.3); border-radius:10px; padding:18px; margin-bottom:20px;">
@@ -1789,8 +1807,8 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
 
     <!-- Live Progress -->
     <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:18px;">
-      <h3 style="color:#ff9100; font-size:1em; margin-bottom:4px;">📊 Live Progress <span style="color:#718096; font-size:0.75em; font-weight:400;">· running total</span></h3>
-      <p style="color:#718096; font-size:0.78em; margin-bottom:12px;">NOC closed 1–31 Oct · updates live 🔴</p>
+      <h3 style="color:#ff9100; font-size:1em; margin-bottom:4px;">📊 Final Standings <span style="color:#718096; font-size:0.75em; font-weight:400;">· October results</span></h3>
+      <p style="color:#718096; font-size:0.78em; margin-bottom:12px;">NOC closed 1–31 Oct 2026</p>
       <div id="rtbProgress"><p style="color:#718096; font-style:italic;">Loading...</p></div>
     </div>
 
@@ -1985,10 +2003,7 @@ function updateRaiseTheBar() {
   document.getElementById('rtbProgress').innerHTML = html + speedNote;
 }
 
-// Recalculate when the panel opens.
-document.querySelector('[onclick*="octoberGamPanel"]').addEventListener('click', function() {
-  setTimeout(updateRaiseTheBar, 100);
-});
+// October panel is opened from the Past Month list, which calls updateRaiseTheBar() inline.
 </script>
 
 <!-- September 2026 Titans World Cup — now archived under Past Month (opened via Past Month panel) -->
@@ -2371,6 +2386,10 @@ function updateWorldCup() {
       .past-gam-content { display:none; padding:12px 16px; margin-top:4px; background:rgba(255,255,255,0.02); border-radius:8px; border-left:3px solid #805ad5; color:#a0aec0; font-size:0.85em; line-height:1.6; }
       .past-gam-content.open { display:block; }
     </style>
+
+    <div class="past-gam-item">
+      <button class="past-gam-btn" onclick="document.getElementById('pastGamPanel').style.display='none'; document.getElementById('octoberGamPanel').style.display='flex'; setTimeout(updateRaiseTheBar, 100);">📈 October 2026 — RAISE THE BAR <span style="color:#718096;">↗ view full results</span></button>
+    </div>
 
     <div class="past-gam-item">
       <button class="past-gam-btn" onclick="document.getElementById('pastGamPanel').style.display='none'; document.getElementById('currentGamPlaceholder').style.display='flex'; setTimeout(updateWorldCup, 100);">🏆 September 2026 — TITANS WORLD CUP <span style="color:#718096;">↗ view full results</span></button>
