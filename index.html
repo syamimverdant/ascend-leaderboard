@@ -2041,15 +2041,11 @@ function updateRaiseTheBar() {
   ch += '<td style="padding:9px 6px; text-align:center; font-weight:700; color:#e2e8f0;">RM ' + gPg + '</td>';
   ch += '<td style="padding:9px 6px; text-align:center; font-weight:700; color:#ffd700;">RM ' + grand.toLocaleString() + '</td>';
   ch += '</tr></tbody></table>';
-  const left = OCT_BUDGET - grand;
-  ch += '<p style="color:' + (left >= 0 ? '#68d391' : '#e53e3e') + '; font-size:0.8em; margin-top:10px;">💼 Budget RM ' +
-        OCT_BUDGET.toLocaleString() + ' · ' + (left >= 0 ? 'RM ' + left + ' remaining' : 'RM ' + (-left) + ' over budget') + '</p>';
   document.getElementById('rtbCombined').innerHTML = ch;
 }
 
 // PG Homedec Gamification results (October) — keyed by RTB display name.
 const PG_HOMEDEC_REWARDS = { 'Naim': 150, 'Shirley': 100, 'Mabel': 50 };
-const OCT_BUDGET = 1044;
 
 // October panel is opened from the Past Month list, which calls updateRaiseTheBar() inline.
 </script>
