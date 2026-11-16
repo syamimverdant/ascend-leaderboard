@@ -70,7 +70,7 @@
     </select>
     <button class="period-btn" data-period="h1">H1 (Jul–Dec)</button>
     <button class="period-btn" data-period="h2">H2 (Jan–Jun)</button>
-    <button class="period-btn gamification-btn" onclick="document.getElementById('novemberGamPanel').style.display='flex';">🎮 Current Month</button>
+    <button class="period-btn gamification-btn" onclick="document.getElementById('novemberGamPanel').style.display='flex'; setTimeout(updatePowerUp, 100);">🎮 Current Month</button>
     <button class="period-btn gamification-btn" onclick="document.getElementById('pastGamPanel').style.display='flex';">🏆 Past Month</button>
   </div>
 
@@ -1756,15 +1756,280 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
 " onclick="if (event.target === this) this.style.display='none';">
   <div style="width:90vw; max-width:700px; max-height:90vh; background:#1a202c; border-radius:16px; padding:30px; overflow-y:auto; position:relative; border:1px solid rgba(255,255,255,0.1);">
     <button onclick="document.getElementById('novemberGamPanel').style.display='none'" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#a0aec0; font-size:1.5em; cursor:pointer;">✕</button>
-    <h2 style="color:#00e5ff; margin-bottom:5px;">🎮 November 2026 Gamification <span style="font-size:0.6em; color:#f6ad55; background:rgba(246,173,85,0.12); border:1px solid rgba(246,173,85,0.35); border-radius:12px; padding:2px 10px; vertical-align:middle;">🚧 In Progress</span></h2>
-    <p style="color:#718096; font-size:0.85em; margin-bottom:20px;">1st – 30th November 2026 | Chapter 05 — Power Up ⚡</p>
-    <div style="background:rgba(255,255,255,0.03); border:1px dashed rgba(255,255,255,0.2); border-radius:10px; padding:30px 20px; text-align:center;">
-      <div style="font-size:2.4em; margin-bottom:8px;">🚧</div>
-      <p style="color:#e2e8f0; font-weight:600; margin-bottom:6px;">November gamification is in progress</p>
-      <p style="color:#a0aec0; font-size:0.85em;">Rules, rewards and live progress will be announced soon. Keep closing — every NOC from 1 Nov counts! 💪</p>
+    <h2 style="color:#00e5ff; margin-bottom:5px;">⚡ Power Up — Nov &amp; Dec 2026 <span style="font-size:0.6em; color:#f6ad55; background:rgba(246,173,85,0.12); border:1px solid rgba(246,173,85,0.35); border-radius:12px; padding:2px 10px; vertical-align:middle;">🔴 In Progress</span></h2>
+    <p style="color:#718096; font-size:0.85em; margin-bottom:20px;">1st November – 31st December 2026 | Individual Challenge · Chapter 05–06</p>
+
+    <!-- Ladder -->
+    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(0,229,255,0.3); border-radius:10px; padding:18px; margin-bottom:20px;">
+      <h3 style="color:#00e5ff; font-size:1em; margin-bottom:12px;">⚡ Power Up Ladder (same for every SC · cumulative)</h3>
+      <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:8px; text-align:center; font-size:0.8em;">
+        <div style="background:rgba(205,127,50,0.1); border:1px solid rgba(205,127,50,0.4); border-radius:8px; padding:10px 4px;">⚡ Power On<br><span style="color:#a0aec0;">5 NOC</span><br><span style="color:#ffd700; font-weight:700;">RM 20</span></div>
+        <div style="background:rgba(192,192,192,0.1); border:1px solid rgba(192,192,192,0.4); border-radius:8px; padding:10px 4px;">🔋 Charge Up<br><span style="color:#a0aec0;">10 NOC</span><br><span style="color:#ffd700; font-weight:700;">RM 50</span></div>
+        <div style="background:rgba(79,195,247,0.1); border:1px solid rgba(79,195,247,0.4); border-radius:8px; padding:10px 4px;">🚀 Overdrive<br><span style="color:#a0aec0;">15 NOC</span><br><span style="color:#ffd700; font-weight:700;">RM 95</span></div>
+        <div style="background:rgba(159,122,234,0.12); border:1px solid rgba(159,122,234,0.5); border-radius:8px; padding:10px 4px;">💥 Supercharge<br><span style="color:#a0aec0;">20 NOC</span><br><span style="color:#ffd700; font-weight:700;">RM 150</span></div>
+        <div style="background:rgba(255,215,0,0.12); border:1px solid rgba(255,215,0,0.5); border-radius:8px; padding:10px 4px;">👑 Full Power<br><span style="color:#a0aec0;">25 NOC</span><br><span style="color:#ffd700; font-weight:700;">RM 220</span></div>
+      </div>
+      <p style="color:#718096; font-size:0.75em; margin-top:10px; text-align:center;">Totals shown. NOC counts across 1 Nov – 31 Dec.</p>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:12px; margin-bottom:20px; font-size:0.82em; color:#a0aec0; text-align:center;">
+      ✅ ATAP &amp; SELCO closings count · 📅 Based on Closed Date (1 Nov – 31 Dec) · 👥 All 8 Titans SCs · 💰 Paid after 31 Dec
+    </div>
+
+    <!-- Win It All -->
+    <div style="background:linear-gradient(135deg, rgba(255,215,0,0.10), rgba(124,77,255,0.10)); border:2px solid rgba(255,215,0,0.6); border-radius:10px; padding:16px; margin-bottom:20px; text-align:center;">
+      <h3 style="color:#ffd700; font-size:1em; margin-bottom:4px;">👑 Win It All — up to <span style="font-size:1.3em;">RM 1,010</span> for one SC</h3>
+      <p style="color:#a0aec0; font-size:0.78em; margin-bottom:10px;">Do super well at everything and every prize can be yours:</p>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px; font-size:0.78em;">
+        <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,215,0,0.35); border-radius:8px; padding:8px 4px;">👑 Full Power<br><span style="color:#a0aec0;">25 NOC</span><br><span style="color:#ffd700; font-weight:700;">RM 220</span></div>
+        <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,112,67,0.4); border-radius:8px; padding:8px 4px;">🔥💪 All 4 sprints<br><span style="color:#a0aec0;">1st in each</span><br><span style="color:#ffd700; font-weight:700;">RM 400</span></div>
+        <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(0,229,255,0.4); border-radius:8px; padding:8px 4px;">🏁 First To<br><span style="color:#a0aec0;">10 &amp; 20 NOC</span><br><span style="color:#ffd700; font-weight:700;">RM 140</span></div>
+        <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,215,0,0.35); border-radius:8px; padding:8px 4px;">🏆 Top Performer<br><span style="color:#a0aec0;">#1 overall</span><br><span style="color:#ffd700; font-weight:700;">RM 250</span></div>
+      </div>
+    </div>
+
+    <!-- Live Progress -->
+    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:18px; margin-bottom:20px;">
+      <h3 style="color:#00e5ff; font-size:1em; margin-bottom:4px;">📊 Live Progress <span style="color:#718096; font-size:0.75em; font-weight:400;">· running total</span></h3>
+      <p style="color:#718096; font-size:0.78em; margin-bottom:12px;">NOC closed 1 Nov – 31 Dec · updates live 🔴</p>
+      <div id="puProgress"><p style="color:#718096; font-style:italic;">Loading...</p></div>
+    </div>
+
+    <!-- Sprints -->
+    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,112,67,0.3); border-radius:10px; padding:18px; margin-bottom:20px;">
+      <h3 style="color:#ff7043; font-size:1em; margin-bottom:4px;">🔥 Sprints <span style="color:#718096; font-size:0.75em; font-weight:400;">· 1st RM 100 · 2nd RM 50 each</span></h3>
+      <p style="color:#718096; font-size:0.78em; margin-bottom:12px;">Four sprints, two in Nov and two in Dec. Most NOC closed within the window wins. Ties share the prizes.</p>
+      <div id="puSprints"><p style="color:#718096; font-style:italic;">Loading...</p></div>
+    </div>
+
+    <!-- First To -->
+    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(0,229,255,0.3); border-radius:10px; padding:18px; margin-bottom:20px;">
+      <h3 style="color:#00e5ff; font-size:1em; margin-bottom:4px;">🏁 First To <span style="color:#718096; font-size:0.75em; font-weight:400;">· by Closed Date</span></h3>
+      <p style="color:#718096; font-size:0.78em; margin-bottom:12px;">First SC to reach 10 NOC wins RM 40 · first to reach 20 NOC wins RM 100.</p>
+      <div id="puFirstTo"><p style="color:#718096; font-style:italic;">Loading...</p></div>
+    </div>
+
+    <!-- Top Performers -->
+    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,215,0,0.3); border-radius:10px; padding:18px;">
+      <h3 style="color:#ffd700; font-size:1em; margin-bottom:4px;">🏆 Top Performers <span style="color:#718096; font-size:0.75em; font-weight:400;">· projected · 1st RM 250 · 2nd RM 150 · 3rd RM 100</span></h3>
+      <p style="color:#718096; font-size:0.78em; margin-bottom:12px;">Highest total NOC over both months. Decided after 31 Dec.</p>
+      <div id="puTop"><p style="color:#718096; font-style:italic;">Loading...</p></div>
     </div>
   </div>
 </div>
+
+<script>
+// ===== POWER UP START =====
+// Power Up — Nov & Dec 2026 (individual NOC ladder + sprints + First To + Top Performers)
+const PU_SCS = [
+  { data: 'Naim',     display: 'Naim' },
+  { data: 'Ashlynn',  display: 'Ashlynn' },
+  { data: 'Sidik',    display: 'Sidik' },
+  { data: 'Adi',      display: 'Adi' },
+  { data: 'Syaheed',  display: 'Syaheed' },
+  { data: 'Mabel',    display: 'Mabel' },
+  { data: 'Norazwin', display: 'Nora' },   // Nora's data key is 'Norazwin'
+  { data: 'Shirley',  display: 'Shirley' }
+];
+const PU_START = '2026-11-01', PU_END = '2026-12-31';
+const PU_LADDER = [
+  { noc: 5,  label: '⚡ Power On',    step: 20, cum: 20,  color: '#cd7f32' },
+  { noc: 10, label: '🔋 Charge Up',   step: 30, cum: 50,  color: '#c0c0c0' },
+  { noc: 15, label: '🚀 Overdrive',   step: 45, cum: 95,  color: '#4fc3f7' },
+  { noc: 20, label: '💥 Supercharge', step: 55, cum: 150, color: '#b794f4' },
+  { noc: 25, label: '👑 Full Power',  step: 70, cum: 220, color: '#ffd700' }
+];
+const PU_SPRINTS = [
+  { label: '🔥 Nov Kick-Off', note: 'Weeks 1–2 · 1–15 Nov',  from: '2026-11-01', to: '2026-11-15', prizes: [100, 50] },
+  { label: '💪 Nov Kick-In',  note: 'Weeks 3–4 · 16–30 Nov', from: '2026-11-16', to: '2026-11-30', prizes: [100, 50] },
+  { label: '🔥 Dec Kick-Off', note: 'Weeks 1–2 · 1–15 Dec',  from: '2026-12-01', to: '2026-12-15', prizes: [100, 50] },
+  { label: '💪 Dec Kick-In',  note: 'Weeks 3–4 · 16–31 Dec', from: '2026-12-16', to: '2026-12-31', prizes: [100, 50] }
+];
+const PU_FIRST_TO = [{ noc: 10, prize: 40 }, { noc: 20, prize: 100 }];
+const PU_TOP_PRIZES = [250, 150, 100];
+
+// Today's date in Malaysia time as YYYY-MM-DD
+function puToday() {
+  const d = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kuala_Lumpur' }));
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+// Sorted Closed Dates per SC (display name) inside the campaign window; AM excluded.
+function puDatesBySC() {
+  const out = {};
+  PU_SCS.forEach(s => { out[s.display] = []; });
+  allItems.forEach(item => {
+    if (item.isAM || !item.closedDate) return;
+    const sc = PU_SCS.find(s => s.data === item.sc);
+    if (!sc) return;
+    const d = String(item.closedDate).slice(0, 10);
+    if (d < PU_START || d > PU_END) return;
+    out[sc.display].push(d);
+  });
+  Object.values(out).forEach(a => a.sort());
+  return out;
+}
+
+function puLadder(noc) {
+  let cum = 0, tier = null;
+  PU_LADDER.forEach(t => { if (noc >= t.noc) { cum = t.cum; tier = t; } });
+  const next = PU_LADDER.find(t => noc < t.noc) || null;
+  return { cum, tier, next };
+}
+
+// Ties share the combined prizes of the positions they occupy.
+// entries: [{ sc, count }]  ->  { sc: { rank, prize, tied } } for those inside the prize positions
+function puDistribute(entries, prizes) {
+  const res = {};
+  const sorted = entries.filter(e => e.count > 0).sort((a, b) => b.count - a.count);
+  let pos = 0, i = 0;
+  while (i < sorted.length && pos < prizes.length) {
+    let j = i;
+    while (j < sorted.length && sorted[j].count === sorted[i].count) j++;
+    const group = sorted.slice(i, j);
+    let pool = 0;
+    for (let p = pos; p < pos + group.length && p < prizes.length; p++) pool += prizes[p];
+    group.forEach(g => { res[g.sc] = { rank: pos + 1, prize: pool / group.length, tied: group.length > 1 }; });
+    pos += group.length;
+    i = j;
+  }
+  return res;
+}
+
+function puMoney(n) { return 'RM ' + (Math.round(n * 100) / 100).toLocaleString(); }
+const PU_MEDALS = ['🥇', '🥈', '🥉'];
+
+function updatePowerUp() {
+  const el = id => document.getElementById(id);
+  if (!allItems || allItems.length === 0) {
+    ['puProgress', 'puSprints', 'puFirstTo', 'puTop'].forEach(id => {
+      el(id).innerHTML = '<p style="color:#718096; font-style:italic;">No data loaded yet — wait for the leaderboard to load, then reopen.</p>';
+    });
+    return;
+  }
+  const today = puToday();
+  const dates = puDatesBySC();
+  const names = PU_SCS.map(s => s.display);
+
+  // ---- Sprints ----
+  const earned = {};
+  names.forEach(n => { earned[n] = 0; });
+  let sprintHtml = '';
+  PU_SPRINTS.forEach(sp => {
+    const closed = today > sp.to;
+    const upcoming = today < sp.from;
+    const entries = names.map(n => ({ sc: n, count: dates[n].filter(d => d >= sp.from && d <= sp.to).length }));
+    const dist = puDistribute(entries, sp.prizes);
+    const list = entries.filter(e => e.count > 0).sort((a, b) => b.count - a.count);
+    const tag = closed
+      ? '<span style="color:#68d391; font-size:0.78em;">✓ Closed</span>'
+      : (upcoming
+          ? '<span style="color:#a0aec0; font-size:0.78em;">⏳ Starts ' + sp.from.slice(8) + '/' + sp.from.slice(5, 7) + '</span>'
+          : '<span style="color:#f6ad55; font-size:0.78em;">🔴 Live</span>');
+    sprintHtml += '<div style="margin-bottom:14px;">';
+    sprintHtml += '<p style="color:#e2e8f0; font-weight:600; font-size:0.88em; margin-bottom:6px;">' + sp.label + ' <span style="color:#718096; font-weight:400;">· ' + sp.note + '</span> ' + tag + '</p>';
+    if (list.length === 0) {
+      sprintHtml += '<p style="color:#718096; font-size:0.82em; font-style:italic;">' + (upcoming ? 'Not started yet.' : 'No closings yet in this window.') + '</p>';
+    } else {
+      sprintHtml += '<table style="width:100%; border-collapse:collapse; font-size:0.82em;">';
+      list.forEach(e => {
+        const d = dist[e.sc];
+        const medal = d && d.rank <= 3 ? PU_MEDALS[d.rank - 1] : '';
+        const prize = d ? '<span style="color:#38a169; font-weight:700;">' + puMoney(d.prize) + (d.tied ? ' <span style="color:#718096; font-weight:400;">(shared)</span>' : '') + '</span>' : '<span style="color:#4a5568;">—</span>';
+        sprintHtml += '<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">' +
+          '<td style="padding:5px 6px; width:28px;">' + medal + '</td>' +
+          '<td style="padding:5px 6px; font-weight:600;">' + e.sc + '</td>' +
+          '<td style="padding:5px 6px; text-align:center; color:#ffd700; font-weight:700;">' + e.count + ' NOC</td>' +
+          '<td style="padding:5px 6px; text-align:right;">' + prize + '</td></tr>';
+        if (closed && d) earned[e.sc] += d.prize;
+      });
+      sprintHtml += '</table>';
+    }
+    sprintHtml += '</div>';
+  });
+  el('puSprints').innerHTML = sprintHtml;
+
+  // ---- First To ----
+  let ftHtml = '<table style="width:100%; border-collapse:collapse; font-size:0.82em;">';
+  PU_FIRST_TO.forEach(ft => {
+    const reached = names.filter(n => dates[n].length >= ft.noc).map(n => ({ sc: n, date: dates[n][ft.noc - 1] }));
+    let status;
+    if (reached.length === 0) {
+      const best = names.map(n => ({ sc: n, left: ft.noc - dates[n].length })).sort((a, b) => a.left - b.left)[0];
+      status = '<span style="color:#718096;">Open · closest: <strong style="color:#e2e8f0;">' + best.sc + '</strong> (' + best.left + ' to go)</span>';
+    } else {
+      const minDate = reached.map(r => r.date).sort()[0];
+      const winners = reached.filter(r => r.date === minDate).map(r => r.sc);
+      const each = ft.prize / winners.length;
+      winners.forEach(w => { earned[w] += each; });
+      status = '<span style="color:#68d391;">🏁 Won by <strong>' + winners.join(' &amp; ') + '</strong> on ' + minDate.slice(8) + '/' + minDate.slice(5, 7) + (winners.length > 1 ? ' (shared)' : '') + '</span>';
+    }
+    ftHtml += '<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">' +
+      '<td style="padding:7px 6px; color:#00e5ff; font-weight:700; white-space:nowrap;">First to ' + ft.noc + ' NOC</td>' +
+      '<td style="padding:7px 6px; color:#ffd700; font-weight:700;">' + puMoney(ft.prize) + '</td>' +
+      '<td style="padding:7px 6px;">' + status + '</td></tr>';
+  });
+  ftHtml += '</table>';
+  el('puFirstTo').innerHTML = ftHtml;
+
+  // ---- Live Progress (ladder) ----
+  const rows = names.map(n => {
+    const noc = dates[n].length;
+    const L = puLadder(noc);
+    earned[n] += L.cum;
+    return { sc: n, noc, L, nocDate: dates[n][noc - 1] || '9999-99-99' };
+  });
+  // Rank by NOC; tie-break = reached that count first
+  rows.sort((a, b) => (b.noc - a.noc) || a.nocDate.localeCompare(b.nocDate) || a.sc.localeCompare(b.sc));
+  let html = '<table style="width:100%; border-collapse:collapse; font-size:0.8em;">';
+  html += '<thead><tr style="border-bottom:1px solid rgba(255,255,255,0.15); color:#a0aec0;">' +
+    '<th style="text-align:left; padding:7px 4px;">#</th>' +
+    '<th style="text-align:left; padding:7px 4px;">SC</th>' +
+    '<th style="padding:7px 4px; text-align:center;">NOC</th>' +
+    '<th style="padding:7px 4px; text-align:left;">Step</th>' +
+    '<th style="padding:7px 4px; text-align:left;">Next</th>' +
+    '<th style="padding:7px 4px; text-align:center;">Earned</th></tr></thead><tbody>';
+  rows.forEach((r, i) => {
+    const step = r.L.tier
+      ? '<span style="color:' + r.L.tier.color + '; font-weight:600;">' + r.L.tier.label + '</span>'
+      : '<span style="color:#718096;">— charging up</span>';
+    const next = r.L.next
+      ? '<span style="color:#a0aec0;">' + (r.L.next.noc - r.noc) + ' to go · ' + r.L.next.noc + ' NOC (+RM ' + r.L.next.step + ')</span>'
+      : '<span style="color:#ffd700;">Max step 🚀 </span>';
+    const medal = i < 3 && r.noc > 0 ? PU_MEDALS[i] : (i + 1);
+    html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">' +
+      '<td style="padding:7px 4px;">' + medal + '</td>' +
+      '<td style="padding:7px 4px; font-weight:600;">' + r.sc + '</td>' +
+      '<td style="padding:7px 4px; text-align:center; color:#ffd700; font-weight:700;">' + r.noc + '</td>' +
+      '<td style="padding:7px 4px;">' + step + '</td>' +
+      '<td style="padding:7px 4px;">' + next + '</td>' +
+      '<td style="padding:7px 4px; text-align:center; color:#38a169; font-weight:700;">' + (earned[r.sc] > 0 ? puMoney(earned[r.sc]) : '—') + '</td></tr>';
+  });
+  const teamNoc = rows.reduce((a, r) => a + r.noc, 0);
+  html += '</tbody></table>';
+  html += '<p style="color:#718096; font-size:0.75em; margin-top:10px;">Team: <strong style="color:#e2e8f0;">' + teamNoc + ' NOC</strong> so far · "Earned" = ladder + closed sprints + First To. Top Performers is decided after 31 Dec. Paid after 31 Dec.</p>';
+  el('puProgress').innerHTML = html;
+
+  // ---- Top Performers (projected) ----
+  const topRows = rows.filter(r => r.noc > 0).slice(0, 3);
+  let topHtml;
+  if (topRows.length === 0) {
+    topHtml = '<p style="color:#718096; font-size:0.82em; font-style:italic;">No closings yet.</p>';
+  } else {
+    topHtml = '<table style="width:100%; border-collapse:collapse; font-size:0.82em;">';
+    topRows.forEach((r, i) => {
+      topHtml += '<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">' +
+        '<td style="padding:6px 6px; width:28px;">' + PU_MEDALS[i] + '</td>' +
+        '<td style="padding:6px 6px; font-weight:600;">' + r.sc + '</td>' +
+        '<td style="padding:6px 6px; text-align:center; color:#ffd700; font-weight:700;">' + r.noc + ' NOC</td>' +
+        '<td style="padding:6px 6px; text-align:right; color:#38a169; font-weight:700;">' + puMoney(PU_TOP_PRIZES[i]) + ' <span style="color:#718096; font-weight:400;">(projected)</span></td></tr>';
+    });
+    topHtml += '</table>';
+  }
+  el('puTop').innerHTML = topHtml;
+}
+// ===== POWER UP END =====
+</script>
 
 <!-- October 2026 — Raise The Bar (now archived under Past Month) -->
 <div id="octoberGamPanel" style="
