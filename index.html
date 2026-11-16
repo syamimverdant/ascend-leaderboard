@@ -1773,7 +1773,7 @@ document.getElementById('gamPanel').addEventListener('click', function(e) {
     </div>
 
     <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:12px; margin-bottom:20px; font-size:0.82em; color:#a0aec0; text-align:center;">
-      ✅ ATAP &amp; SELCO closings count · 📅 Based on Closed Date (1 Nov – 31 Dec) · 👥 All 8 Titans SCs · 💰 Paid after 31 Dec
+      ✅ ATAP &amp; SELCO closings count · 📅 Based on Closed Date (1 Nov – 31 Dec) · 👥 All 8 Titans SCs · 💰 Paid on the January payslip
     </div>
 
     <!-- Win It All -->
@@ -2007,7 +2007,7 @@ function updatePowerUp() {
   });
   const teamNoc = rows.reduce((a, r) => a + r.noc, 0);
   html += '</tbody></table>';
-  html += '<p style="color:#718096; font-size:0.75em; margin-top:10px;">Team: <strong style="color:#e2e8f0;">' + teamNoc + ' NOC</strong> so far · "Earned" = ladder + closed sprints + First To. Top Performers is decided after 31 Dec. Paid after 31 Dec.</p>';
+  html += '<p style="color:#718096; font-size:0.75em; margin-top:10px;">Team: <strong style="color:#e2e8f0;">' + teamNoc + ' NOC</strong> so far · "Earned" = ladder + closed sprints + First To. Top Performers is decided after 31 Dec. Prizes are paid on the January payslip.</p>';
   el('puProgress').innerHTML = html;
 
   // ---- Top Performers (projected) ----
